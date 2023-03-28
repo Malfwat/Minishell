@@ -25,12 +25,12 @@ A   kill
 A   exit
 
 
-H   getcwd
-H   chdir
-H   stat
+H   getcwd	V
+H   chdir	V
+H   stat	V
 H   tputs
-H   lstat
-H   fstat
+H   lstat	V
+H   fstat	V
 H   unlink
 H   opendir
 H   readdir
