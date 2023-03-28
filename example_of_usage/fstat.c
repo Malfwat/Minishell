@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:25:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 17:36:54 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:44:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(void)
 	struct stat	buf;
 	int			fd;
 
-	fd = open("stat_test_file.txt", O_RDONLY);
+	fd = open("test_files/stat_test_file.txt", O_RDONLY);
 	// On genere et stock dans la structure buf
 	// les informations sur le fichier
 	if (fstat(fd, &buf) == -1)
