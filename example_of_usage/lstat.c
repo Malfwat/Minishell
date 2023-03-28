@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:30:22 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 17:37:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:44:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(void)
 
 	// On genere et stock dans la structure buf
 	// les informations sur le fichier
-	if (lstat("lstat_symlink_test.txt", &buf) == -1)
+	if (lstat("test_files/lstat_symlink_test.txt", &buf) == -1)
 	{
 		perror("stat");
 		return (1);
