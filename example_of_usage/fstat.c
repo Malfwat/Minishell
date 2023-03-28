@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 17:25:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 17:28:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:30:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ int	main(void)
 		Group owner UID: %u\n", \
 		buf.st_atime, buf.st_mtime, buf.st_ctime, buf.st_size, \
 		buf.st_nlink, buf.st_uid, buf.st_gid);
+	close(fd);
 	return (0);
 }
