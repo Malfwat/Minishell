@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:58:24 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 17:22:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/28 17:44:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(void)
 
 	// On genere et stock dans la structure buf
 	// les informations sur le fichier
-	if (stat("stat_test_file.txt", &buf) == -1)
+	if (stat("test_files/stat_test_file.txt", &buf) == -1)
 	{
 		perror("stat");
 		return (1);
