@@ -6,13 +6,14 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:15:30 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 16:30:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/28 16:34:00 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int	main(void)
 {
@@ -26,5 +27,6 @@ int	main(void)
 		perror("getcwd");
 	else
 		printf("%s\n", current_dir);
+	free(current_dir);
 	return (0);
 }
