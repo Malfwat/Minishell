@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_line.c                                        :+:      :+:    :+:   */
+/*   unlink.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/28 14:13:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/03/28 16:13:23 by hateisse         ###   ########.fr       */
+/*   Created: 2023/03/28 17:40:26 by hateisse          #+#    #+#             */
+/*   Updated: 2023/03/28 17:40:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/history.h>
-#include <readline/readline.h>
+#include <unistd.h>
 #include <stdio.h>
 
 int	main(void)
 {
-	printf("%s\n", readline("This is my prompt: "));
-	return (0);
+	
 }
