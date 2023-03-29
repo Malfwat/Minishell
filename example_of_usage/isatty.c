@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:45:11 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/29 16:55:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/29 16:59:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,15 @@ int main() {
 
 	fd = open("/dev/tty0", O_RDONLY);
 	// on testle fichier lstat.c
-	if (isatty(fd)) {
+	if (isatty(fd))
 		printf("is a terminal\n");
-	} else {
+	else
 		printf("is not a terminal\n");
-	}
+
 	// on test l'entree standard
-	if (isatty(1)) {
+	if (isatty(1))
 		printf("is a terminal\n");
-	} else {
+	else
 		printf("is not a terminal\n");
-	}
-	return 0;
+	return (0);
 }
