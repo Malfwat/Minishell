@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 16:45:11 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/29 16:59:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:00:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int main() {
 		printf("is a terminal\n");
 	else
 		printf("is not a terminal\n");
+	close(fd);
 
 	// on test l'entree standard
 	if (isatty(1))
