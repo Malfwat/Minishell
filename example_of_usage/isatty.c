@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 16:45:11 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/29 17:00:13 by hateisse         ###   ########.fr       */
+/*   Created: 2023/03/29 17:00:47 by hateisse          #+#    #+#             */
+/*   Updated: 2023/03/29 17:04:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // Indque si un file descriptor est un terminal.
 // stdin stdout stderr le sont de base
 
-int main() {
+int main(void) {
 	int	fd;
 
 	fd = open("/dev/tty0", O_RDONLY);
