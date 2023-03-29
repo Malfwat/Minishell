@@ -6,13 +6,14 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 18:12:07 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 18:57:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/29 16:41:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
+#include <stdio.h>
 
 // Ouvre un repertoire. A utilise avec readdir ou autre fonction relate
 
@@ -31,14 +32,15 @@ int	main(void)
 	// On accede aux element du repertoire, un par un
 	// on set errno a 0 pour distinguer une erreur de la fin de la liste
 	errno = 0;
+	dir_entry = readdir(dirp);
 	while (dir_entry)
 	{
+		printf("Nom du fichier: %s\n", dir_entry->d_name);
 		dir_entry = readdir(dirp);
-		printf()
 	}
 	if (errno)
 	{
-		perror()
+		perror("readdir");
 	}
 	// On ferme le flux vers le repertoire pointe par dirp
 	if (closedir(dirp) == -1)
@@ -46,4 +48,5 @@ int	main(void)
 		perror("closedir");
 		return (1);
 	}
+	return (0);
 }
