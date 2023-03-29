@@ -28,20 +28,23 @@ A   exit
 H   getcwd	V
 H   chdir	V
 H   stat	V
-H   tputs
 H   lstat	V
 H   fstat	V
-H   unlink
-H   opendir
+H   unlink	V
+H   opendir	
 H   readdir
 H   closedir
 H   strerror
 H   perror
+
+
+H   getenv
 H   isatty
 H   ttyname
+H   tputs
+
 H   ttyslot
 H   ioctl
-H   getenv
 H   tcsetattr
 H   tcgetattr
 H   tgetent
@@ -49,4 +52,3 @@ H   tgetflag
 H   tgetnum
 H   tgetstr
 H   tgoto
-H   tputs
