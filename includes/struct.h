@@ -3,33 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/16 21:17:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/01/27 18:53:07 by amouflet         ###   ########.fr       */
+/*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
+/*   Updated: 2023/03/31 20:50:16 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
+
 # define STRUCT_H
 
 typedef struct s_cmd
 {
 	char			**cmd;
+	bool			and_operator;
 	char			*error_str;
 	int				exit_value;
 	int				pid;
+	char			*output;
+	char			*input;
 	struct s_cmd	*begin;
 	struct s_cmd	*end;
-	struct s_cmd	*next;
-}t_cmd;
+	// struct s_cmd	*next;
+}	t_cmd;
 
-typedef struct s_task
+typedef struct s_block
 {
-	char	*files[2];
-	char	*limiter;
-	int		append;
-	t_cmd	*cmd;
-}t_task;
+	struct s_block	*pipe_next;
+	// char			*cmd_line;
+	t_cmd			*cmd;
+	struct s_block	*next;
+	struct s_block	*sub;
+}	t_block;
 
-#endif /*STRUCT_H*/
+#endif

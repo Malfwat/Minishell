@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:32:50 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/28 16:57:48 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/03/30 18:05:03 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ void	print_cwd(void)
 
 int	main(void)
 {
+	char *str = "/bin/ls";
+	char *cmd[2];
+	cmd[0] = str;
+	cmd[1] = NULL;
 	// on affiche le repertoire actuel (voir getcwd.c)
 	print_cwd();
 	// on se deplace dans le repertoire parent
@@ -41,5 +45,7 @@ int	main(void)
 	}
 	else
 		print_cwd(); // on affiche le nouveau repertoire
+	printf("PATH contient : %s\n", getenv("PWD"));
+	execve(cmd[0], cmd, NULL);
 	return (0);
 }
