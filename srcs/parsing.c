@@ -3,66 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 23:06:36 by malfwa            #+#    #+#             */
-/*   Updated: 2023/01/25 19:28:45 by amouflet         ###   ########.fr       */
+/*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
+/*   Updated: 2023/03/31 20:35:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <pipex.h>
+#include <struct.h>
+#include <libft.h>
 
-int	check_exe(t_cmd *cmd)
+t_block	*new_block(char *line)
 {
-	if (cmd->cmd[0] && access(cmd->cmd[0], X_OK) == 0)
-		return (1);
-	else if (cmd->cmd[0] && access(cmd->cmd[0], F_OK) == 0)
-	{
-		cmd->exit_value = 126;
-		cmd->error_str = NO_PERM;
-		return (0);
-	}
-	cmd->exit_value = 127;
-	cmd->error_str = NO_CMD;
-	return (0);
+	t_block	*new;
+
+	new = ft_calloc(1, sizeof(t_block));
+	if (!new)
+		return (NULL);
+	new->cmd_line = line;
+	// remplir egalement t_cmds
+	return (new);
 }
 
-static int	check_access(char *path, t_cmd *cmd)
+t_block	*last_sibling(t_block *head)
 {
-	char	*str;
-	char	*tmp;
-
-	str = ft_strjoin(path, cmd->cmd[0]);
-	if (str && access(str, X_OK) == 0)
-	{
-		tmp = cmd->cmd[0];
-		cmd->cmd[0] = str;
-		return (free(tmp), 1);
-	}
-	else if (str && access(str, F_OK) == 0)
-	{
-		cmd->exit_value = 126;
-		cmd->error_str = NO_PERM;
-	}
-	free(str);
-	return (0);
+	while (head->next)
+		head = head->next;
+	return (head);
 }
 
-int	check_cmd(char **path, t_cmd *cmd)
+int	find_closing_parenthesis(char *str)
 {
-	int		i;
+	int counter;
+	int i;
 
+	counter = 0;
 	i = 0;
-	if (cmd && cmd->cmd && cmd->cmd[0] && ((cmd->cmd[0][0] == '.' \
-	&& cmd->cmd[0][1] == '/') || cmd->cmd[0][0] == '/'))
-		return (check_exe(cmd));
-	while (cmd->cmd && cmd->cmd[0] && path && path[i])
+	while (str[i])
 	{
-		if (check_access(path[i], cmd))
-			return (1);
-		i++;
+		if (str[i] == '(')
+			counter += 1;
+		else if (str[i] == ')')
+			counter -= 1;
+		if (counter == 0)
+			return (i - 1);
+		i += 1;
 	}
-	cmd->exit_value = 127;
-	cmd->error_str = NO_CMD;
+	return (-1);
+}
+
+
+int	add_block_back(t_block **head, char *line)
+{
+	char	*tmp;
+	if (*head == NULL)
+	{
+		*head = new_block(line);
+		if (*head == NULL)
+			return (1); // ajouter print pour localiser l'erreur
+	}
+	else
+	{
+		tmp = *head;
+		last->sibling(tmp)->next = new_block(line);
+	}
 	return (0);
+}
+
+((eede)  (dedede)) (ededede)
+
+
+
+int main(int argc, char **argv, char **envp)
+{
+	t_block	*tmp;
+
+	tmp = NULL;
+	if (argc < 2)
+		return (0);
+	add_block_back(&tmp, line);
+	add_block_back(&tmp, line2);
+	add_block_back(&tmp->sub, line3);
 }
