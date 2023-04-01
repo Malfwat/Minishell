@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/01 15:08:13 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/01 17:03:30 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ typedef struct s_redirect
 
 typedef struct s_block
 {
-	// char			*cmd_line;
+	char			*cmd_line;
 	int				operator;
 	t_redirect		*input_redirect;
 	t_redirect		*output_redirect;
 	t_cmd			*cmd;
 	struct s_block	*pipe_next;
+	struct s_block	*prev;
 	struct s_block	*next;
 	struct s_block	*sub;
 }	t_block;
