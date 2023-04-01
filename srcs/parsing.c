@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/31 20:35:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/01 15:06:46 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct.h>
+#include <minishell.h>
 #include <libft.h>
 
 t_block	*new_block(char *line)
@@ -20,7 +21,7 @@ t_block	*new_block(char *line)
 	new = ft_calloc(1, sizeof(t_block));
 	if (!new)
 		return (NULL);
-	new->cmd_line = line;
+	// new->cmd_line = line;
 	// remplir egalement t_cmds
 	return (new);
 }
@@ -29,6 +30,20 @@ t_block	*last_sibling(t_block *head)
 {
 	while (head->next)
 		head = head->next;
+	return (head);
+}
+
+t_block	*last_pipe(t_block *head)
+{
+	while (head->pipe_next)
+		head = head->pipe_next;
+	return (head);
+}
+
+t_block	*last_sub(t_block *head)
+{
+	while (head->sub)
+		head = head->sub;
 	return (head);
 }
 
@@ -53,25 +68,22 @@ int	find_closing_parenthesis(char *str)
 }
 
 
-int	add_block_back(t_block **head, char *line)
+int	add_block_back(t_block **head, char *line, t_block *(*last)(t_block *))
 {
 	char	*tmp;
 	if (*head == NULL)
 	{
 		*head = new_block(line);
 		if (*head == NULL)
-			return (1); // ajouter print pour localiser l'erreur
+			return (1); // ajouter une fonction print error
 	}
 	else
 	{
 		tmp = *head;
-		last->sibling(tmp)->next = new_block(line);
+		last(tmp)->next = new_block(line);
 	}
 	return (0);
 }
-
-((eede)  (dedede)) (ededede)
-
 
 
 int main(int argc, char **argv, char **envp)
