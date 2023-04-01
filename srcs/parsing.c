@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/01 15:06:46 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/01 15:41:41 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,40 @@ t_block	*last_sub(t_block *head)
 	while (head->sub)
 		head = head->sub;
 	return (head);
+}
+
+
+int	is_delimiter(char *str, int i)
+{
+	if (str[i] == '|')
+	{
+		if (str[i + 1] == '|')
+			return (OR_OPERATOR);
+		return (PIPE_OPERATOR);
+	}
+	if (str[i] == '&' && str[i + 1] == '&')
+		return (AND_OPERATOR);
+	if (str[i] == ';')
+		return (SEMI_COLON);
+	return (-1);
+}
+
+// function using substr
+int trouve_la_prochaine_portion_a_etudier(char *cmd_line, char **str/* a remplir avec la portion retiree */, \
+int *positon_dans_la_string)
+{
+	int i = *positon_dans_la_string;
+	int delimiter;
+
+	while (cmd_line[i])
+	{
+		delimiter = is_delimiter(cmd_line, i);
+		if (delimiter != -1)
+			break;
+		i++;
+	}
+	*str = ft_substr(cmd_line, *positon_dans_la_string, i);
+	return (delimiter);
 }
 
 int	find_closing_parenthesis(char *str)
