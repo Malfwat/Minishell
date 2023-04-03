@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/03 14:22:18 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/03 14:59:33 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,13 @@ bool	check_io_param(char *str, int *i, char **new_line)
 	if (str[*i + j] == '<' || str[*i + j] == '>')
 	{
 		j += 1;
-		if (j == 0)
-		{
+		// if (j == 0)
+		// {
 			if (str[*i + j] == str[*i])
 				j += 1;
 			while (str[*i + j] == ' ')
 				j += 1;
-		}
+		// }
 		while (str[*i + j] && str[*i + j] != ' ')
 			j += 1;
 		*new_line = ft_substr(str, *i, j);
