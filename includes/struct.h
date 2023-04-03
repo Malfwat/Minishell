@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/03 11:50:23 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/03 13:19:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 typedef struct s_env_var
 {
 	char				*var;
+	struct s_env_var	*prev;
 	struct s_env_var	*next;
 }	t_env_var;
 
