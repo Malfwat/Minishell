@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:08:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:20:12 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 01:27:00 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ bool 	check_parenthesis_param(char *str, int *i, char **new_line)
 		if (*i == -1)
 			return (/* ft_error(),  */false);
 		*new_line = ft_substr(str, start, *i- start + 1);
+		
 		return (true);
 		*i += 1;
 	}
