@@ -1,0 +1,18 @@
+index 0 =>
+
+- Nom du programme OU input OU output (ordre qu'on veut)
+
+SI nom du programme deja donne, on lit des arguments (ou input/output si on le detecte)
+
+SI on detecte FIN  ou SEPARATEUR => On met le block de commande precedent dans notre list
+Si on detecte autre chose (ni input/output/argument/separateur) => erreur on quitte
+
+
+
+(si il y a un pipe puis une parenthese c'est correct a condition qu'une commande a ete trouvee)
+
+
+
+SI PARENTHESE (et que debut_de_commande == 1):
+on deplace le curseur liste chainee vers un nouvelle enfant
+On traite la chaine de caractere a l'interieur
