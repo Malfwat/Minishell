@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loook.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:32:19 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/01 18:41:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/03 14:37:41 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,40 @@ void	ft_error(void)
 }
 
 
-bool 	check_io_param(char *str, int *i, char **new_line)
+bool	is_quote_closed(char c)
 {
-	
+	static int	single_quote;
+	static int	double_quote;
+
+	if (c == '\'')
+		single_quote += 1;
+	else if (c == '\"')
+		double_quote += 1;
+	return (single_quote % 2 == 0 && double_quote % 2 == 0);
+}
+
+bool	check_io_param(char *str, int *i, char **new_line)
+{
+	int	j;
+
+	j = 0;
+	if (str[*i + j] == '<' || str[*i + j] == '>')
+	{
+		j += 1;
+		if (j == 0)
+		{
+			if (str[*i + j] == str[*i])
+				j += 1;
+			while (str[*i + j] == ' ')
+				j += 1;
+		}
+		while (str[*i + j] && str[*i + j] != ' ' && !is_quote_closed(str[*i + j]))
+			j += 1;
+		*new_line = ft_substr(str, *i, j);
+		*i += j;
+		return (true);
+	}
+	return (false);
 }
 
 bool 	check_parenthesis_param(char *str, int *i, char **new_line)
