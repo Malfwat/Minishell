@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/03 14:59:33 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/03 19:22:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,25 +138,109 @@ bool 	check_parenthesis_param(char *str, int *i, char **new_line)
 	return (false);
 }
 
+bool	is_quote_closed(char c)
+{
+	static int	single_quote;
+	static int	double_quote;
+
+	if (c == '\'')
+		single_quote += 1;
+	else if (c == '\"')
+		double_quote += 1;
+	return (single_quote % 2 == 0 && double_quote % 2 == 0);
+}
+
+int	count_chars_inside_quotes(char **str, char c)
+{
+	int	count;
+	
+	count = 0;
+	(*str)++;
+	while (**str && **str != c)
+	{
+		count++;
+		(*str)++;
+	}
+	if (**str)
+		(*str)++;
+	return (count);
+}
+
+int	copy_chars_inside_quotes(char *src, char c, char **dest)
+{
+	int	i;
+
+	i = 0;
+	while (src && src[i] != c)
+		*((*dest)++) = src[i++];
+	if (src[i])
+		i++;
+	return (i);
+}
+
+int	count_param_length(char *str, char *charset, int *size)
+{
+	int	count;
+
+	count = 0;
+	while (*str && !ft_strchr(charset, *str) && ft())
+	{
+		if (ft_strchr("'\"", *str) && ft_strchr(str + 1, *str))
+			count += count_chars_inside_quotes(&str, *str);
+		else
+		{
+			count++;
+			str++;
+		}
+	}
+	if (size)
+		*size += count;
+	return (count);
+}
+
+int	ft_substr_io_param(char *src, char *dest, int length)
+{
+	int	i;
+
+	i = 0;
+	if (!dest)
+		return (0);
+	while (ft_strchr("><", src[i]))
+		*(dest++) = src[i++];
+	while (ft_strchr(" \t", src[i]))
+		i++;
+	while (src[i] && !ft_strchr(" \t><", src[i]))
+	{
+		if (ft_strchr("'\"", src[i]) && ft_strchr(&src[i + 1], src[i]))
+			i += 1 + copy_chars_inside_quotes(&src[i + 1], src[i], &dest);
+		else
+			*(dest++) = src[i++];
+	}
+	*(dest) = 0;
+	return (i);
+}
+
 bool	check_io_param(char *str, int *i, char **new_line)
 {
-	int	j;
+	int		j;
+	int		size;
+	// char	*str;
 
+	size = 1;
 	j = 0;
-	if (str[*i + j] == '<' || str[*i + j] == '>')
+	if (ft_strchr("><", str[*i + j++]))
 	{
-		j += 1;
-		// if (j == 0)
-		// {
-			if (str[*i + j] == str[*i])
-				j += 1;
-			while (str[*i + j] == ' ')
-				j += 1;
-		// }
-		while (str[*i + j] && str[*i + j] != ' ')
-			j += 1;
-		*new_line = ft_substr(str, *i, j);
-		*i += j;
+		if (str[*i + j] == str[*i])
+		{
+			j++;
+			size++;
+		}
+		while (ft_strchr(" \t", str[*i + j]))
+			j++;
+		if (!count_param_length(&str[*i + j], " \t><", &size))
+			return (false);
+		*new_line = malloc((size + 1) * sizeof(char));
+		*i += ft_substr_io_param(&str[*i], *new_line, size);
 		return (true);
 	}
 	return (false);
