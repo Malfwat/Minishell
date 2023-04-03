@@ -27,11 +27,12 @@ SRCS =	get_next_line/get_next_line.c \
 	ft_strcpy.c \
 	ft_strncat.c \
 	ft_strchr.c \
+	ft_strchrnul.c \
+	ft_strschr_here.c \
 	ft_strs_expand.c \
 	ft_intchr.c \
 	ft_strnchr.c \
 	ft_strrchr.c \
-	ft_strchrnul.c \
 	ft_strstr.c \
 	ft_str_endswith.c \
 	ft_strcasestr.c \
