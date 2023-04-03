@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:32:50 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/02 20:42:36 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 01:36:57 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	print_cwd(void)
+void	pwd(void)
 {
 	char	*current_dir;
 
