@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 23:59:34 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:00:47 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 01:28:27 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	free_env_lst(t_env_var **lst)
 	while (*lst)
 	{
 		tmp = (*lst)->next;
-		free((*lst)->var);
+		if ((*lst)->var)
+			free((*lst)->var);
 		free(*lst);
 		*lst = tmp;
 	}
