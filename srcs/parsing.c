@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/01 18:55:10 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/03 12:00:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,21 @@ t_block	*new_block(char *line)
 
 t_block	*last_sibling(t_block *head)
 {
-	while (head->next)
+	while (head && head->next)
 		head = head->next;
 	return (head);
 }
 
 t_block	*last_pipe(t_block *head)
 {
-	while (head->pipe_next)
+	while (head && head->pipe_next)
 		head = head->pipe_next;
 	return (head);
 }
 
 t_block	*last_sub(t_block *head)
 {
-	while (head->sub)
+	while (head && head->sub)
 		head = head->sub;
 	return (head);
 }
