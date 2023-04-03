@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test3.c                                            :+:      :+:    :+:   */
+/*   draft_test.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/03 20:17:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/03 20:18:30 by hateisse         ###   ########.fr       */
+/*   Created: 2023/04/03 23:36:44 by malfwa            #+#    #+#             */
+/*   Updated: 2023/04/03 23:37:05 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	main(void)
-{
-	while (1
-		&& 0)
-		;
-	return (0);
+#include <criterion/criterion.h>
+
+Test(basics, first_test) {
+          cr_assert(1 + 1 == 2);
 }
