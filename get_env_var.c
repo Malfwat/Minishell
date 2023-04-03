@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/03 13:15:11 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/03 13:50:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_env_var	*new_env_var(char *str)
 	if (!new)
 		return (NULL);
 	new->var = str;
+	new->prev = NULL;
 	new->next = NULL;
 	return (new);
 }
@@ -39,14 +40,19 @@ t_env_var	*get_last(t_env_var *tmp)
 int	add_env_var(t_env_var **head, char *str)
 {
 	t_env_var	*new;
+	t_env_var	*last;
 
 	new = new_env_var(str);
 	if (!new)
 		return (free(str), -1);
 	if (!*head)
 		*head = new;
-	else 
-		get_last(*head)->next = new;
+	else
+	{
+		last = get_last(*head);
+		last->next = new;
+		new->prev = last;
+	}
 	return (0);
 }
 
@@ -87,6 +93,7 @@ char **t_env_var_to_array(t_env_var	*lst)
 	t_env_var	*tmp;
 
 	tmp = lst;
+	len = 0;
 	while (lst)
 	{
 		lst = lst->next;
@@ -143,14 +150,17 @@ t_env_var	*find_env_var(t_env_var	*lst, char *str)
 {
 	char	*tmp;
 	
-	tmp = get_env_var_name(lst->var);
-	while (lst && ft_strcmp(str, tmp))
+	while (lst)
 	{
-		free(tmp);
 		tmp = get_env_var_name(lst->var);
+		if (ft_strcmp(str, tmp) == 0)
+		{
+			free(tmp);
+			return (lst);
+		}
+		free(tmp);
 		lst = lst->next;
 	}
-	free(tmp);
 	return (lst);
 }
 
@@ -178,29 +188,45 @@ int export(t_env_var **lst, char *str)
 }
 
 
-// int	unset(t_env_var **head, char *name)
-// {
-	
-// }
+int	unset(t_env_var **head, char *name)
+{
+	t_env_var	*to_pop;
+
+	to_pop = find_env_var(*head, name);
+	if (!to_pop)
+		return (0);
+	if (to_pop->prev)
+		to_pop->prev->next = to_pop->next;
+	if (to_pop->next)
+		to_pop->next->prev = to_pop->prev;
+	free(to_pop->var);
+	free(to_pop);
+	return (0);
+}
 
 int	main(int ac, char **av, char **env)
 {
 	t_env_var	*env_lst;
 	char *str1 = ft_strdup("test=sdfsf");
-	char *str2 = ft_strdup("test=bonjour");
-	char *res;
+	char *str3 = ft_strdup("test=sdfsf");
+	char *str2 = ft_strdup("test2=bonjour");
+	char **tab;
 	(void)ac;
 	(void)av;
 	
 	env_lst = get_env_var(env);
 	export(&env_lst, str1);
-	res = get_env_var_value(find_env_var(env_lst, "test")->var);
-	printf("'%s'\n", res);
-	free(res);
+	export(&env_lst, str3);
 	export(&env_lst, str2);
-	res = get_env_var_value(find_env_var(env_lst, "test")->var);
-	printf("'%s'\n", res);
-	free(res);
+	tab = t_env_var_to_array(env_lst);
+	print_tab(tab);
+	free(tab);
+	printf("\n\n\n\n");
+	unset(&env_lst, "test");
+	unset(&env_lst, "test2");
+	tab = t_env_var_to_array(env_lst);
+	print_tab(tab);
+	free(tab);
 	free_env_lst(&env_lst);
 	return (0);
 }
