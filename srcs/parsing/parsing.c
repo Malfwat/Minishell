@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 16:57:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:16:48 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,61 +16,77 @@
 #include <libft.h>
 #include <stdio.h>
 
-int	count_chars_inside_quotes(char **str, char c)
+bool	is_delimiter(char *str, int *storage)
 {
-	int	count;
-	
-	count = 0;
-	(*str)++;
-	while (**str && **str != c)
+	if (str[0] == '|')
 	{
-		count++;
-		(*str)++;
-	}
-	if (**str)
-		(*str)++;
-	if (!count)
-		count = 2;
-	return (count);
-}
-
-int	copy_chars_inside_quotes(char *src, char c, char **dest)
-{
-	int	i;
-
-	i = 0;
-	if (src[i] == c)
-	{
-		*((*dest)++) = c;
-		*((*dest)++) = c;
-		return (2 + (src[i + 2]));
-	}
-	while (src && src[i] != c)
-		*((*dest)++) = src[i++];
-	if (src[i])
-		i++;
-	return (i);
-}
-
-int	count_param_length(char *str, char *charset, int *size)
-{
-	int	count;
-
-	count = 0;
-	while (*str && !ft_strchr(charset, *str)
-		&& !ft_strschr_here(4, str, "&&", "||", "<<", ">>"))
-	{
-		if (ft_strchr("'\"", *str) && ft_strchr(str + 1, *str))
-			count += count_chars_inside_quotes(&str, *str);
+		if (str[1] == '|')
+			*storage = OR_OPERATOR;
 		else
-		{
-			count++;
-			str++;
-		}
+			*storage = PIPE_OPERATOR;
 	}
-	if (size)
-		*size += count;
-	return (count);
+	else if (str[0] == '&' && str[1] == '&')
+		*storage = AND_OPERATOR;
+	else if (str[0] == ';')
+		*storage = SEMI_COLON;
+	if (*storage != -1)
+		return (true);
+	return (false);
+}
+
+bool	is_valid_param(char *param, int type, t_block *block)
+{
+	errno = 0;
+	if (type == -1)
+		return (0);
+	else if (!block->cmd.name && type == CMD_ARG && !block->sub)
+		block->cmd.name = param;
+	else if (block->cmd.name && type == CMD_ARG && !block->sub)
+		ft_addargs(&block->cmd.args, param);
+	else if (type == INPUT_OUTPUT)
+		ft_add_io(block, param);
+	else if (type == PARENTHESIS && !block->cmd.args && !block->sub)
+	{
+		block->subshell_command = param;
+		add_block_back(&block->sub, &last_sub);
+	}
+	else
+		return (0);
+	if (errno)
+		return (0);
+	return (1);
+}
+
+
+
+void parse_cmd(t_block **curr_block, char *cmd_line)
+{
+	int i = 0;
+	int	type = -1;
+	char	*next_param;
+
+	next_param = get_next_param(cmd_line, &i, &type);
+	while (next_param && is_valid_param(next_param, type, *curr_block))
+	{
+		if (type == PARENTHESIS)
+			if (func(&((*curr_block)->sub), ft_substr(&cmd_line[i], 1, \
+			ft_strlen(&cmd_line[i]) - 2)) == -1)
+				return (free(cmd_line), -1);
+			next_param = get_next_param(cmd_line, &i, &type);
+			continue ;
+		if (check_and_store_delimiter(cmd_line, &(*curr_block)->operator))
+		{
+			(*curr_block)->operator = is_delimiter(cmd_line, i);
+			add_block_back(curr_block, last_sibling);
+			curr_block = &(*curr_block)->next;
+			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
+		}
+		next_param = get_next_param(cmd_line, &i, &type);
+	}
+	if (next_param)
+		error(free(next_param), -1);
+	free(cmd_line);
+	return (0);
 }
 
 char	*get_next_param(char *str, int *i, int *type)
@@ -84,6 +100,7 @@ char	*get_next_param(char *str, int *i, int *type)
 	{
 		if (res == NULL)
 			return (perror("malloc failed"), NULL);
+		
 	}
 	return (res);
 }
