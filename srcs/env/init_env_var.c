@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env_var.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 23:59:34 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:28:27 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 21:26:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ bool	add_env_var(t_env_var **head, char *str)
 t_env_var	*get_env_var(char **env)
 {
 	t_env_var	*lst;
-	int	i;
+	int			i;
 
 	i = 0;
 	lst = NULL;

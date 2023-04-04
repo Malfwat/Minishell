@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 16:57:10 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:26:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <env_function.h>
 #include <libft.h>
 
-int export(t_env_var **lst, char *str)
+int	export(t_env_var **lst, char *str)
 {
 	t_env_var	*tmp;
 	char		*name;
@@ -58,7 +58,7 @@ int	unset(t_env_var **head, char *name)
 void	env(t_env_var *lst)
 {
 	char	**tab;
-	
+
 	tab = t_env_var_to_array(lst);
 	ft_print_array_str(tab);
 	free(tab);

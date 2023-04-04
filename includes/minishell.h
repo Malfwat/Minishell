@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:16:55 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:34:44 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ enum e_operator
 enum e_type
 {
 	INPUT_OUTPUT,
-	PARENTHESIS, 
+	PARENTHESIS,
 	CMD_ARG
 };
 
@@ -37,7 +37,7 @@ t_block	*new_block(void);
 t_block	*last_sub(t_block *head);
 t_block	*last_pipe(t_block *head);
 t_block	*last_sibling(t_block *head);
-int		add_block_back(t_block **head, t_block *(*last)(t_block *));
+void	add_block_back(t_block **head, t_block *(*last)(t_block *));
 
 // built_in/
 

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 21:11:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:14:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:30:24 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 int	count_chars_inside_quotes(char **str, char c)
 {
 	int	count;
-	
+
 	count = 0;
 	(*str)++;
 	while (**str && **str != c)
