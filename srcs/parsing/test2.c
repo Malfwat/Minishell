@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 15:32:17 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 16:12:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 #include <minishell.h>
 #include <unistd.h>
 #include <parsing.h>
-
+#include <readline/history.h>
+#include <readline/readline.h>
 
 // char	*get_next_param(char *str, int *i, int *type)
 // {
@@ -36,14 +37,17 @@
 // 	return (res);
 // }
 
-int	main(int ac, char **av)
+int	main(void)
 {
 	char	*res = NULL;
 	int		i = 0;
 	int		type = -1;
 	
-	if (ac != 2)
-		return (0);
-	res = get_next_param("\" '' \"", &i, &type);
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+		return (perror("minishell"), 1);
+	readline(">> ");
+	res = get_next_param(rl_line_buffer, &i, &type);
+	free(rl_line_buffer);
+	free(rl_prompt);
 	printf("[%d] res: '%s'\n", type, res);
 }
