@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 15:12:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 15:29:21 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <parsing.h>
 #include <minishell.h>
 #include <libft.h>
-
+#include <stdio.h>
 
 int	count_chars_inside_quotes(char **str, char c)
 {
@@ -67,10 +67,8 @@ int	count_param_length(char *str, char *charset, int *size)
 
 char	*get_next_param(char *str, int *i, int *type)
 {
-	int		i;
 	char	*res;
 
-	i = 0;
 	res = NULL;
 	if (check_parenthesis_param(str, i, &res, type) \
 		|| check_io_param(str, i, &res, type) \
