@@ -6,10 +6,9 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 15:50:04 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:26:18 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include <minishell.h>
 #include <env_function.h>

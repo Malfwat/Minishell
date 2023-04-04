@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parenthesis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:08:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 15:09:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 21:31:01 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 int	find_closing_parenthesis(char *str)
 {
-	int counter;
-	int i;
+	int	counter;
+	int	i;
 
 	counter = 0;
 	i = 0;
@@ -34,17 +34,17 @@ int	find_closing_parenthesis(char *str)
 	return (-1);
 }
 
-bool 	check_parenthesis_param(char *str, int *i, char **new_line, int *type)
+bool	check_parenthesis_param(char *str, int *i, char **new_line, int *type)
 {
-	int start;
+	int	start;
 
 	start = *i;
 	if (str[*i] == '(')
 	{
 		*i += find_closing_parenthesis(&str[*i]);
 		if (*i == -1)
-			return (/* ft_error(),  */false);
-		*new_line = ft_substr(str, start, *i- start + 1);
+			return (false);
+		*new_line = ft_substr(str, start, *i - start + 1);
 		*type = PARENTHESIS;
 		return (true);
 		*i += 1;

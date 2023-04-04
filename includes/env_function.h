@@ -6,15 +6,14 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 16:57:46 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:23:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_FUNCTION_C
-# define ENV_FUNCTION_C
+#ifndef ENV_FUNCTION_H
+# define ENV_FUNCTION_H
 
-#include <struct_ms.h>
-
+# include <struct_ms.h>
 
 // init_env_var.c
 

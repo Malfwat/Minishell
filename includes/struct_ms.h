@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 20:45:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:24:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 # define STRUCT_MS_H
 
-#include <stdbool.h>
+# include <stdbool.h>
 
 typedef struct s_env_var
 {
 	char				*var;
-	// char				*var_value;
 	struct s_env_var	*prev;
 	struct s_env_var	*next;
 }	t_env_var;
@@ -39,9 +38,6 @@ typedef struct s_cmd
 	int				pid;
 	char			*output;
 	char			*input;
-	// struct s_cmd	*begin;
-	// struct s_cmd	*end;
-	// struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_redirect
