@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 15:07:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 21:16:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include <struct.h>	
+# include <struct_ms.h>	
+# include <stdbool.h>
+# include <errno.h>
 
 enum e_operator
 {
@@ -31,16 +33,21 @@ enum e_type
 
 // init_t_block.c
 
-t_block	*new_block(char *line);
+t_block	*new_block(void);
 t_block	*last_sub(t_block *head);
 t_block	*last_pipe(t_block *head);
 t_block	*last_sibling(t_block *head);
-int		add_block_back(t_block **head, char *line, t_block *(*last)(t_block *));
+int		add_block_back(t_block **head, t_block *(*last)(t_block *));
 
 // built_in/
 
 void	pwd(void);
-int	cd(t_env_var	*head, char *str);
+int		cd(t_env_var	*head, char *str);
+void	echo(bool nl, int nb, ...);
 
+// struct_utils
+
+void	ft_add_io(t_block *block, char *io);
+void	ft_addargs(t_arg **head, char *arg);
 
 #endif /* MINISHELL_H */

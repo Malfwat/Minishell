@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env_function.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 00:57:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 16:57:46 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_FUNCTION_C
 # define ENV_FUNCTION_C
 
-#include <struct.h>
+#include <struct_ms.h>
 
 
 // init_env_var.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 21:12:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/01/25 15:29:02 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:34:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 # include <errno.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-# include <struct.h>
+# include <struct_ppx.h>
+
 # ifndef NO_CMD
 #  define NO_CMD "command not found: \0"
 # endif /*NO_CMD*/

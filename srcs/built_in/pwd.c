@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:38:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:38:54 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 15:44:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	pwd(void)
 
 	current_dir = getcwd(NULL, 0);
 	if (current_dir)
-		printf("Le repertoire actuel est %s\n", current_dir);
+		printf("%s\n", current_dir);
 	else
 	{
-		perror("getcwd");
-		exit(1);
+		perror("pwd");
+		exit(0);
 	}
 	free(current_dir);
 }
