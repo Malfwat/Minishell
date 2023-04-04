@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/03 23:53:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 14:59:30 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,23 @@ typedef struct s_env_var
 	struct s_env_var	*next;
 }	t_env_var;
 
+typedef struct s_arg
+{
+	char			*arg;
+	struct s_arg	*next;
+}	t_arg;
 
 typedef struct s_cmd
 {
-	char			**cmd;
+	char			*cmd;
+	t_arg			*args;
 	char			*error_str;
 	int				exit_value;
 	int				pid;
 	char			*output;
 	char			*input;
-	struct s_cmd	*begin;
-	struct s_cmd	*end;
+	// struct s_cmd	*begin;
+	// struct s_cmd	*end;
 	// struct s_cmd	*next;
 }	t_cmd;
 

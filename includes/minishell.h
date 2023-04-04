@@ -6,14 +6,13 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:52:11 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 15:07:30 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-# include <struct.h>
+# include <struct.h>	
 
 enum e_operator
 {
@@ -21,6 +20,13 @@ enum e_operator
 	OR_OPERATOR,
 	PIPE_OPERATOR,
 	SEMI_COLON
+};
+
+enum e_type
+{
+	INPUT_OUTPUT,
+	PARENTHESIS, 
+	CMD_ARG
 };
 
 // init_t_block.c
