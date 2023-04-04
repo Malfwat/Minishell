@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 15:29:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 16:57:03 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct.h>
+#include <struct_ms.h>
 #include <parsing.h>
 #include <minishell.h>
 #include <libft.h>
@@ -29,6 +29,8 @@ int	count_chars_inside_quotes(char **str, char c)
 	}
 	if (**str)
 		(*str)++;
+	if (!count)
+		count = 2;
 	return (count);
 }
 
@@ -37,6 +39,12 @@ int	copy_chars_inside_quotes(char *src, char c, char **dest)
 	int	i;
 
 	i = 0;
+	if (src[i] == c)
+	{
+		*((*dest)++) = c;
+		*((*dest)++) = c;
+		return (2 + (src[i + 2]));
+	}
 	while (src && src[i] != c)
 		*((*dest)++) = src[i++];
 	if (src[i])
