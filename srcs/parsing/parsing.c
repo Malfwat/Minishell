@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:38:09 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:19:08 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,19 @@ char	*get_next_param(char *str, int *i, int *type)
 	return (NULL);
 }
 
-void	parse_cmd(t_block **curr_block, char *cmd_line)
+void	ft_error(int err, char *comment)
+{
+	ft_putstr_fd("minishell: ", 2);
+	if (err == CMD_SYNTAX_ERR)
+	{
+		ft_putstr_fd("syntax error near unexpected token \n", 2);
+		ft_putchar_fd("`", 2);
+		ft_putstr_fd(comment, 2);
+		ft_putchar_fd("`\n", 2);
+	}
+}
+
+bool	parse_cmd(t_block **curr_block, char *cmd_line)
 {
 	int		i;
 	int		type;
@@ -82,9 +94,9 @@ void	parse_cmd(t_block **curr_block, char *cmd_line)
 	{
 		if (type == PARENTHESIS)
 		{
-			if (func(&((*curr_block)->sub), ft_substr(&cmd_line[i], 1, \
-			ft_strlen(&cmd_line[i]) - 2)) == -1)
-				return (free(cmd_line), -1);
+			if (parse_cmd(&((*curr_block)->sub), ft_substr(&cmd_line[i], 1, \
+			ft_strlen(&cmd_line[i]) - 2)))
+				return (free(cmd_line), false);
 			next_param = get_next_param(cmd_line, &i, &type);
 			continue ;
 		}
@@ -97,8 +109,18 @@ void	parse_cmd(t_block **curr_block, char *cmd_line)
 		}
 		next_param = get_next_param(cmd_line, &i, &type);
 	}
+	if (errno)
+		return(free(cmd_line), free(next_param), \
+		perror("minishell"), false);
 	if (next_param)
-		error(free(next_param), -1);
+	{
+		ft_error(CMD_SYNTAX_ERR, next_param);
+		free(next_param);
+		return (false);
+	}
 	free(cmd_line);
-	return (0);
+	return (true);
 }
+
+if (next_param || errno)
+	error
