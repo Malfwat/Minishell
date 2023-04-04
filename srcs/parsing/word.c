@@ -6,12 +6,13 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:20:34 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 15:10:45 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
 #include <stdbool.h>
+#include <minishell.h>
 #include <libft.h>
 
 int	ft_substr_word_param(char *src, char *dest)
@@ -35,7 +36,7 @@ int	ft_substr_word_param(char *src, char *dest)
 	return (i);
 }
 
-bool	check_word_param(char *str, int *i, char **new_line)
+bool	check_word_param(char *str, int *i, char **new_line, int *type)
 {
 	int		j;
 	int		size;
@@ -50,6 +51,7 @@ bool	check_word_param(char *str, int *i, char **new_line)
 			return (false);
 		*new_line = malloc((size + 1) * sizeof(char));
 		*i += ft_substr_word_param(&str[*i], *new_line);
+		*type = CMD_ARG;
 		return (true);
 	}
 	return (false);

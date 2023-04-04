@@ -6,12 +6,13 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:08:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:27:00 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 15:09:53 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <stdbool.h>
+#include <minishell.h>
 
 int	find_closing_parenthesis(char *str)
 {
@@ -33,7 +34,7 @@ int	find_closing_parenthesis(char *str)
 	return (-1);
 }
 
-bool 	check_parenthesis_param(char *str, int *i, char **new_line)
+bool 	check_parenthesis_param(char *str, int *i, char **new_line, int *type)
 {
 	int start;
 
@@ -44,7 +45,7 @@ bool 	check_parenthesis_param(char *str, int *i, char **new_line)
 		if (*i == -1)
 			return (/* ft_error(),  */false);
 		*new_line = ft_substr(str, start, *i- start + 1);
-		
+		*type = PARENTHESIS;
 		return (true);
 		*i += 1;
 	}
