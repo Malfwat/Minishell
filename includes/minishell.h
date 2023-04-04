@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:34:44 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 22:05:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ enum e_type
 	INPUT_OUTPUT,
 	PARENTHESIS,
 	CMD_ARG
+};
+
+enum e_errors
+{
+	CMD_SYNTAX_ERR
 };
 
 // init_t_block.c
