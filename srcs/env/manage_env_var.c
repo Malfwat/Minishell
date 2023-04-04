@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_env_var.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:00:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 21:27:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 #include <env_function.h>
 #include <stdlib.h>
 
-char *get_env_var_name(char *str)
+char	*get_env_var_name(char *str)
 {
 	int	i;
 
 	i = 0;
-	while(str[i] != '=')
+	while (str[i] != '=')
 		i++;
 	return (ft_substr(str, 0, i));
 }
 
-char *get_env_var_value(char *str)
+char	*get_env_var_value(char *str)
 {
 	int	i;
 
 	i = 0;
-	while(str[i] != '=')
+	while (str[i] != '=')
 		i++;
 	return (ft_substr(str, i + 1, ft_strlen(&str[i + 1])));
 }
 
-char **t_env_var_to_array(t_env_var	*lst)
+char	**t_env_var_to_array(t_env_var	*lst)
 {
 	char		**tab;
 	int			len;
@@ -64,7 +64,7 @@ char **t_env_var_to_array(t_env_var	*lst)
 t_env_var	*find_env_var(t_env_var	*lst, char *str)
 {
 	char	*tmp;
-	
+
 	while (lst)
 	{
 		tmp = get_env_var_name(lst->var);

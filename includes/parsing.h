@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:16:33 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:22:01 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 int		find_closing_parenthesis(char *str);
 bool	check_parenthesis_param(char *str, int *i, char **new_line, int *type);
-
 
 // parsing.c
 

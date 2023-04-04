@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:04:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:29:41 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ t_redirect	*new_cmd_arg(char *arg)
 
 t_redirect	*last_redirect(t_redirect *head)
 {
-	
 	while (head && head->next)
 		head = head->next;
 	return (head);
 }
-
 
 void	ft_addargs(t_redirect **head, char *arg)
 {

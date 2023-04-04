@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:16:48 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:38:09 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,37 @@ bool	is_valid_param(char *param, int type, t_block *block)
 	return (1);
 }
 
-
-
-void parse_cmd(t_block **curr_block, char *cmd_line)
+char	*get_next_param(char *str, int *i, int *type)
 {
-	int i = 0;
-	int	type = -1;
+	char	*res;
+
+	res = NULL;
+	if (check_parenthesis_param(str, i, &res, type) \
+		|| check_io_param(str, i, &res, type) \
+		|| check_word_param(str, i, &res, type))
+		return (res);
+	return (NULL);
+}
+
+void	parse_cmd(t_block **curr_block, char *cmd_line)
+{
+	int		i;
+	int		type;
 	char	*next_param;
 
+	i = 0;
+	type = -1;
 	next_param = get_next_param(cmd_line, &i, &type);
 	while (next_param && is_valid_param(next_param, type, *curr_block))
 	{
 		if (type == PARENTHESIS)
+		{
 			if (func(&((*curr_block)->sub), ft_substr(&cmd_line[i], 1, \
 			ft_strlen(&cmd_line[i]) - 2)) == -1)
 				return (free(cmd_line), -1);
 			next_param = get_next_param(cmd_line, &i, &type);
 			continue ;
+		}
 		if (check_and_store_delimiter(cmd_line, &(*curr_block)->operator))
 		{
 			(*curr_block)->operator = is_delimiter(cmd_line, i);
@@ -87,20 +101,4 @@ void parse_cmd(t_block **curr_block, char *cmd_line)
 		error(free(next_param), -1);
 	free(cmd_line);
 	return (0);
-}
-
-char	*get_next_param(char *str, int *i, int *type)
-{
-	char	*res;
-
-	res = NULL;
-	if (check_parenthesis_param(str, i, &res, type) \
-		|| check_io_param(str, i, &res, type) \
-		|| check_word_param(str, i, &res, type))
-	{
-		if (res == NULL)
-			return (perror("malloc failed"), NULL);
-		
-	}
-	return (res);
 }

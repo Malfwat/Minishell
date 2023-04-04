@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 17:42:27 by amouflet          #+#    #+#             */
-/*   Updated: 2023/04/04 16:33:35 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 21:27:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	after_exec(int *pipe1, int *pipe0, int i, t_cmd **cmd)
 void	child(int *pfds[2], t_task task, int size)
 {
 	int		i;
-	t_task tmp;
+	t_task	tmp;
 
 	i = 0;
 	get_infiles(task, pfds[0]);

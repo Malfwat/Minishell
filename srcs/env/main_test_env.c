@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_test_env.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:15:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 01:46:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/04 21:26:51 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // 	char *str2 = ft_strdup("test2=bonjour");
 // 	(void)ac;
 // 	(void)av;
-	
+
 // 	env_lst = get_env_var(envp);
 // 	env(env_lst);
 // 	export(&env_lst, str1);
