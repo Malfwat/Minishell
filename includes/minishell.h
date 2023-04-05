@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 22:05:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:59:24 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 enum e_operator
 {
-	AND_OPERATOR,
+	AND_OPERATOR = 1,
 	OR_OPERATOR,
 	PIPE_OPERATOR,
 	SEMI_COLON
@@ -54,5 +54,6 @@ void	echo(bool nl, int nb, ...);
 
 void	ft_add_io(t_block *block, char *io);
 void	ft_addargs(t_arg **head, char *arg);
+
 
 #endif /* MINISHELL_H */
