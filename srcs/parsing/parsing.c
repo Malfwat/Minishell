@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 22:19:08 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/05 14:43:40 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft.h>
 #include <stdio.h>
 
-bool	is_delimiter(char *str, int *storage)
+bool	check_and_store_delimiter(char *str, int *storage)
 {
 	if (str[0] == '|')
 	{
@@ -75,9 +75,9 @@ void	ft_error(int err, char *comment)
 	if (err == CMD_SYNTAX_ERR)
 	{
 		ft_putstr_fd("syntax error near unexpected token \n", 2);
-		ft_putchar_fd("`", 2);
+		ft_putchar_fd('`', 2);
 		ft_putstr_fd(comment, 2);
-		ft_putchar_fd("`\n", 2);
+		ft_putstr_fd("`\n", 2);
 	}
 }
 
@@ -89,7 +89,11 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 
 	i = 0;
 	type = -1;
+	*curr_block = ft_calloc(1, sizeof(t_block));
+	if (!*curr_block)
+		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
+	printf("arg: %s\n", next_param);
 	while (next_param && is_valid_param(next_param, type, *curr_block))
 	{
 		if (type == PARENTHESIS)
@@ -102,7 +106,7 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 		}
 		if (check_and_store_delimiter(cmd_line, &(*curr_block)->operator))
 		{
-			(*curr_block)->operator = is_delimiter(cmd_line, i);
+			// (*curr_block)->operator = is_delimiter(cmd_line, &i);
 			add_block_back(curr_block, last_sibling);
 			curr_block = &(*curr_block)->next;
 			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
@@ -122,5 +126,3 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 	return (true);
 }
 
-if (next_param || errno)
-	error

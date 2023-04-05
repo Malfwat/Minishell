@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:29:41 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/05 14:42:32 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <struct_ms.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-t_redirect	*new_cmd_arg(char *arg)
+t_redirect	*new_redirect(char *arg)
 {
 	t_redirect	*new;
 
@@ -42,11 +43,11 @@ t_redirect	*last_redirect(t_redirect *head)
 	return (head);
 }
 
-void	ft_addargs(t_redirect **head, char *arg)
+void	ft_add_redirect(t_redirect **head, char *arg)
 {
 	t_redirect	*new;
 
-	new = new_cmd_arg(arg);
+	new = new_redirect(arg);
 	if (!new)
 		return ;
 	if (*head == NULL)
@@ -58,7 +59,7 @@ void	ft_addargs(t_redirect **head, char *arg)
 void	ft_add_io(t_block *block, char *io)
 {
 	if (io[0] == '<')
-		ft_addargs(&block->input_redirect, io);
+		ft_add_redirect(&block->input_redirect, io);
 	else
-		ft_addargs(&block->output_redirect, io);
+		ft_add_redirect(&block->output_redirect, io);
 }
