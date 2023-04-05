@@ -1,35 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsjoin.c                                      :+:      :+:    :+:   */
+/*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/30 05:26:47 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 17:18:05 by hateisse         ###   ########.fr       */
+/*   Created: 2023/04/05 14:25:00 by malfwa            #+#    #+#             */
+/*   Updated: 2023/04/05 15:49:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdarg.h>
-#include <stdlib.h>
+#include <minishell.h>
+#include <libft.h>
+#include <struct_ms.h>
+#include <parsing_ms.h>
 
-char	*ft_strsjoin(unsigned int count, ...)
+int	main(void)
 {
-	char	*res;
-	void	*tmp;
-	va_list	ap;
+	t_block	*head;
 
-	va_start(ap, count);
-	res = NULL;
-	while (count--)
-	{
-		tmp = res;
-		res = ft_strjoin(res, va_arg(ap, char *));
-		free(tmp);
-		if (!res)
-			break ;
-	}
-	va_end(ap);
-	return (res);
+	head = NULL;
+	return (parse_cmd(&head, ft_strdup("ok ls && ls")));
 }

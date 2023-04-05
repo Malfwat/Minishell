@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   input_output.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:11:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 15:09:07 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/05 16:16:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parsing.h>
+#include <parsing_ms.h>
 #include <stdbool.h>
 #include <minishell.h>
 #include <libft.h>
@@ -22,10 +22,9 @@ int	ft_substr_io_param(char *src, char *dest)
 	i = 0;
 	if (!dest)
 		return (0);
-	while (ft_strchr("><", src[i]))
+	while (src[i] && ft_strchr("><", src[i]))
 		*(dest++) = src[i++];
-	while (ft_strchr(" \t", src[i]))
-		i++;
+	i += pass_whitespaces(src);
 	while (src[i] && !ft_strchr(SINGLE_DELIM, src[i])
 		&& !ft_strschr_here(4, &src[i], "&&", "||", "<<", ">>"))
 	{
@@ -52,8 +51,7 @@ bool	check_io_param(char *str, int *i, char **new_line, int *type)
 			j++;
 			size++;
 		}
-		while (ft_strchr(" \t", str[*i + j]))
-			j++;
+		j += pass_whitespaces(&str[*i + j]);
 		if (!count_param_length(&str[*i + j], SINGLE_DELIM, &size))
 			return (false);
 		*new_line = malloc((size + 1) * sizeof(char));

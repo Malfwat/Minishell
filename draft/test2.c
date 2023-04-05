@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/03 20:06:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/05 16:05:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,9 @@ int	ft_substr_word_param(char *src, char *dest, int length)
 {
 	int	i;
 
-	i = 0;
 	if (!dest)
 		return (0);
-	while (ft_strchr(" \t", src[i]))
-		i++;
+	i = pass_whitespaces(src);
 	while (src[i] && !ft_strchr(" \t><", src[i]))
 	{
 		if (ft_strchr("'\"", src[i]) && ft_strchr(&src[i + 1], src[i]))
@@ -106,8 +104,7 @@ bool	check_word_param(char *str, int *i, char **new_line)
 	j = 0;
 	if (!ft_strchr("><", str[*i + j++]))
 	{
-		while (ft_strchr(" \t", str[*i + j]))
-			j++;
+		j += pass_whitespaces(&str[*i + j]);
 		if (!count_param_length(&str[*i + j], " \t><", &size))
 			return (false);
 		*new_line = malloc((size + 1) * sizeof(char));
