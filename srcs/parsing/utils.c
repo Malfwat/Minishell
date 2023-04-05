@@ -6,12 +6,12 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 21:11:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:30:24 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/05 16:09:46 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
-#include <parsing.h>
+#include <parsing_ms.h>
 #include <minishell.h>
 #include <libft.h>
 #include <stdio.h>
@@ -77,10 +77,18 @@ int	pass_ws_and_delim(char *str, int type)
 {
 	int	i;
 
-	i = 0;
-	while (ft_strchr(" \t", str[i]))
-		i++;
+	i = pass_whitespaces(str);
 	if (type < 2)
 		return (i + 2);
 	return (i + 1);
+}
+
+int	pass_whitespaces(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && ft_strchr(" \t", str[i]))
+		i++;
+	return (i);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_t_block.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:02:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/05 14:21:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/05 15:24:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_block	*new_block(void)
 	new = ft_calloc(1, sizeof(t_block));
 	if (!new)
 		return (NULL);
+	
 	return (new);
 }
 
