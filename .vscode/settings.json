@@ -4,6 +4,7 @@
 		"types.h": "c",
 		"stdlib.h": "c",
 		"stdbool.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"wait.h": "c"
 	}
 }
