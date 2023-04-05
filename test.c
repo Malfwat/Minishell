@@ -31,7 +31,7 @@ int	main(void)
 	
 	readline("➜  \033[38;5;189mparsing \033[0m✗  ");
 
-	res = get_next_param(rl_line_buffer, &i, &type);
+	//res = get_next_param(rl_line_buffer, &i, &type);
 	free(rl_line_buffer);
 	free(rl_prompt);
 	printf("[%d] res: '%s'\n", type, res);
