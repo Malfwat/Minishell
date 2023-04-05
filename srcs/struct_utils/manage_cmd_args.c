@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:29:54 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/05 22:57:08 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,27 @@ void	ft_addargs(t_arg **head, char *arg)
 		*head = new;
 	else
 		last_arg(*head)->next = new;
+}
+
+char	**t_arg_to_array(t_arg *head)
+{
+	char	**tab;
+	int		len;
+	t_arg	*tmp;
+
+	len = 0;
+	tmp = head;
+	while (tmp)
+		tmp = tmp->next;
+	tab = malloc(sizeof(char *) * (len + 1));
+	if (!tab)
+		return (0);
+	len = 0;
+	while (head)
+	{
+		tab[len++] = head->name; // a voir si tu preferes utiliser strdup
+		head = head->next;
+	}
+	tab[len] = NULL;
+	return (tab);
 }
