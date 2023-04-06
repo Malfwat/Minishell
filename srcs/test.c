@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/06 22:34:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 22:49:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,8 @@ bool	build_prompt_mid_delim(char **prompt, t_prompt params)
 	int		len;
 
 	len = params.term_width - params.width_without_mid_delim - 37;
+	if (!params.git_branch_name)
+		len += 23;
 	delim = NULL;
 	if (len > 0)
 	{
@@ -224,7 +226,8 @@ char	*build_prompt(t_prompt params)
 	{
 		build_prompt_start_delim(&prompt);
 		build_prompt_cwd(&prompt, params);
-		build_prompt_git(&prompt, params);
+		if (params.git_branch_name)
+			build_prompt_git(&prompt, params);
 		build_prompt_mid_delim(&prompt, params);
 		build_prompt_exit_status(&prompt, params);
 		build_prompt_time(&prompt, params);
@@ -277,7 +280,7 @@ bool	refresh_prompt_param(t_prompt *lst)
 		return (false);
 	lst->session_user = getenv("USER");
 	lst->git_branch_name = fetch_git_cwd_branch_name();
-	if (!lst->git_branch_name)
+	if (errno)
 		return (false);
 	lst->time = fetch_current_time();
 	if (!lst->time)
@@ -287,7 +290,8 @@ bool	refresh_prompt_param(t_prompt *lst)
 		return (false);
 	lst->width_without_mid_delim = ft_intlen(lst->last_exit_code);
 	lst->width_without_mid_delim += ft_strlen(lst->session_user);
-	lst->width_without_mid_delim += ft_strlen(lst->git_branch_name);
+	if (lst->git_branch_name)
+		lst->width_without_mid_delim += ft_strlen(lst->git_branch_name);
 	lst->width_without_mid_delim += ft_strlen(lst->time);
 	lst->term_width = fetch_term_width();
 	if (lst->term_width == -1)
