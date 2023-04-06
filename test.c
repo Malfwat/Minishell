@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 21:34:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 18:02:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char	*fetch_git_cwd_branch_name(void)
 	close(tube[1]);
 	get_next_line(tube[0], &res);
 	close(tube[0]);
-	if (*res && res[ft_strlen(res) - 1] == '\n')
+	if (res && res[ft_strlen(res) - 1] == '\n')
 		res[ft_strlen(res) - 1] = 0;
 	return (res);
 }
@@ -137,8 +137,11 @@ void	build_prompt_git(char **prompt)
 	char	*branch;
 
 	branch = fetch_git_cwd_branch_name();
+	if (!branch)
+		return ;
 	tmp = *prompt;
-	*prompt = ft_strsjoin(7, tmp, LGREY_BG, "\u2387  ", LGREEN, branch, LLGREY, ENDC);
+	*prompt = ft_strsjoin(11, tmp, LGREY_BG, LLGREY,
+			"  ", ENDC, LGREY_BG, "\u2387  ", LGREEN, branch, LLGREY, ENDC);
 	free(tmp);
 	free(branch);
 }
@@ -148,8 +151,7 @@ void	build_prompt_cwd(char **prompt, char *cwd)
 	char	*tmp;
 
 	tmp = *prompt;
-	*prompt = ft_strsjoin(9, tmp, BOLD, LGREY_BG, " ", LCYAN, cwd, LLGREY,
-			"  ", ENDC);
+	*prompt = ft_strsjoin(7, tmp, BOLD, LGREY_BG, " ", LCYAN, cwd, ENDC);
 	free(tmp);
 }
 
@@ -203,9 +205,34 @@ char	*build_prompt(int status, char *cwd)
 	return (prompt);
 }
 
+char	*get_cwd_path_since_home(void)
+{
+	char	*home_path;
+	char	*cwd;
+	char	*home_in_cwd;
+	char	*result;
+
+	result = NULL;
+	home_path = getenv("HOME");
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+		return (NULL);
+	else if (home_path && *home_path)
+	{
+		home_in_cwd = ft_strnstr(cwd, home_path, ft_strlen(home_path));
+		if (home_in_cwd)
+		{
+			result = ft_strjoin("~", cwd + ft_strlen(home_path));
+			return (free(cwd), result);
+		}
+	}
+	return (cwd);
+}
+
 int	main(void)
 {
 	char	*res;
+	char	*cwd;
 	int		i;
 	int		type;
 	t_block	*head;
@@ -215,7 +242,9 @@ int	main(void)
 	type = -1;
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (perror("minishell"), 1);
-	readline(build_prompt(125, "~/42-CURSUS/Minishell"));
+	cwd =  get_cwd_path_since_home();
+	printf("cwd: %s\n", cwd);
+	readline(build_prompt(125, cwd));
 	parse_cmd(&head, rl_line_buffer);
 	free(rl_prompt);
 	printf("[%d] res: '%s'\n", type, res);
