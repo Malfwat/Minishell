@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:26:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 05:17:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,37 @@
 #include <env_function.h>
 #include <libft.h>
 
-int	export(t_env_var **lst, char *str)
+void	export(t_env_var **lst, char *name, char *value, bool temp)
 {
 	t_env_var	*tmp;
-	char		*name;
 
-	name = get_env_var_name(str);
-	if (!name)
-		return (-1);
 	tmp = find_env_var(*lst, name);
-	free(name);
 	if (!tmp)
 	{
-		if (!add_env_var(lst, str))
-			return (free_env_lst(lst), -1);
+		if (!add_env_var(lst, name, value, temp))
+			return (free_env_lst(lst));
 	}
 	else
 	{
-		free(tmp->var);
-		tmp->var = str;
+		free(name);
+		free(tmp->var_value);
+		tmp->var_value = value;
 	}
-	return (0);
 }
 
-int	unset(t_env_var **head, char *name)
+void	unset(t_env_var **head, t_env_var *to_pop)
 {
-	t_env_var	*to_pop;
-
-	to_pop = find_env_var(*head, name);
 	if (!to_pop)
-		return (0);
+		return ;
 	if (to_pop->prev)
 		to_pop->prev->next = to_pop->next;
 	if (to_pop->next)
 		to_pop->next->prev = to_pop->prev;
 	if (to_pop == *head)
 		*head = to_pop->next;
-	free(to_pop->var);
+	free(to_pop->var_name);
+	free(to_pop->var_value);
 	free(to_pop);
-	return (0);
 }
 
 void	env(t_env_var *lst)
@@ -61,5 +53,5 @@ void	env(t_env_var *lst)
 
 	tab = t_env_var_to_array(lst);
 	ft_print_array_str(tab);
-	free(tab);
+	ft_strsfree(tab);
 }
