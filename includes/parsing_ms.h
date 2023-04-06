@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/05 15:59:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:26:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int		ft_substr_word_param(char *src, char *dest);
 
 int		ft_substr_io_param(char *src, char *dest);
 bool	check_io_param(char *str, int *i, char **new_line, int *type);
-
 
 
 
