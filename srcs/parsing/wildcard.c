@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 01:14:10 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/06 03:52:36 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,56 +19,59 @@
 
 bool	compare_wildcard(char *pattern, char *str)
 {
-	int	i;
-	int	j;
+	int		i;
+	char	**tab;
+	char	*tmp;
 
 	i = 0;
-	j = 0;
-	if (ft_strcmp(pattern, "*") == 0)
-		return (true);
-	if (!ft_strstr(str, pattern))
-		return (false);
-	return (true);
+	tab = ft_split(pattern, '*');
+	if (!tab)
+		return (ft_strsfree(tab), !ft_strcmp(pattern, "*"));
+	tmp = str;
+	while (tab[i])
+	{
+		tmp = ft_strstr(tmp, tab[i]);
+		if (!tmp)
+			return (ft_strsfree(tab), false);
+		if (i++ == 0)
+			if (*str != *tmp && *pattern != '*')
+				return (ft_strsfree(tab), false);
+	}
+	if (tab[i])
+		return (ft_strsfree(tab), false);
+	if (pattern[ft_strlen(pattern) - 1] != '*' && ft_strcmp(tmp, tab[i - 1]))
+		return (ft_strsfree(tab), false);
+	return (ft_strsfree(tab), true);
 }
 
 t_arg	*wildcard(char *dir, char *pattern)
 {
 	DIR				*dirp;
 	struct dirent	*dir_entry;
+	t_arg			*lst;
 
-	// On ouvre un flux vers le repertoire courant
 	dirp = opendir(dir);
 	if (!dirp)
-	{
-		perror("dirp");
-		return (NULL);
-	}
-	// On accede aux element du repertoire, un par un
-	// on set errno a 0 pour distinguer une erreur de la fin de la liste
+		return (perror("dirp"), NULL);
 	errno = 0;
 	dir_entry = readdir(dirp);
 	while (dir_entry)
 	{
 		if (compare_wildcard(pattern, dir_entry->d_name))
-			printf("Nom du fichier: %s\n", dir_entry->d_name);
+			ft_addargs(&lst, dir_entry->d_name);
 		dir_entry = readdir(dirp);
 	}
 	if (errno)
-	{
 		perror("readdir");
-	}
-	// On ferme le flux vers le repertoire pointe par dirp
 	if (closedir(dirp) == -1)
-	{
 		perror("closedir");
-		return (NULL);
-	}
+	return (NULL);
 }
 
 void	split_path_pattern(char *str, char **path, char **pattern)
 {
 	char	*tmp;
-	int 	i;
+	int		i;
 	int		len;
 
 	i = 0;
@@ -88,7 +91,7 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 	*pattern = ft_substr(str, i, len - i + 1);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	char	*path;
 	char	*pattern;
