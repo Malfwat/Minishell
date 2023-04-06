@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/05 22:58:40 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/06 20:42:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ enum e_errors
 // init_t_block.c
 
 t_block	*new_block(void);
-t_block	*last_sub(t_block *head);
-t_block	*last_pipe(t_block *head);
-t_block	*last_sibling(t_block *head);
-void	add_block_back(t_block **head, t_block *(*last)(t_block *));
+t_block	**last_sub(t_block *head);
+t_block	**last_pipe(t_block *head);
+t_block	**last_sibling(t_block *head);
+void	add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 // built_in/
 

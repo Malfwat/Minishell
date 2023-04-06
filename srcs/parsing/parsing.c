@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 17:24:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 20:44:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool	is_valid_param(char *param, int type, t_block *block)
 	else if (type == PARENTHESIS && !block->cmd.name && !block->sub)
 	{
 		block->subshell_command = param;
-		add_block_back(&block->sub, &last_sub);
+		add_block_back(&block->sub, last_sub);
 	}
 	else
 		return (false);
@@ -103,17 +103,22 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
 		{
-			if (parse_cmd(&((*curr_block)->sub), ft_substr(&cmd_line[i], 1, \
-			ft_strlen(&cmd_line[i]) - 2)))
-				return (free(cmd_line), false);
-			next_param = get_next_param(cmd_line, &i, &type);
-			continue ;
+			if (!parse_cmd(&((*curr_block)->sub), ft_substr(next_param, 1, \
+			ft_strlen(next_param) - 2)))
+				return (free(cmd_line), free(next_param), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
 		{
-			// (*curr_block)->operator = is_delimiter(cmd_line, &i);
-			add_block_back(curr_block, last_sibling);
-			curr_block = &(*curr_block)->next;
+			if ((*curr_block)->operator == PIPE_OPERATOR)
+			{
+				curr_block = &(*curr_block)->pipe_next;
+				add_block_back(curr_block, last_pipe);
+			}
+			else
+			{
+				add_block_back(curr_block, last_sibling);
+				curr_block = &(*curr_block)->next;
+			}
 			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
 		}
 		next_param = get_next_param(cmd_line, &i, &type);
