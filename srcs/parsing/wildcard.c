@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 04:00:02 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/06 04:11:47 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,13 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 	*pattern = ft_substr(str, i, len - i + 1);
 }
 
-int	main(int ac, char **av)
+void	manage_wildcard(t_arg **head, char *str)
 {
 	char	*path;
 	char	*pattern;
 
-	if (ac != 2)
-		return (0);
 	path = getcwd(NULL, 0);
 	pattern = NULL;
-	split_path_pattern(av[1], &path, &pattern);
-	printf("%s %s \n", path, pattern);
-	wildcard(path, pattern);
-	return (0);
+	split_path_pattern(str, &path, &pattern);
+	*head = wildcard(path, pattern);
 }
