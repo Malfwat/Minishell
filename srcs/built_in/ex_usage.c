@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ex_usage.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:26:18 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 04:52:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <env_function.h>
-#include <struct.h>
+#include <struct_ms.h>
 
 int	main(int ac, char **av, char **envp)
 {

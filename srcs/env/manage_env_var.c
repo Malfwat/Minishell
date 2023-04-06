@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_env_var.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:27:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 05:20:31 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ char	**t_env_var_to_array(t_env_var	*lst)
 		lst = lst->next;
 		len++;
 	}
-	tab = malloc(sizeof(char *) * (len + 1));
+	tab = ft_calloc((len + 1), sizeof(char *));
 	if (!tab)
 		return (NULL);
-	tab[len] = NULL;
 	len = 0;
 	while (tmp)
 	{
-		tab[len] = tmp->var;
-		len++;
+		tab[len] = ft_strsjoin(3, tmp->var_name, "=", tmp->var_value);
+		if (!tab[len++])
+			return (ft_strsfree(tab), NULL);
 		tmp = tmp->next;
 	}
 	return (tab);
@@ -63,18 +63,26 @@ char	**t_env_var_to_array(t_env_var	*lst)
 
 t_env_var	*find_env_var(t_env_var	*lst, char *str)
 {
-	char	*tmp;
-
 	while (lst)
 	{
-		tmp = get_env_var_name(lst->var);
-		if (ft_strcmp(str, tmp) == 0)
-		{
-			free(tmp);
+		if (!ft_strcmp(str, lst->var_name))
 			return (lst);
-		}
-		free(tmp);
 		lst = lst->next;
 	}
 	return (lst);
+}
+
+void	update_env_var(t_env_var **head)
+{
+	t_env_var	*tmp;
+	t_env_var	*curr;
+
+	curr = *head;
+	while (curr)
+	{
+		tmp = curr;
+		curr = curr->next;
+		if (tmp->temp)
+			unset(head, tmp);
+	}
 }

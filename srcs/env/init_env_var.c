@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env_var.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 23:59:34 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:26:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 05:17:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	free_env_lst(t_env_var **lst)
 	while (*lst)
 	{
 		tmp = (*lst)->next;
-		if ((*lst)->var)
-			free((*lst)->var);
+		free((*lst)->var_name);
+		free((*lst)->var_value);
 		free(*lst);
 		*lst = tmp;
 	}
@@ -38,29 +38,29 @@ t_env_var	*get_last_env_var(t_env_var *tmp)
 	return (tmp);
 }
 
-t_env_var	*new_env_var(char *str)
+t_env_var	*new_env_var(char *name, char *value, bool temp)
 {
 	t_env_var	*new;
 
-	if (!str)
+	if (!name)
 		return (NULL);
-	new = malloc(sizeof(t_env_var));
+	new = ft_calloc(1, sizeof(t_env_var));
 	if (!new)
 		return (NULL);
-	new->var = str;
-	new->prev = NULL;
-	new->next = NULL;
+	new->var_name = name;
+	new->var_value = value;
+	new->temp = temp;
 	return (new);
 }
 
-bool	add_env_var(t_env_var **head, char *str)
+bool	add_env_var(t_env_var **head, char *name, char *value, bool temp)
 {
 	t_env_var	*new;
 	t_env_var	*last;
 
-	new = new_env_var(str);
+	new = new_env_var(name, value, temp);
 	if (!new)
-		return (free(str), false);
+		return (free(name), free(value), false);
 	if (!*head)
 		*head = new;
 	else
@@ -74,6 +74,8 @@ bool	add_env_var(t_env_var **head, char *str)
 
 t_env_var	*get_env_var(char **env)
 {
+	char		*name;
+	char		*value;
 	t_env_var	*lst;
 	int			i;
 
@@ -81,8 +83,11 @@ t_env_var	*get_env_var(char **env)
 	lst = NULL;
 	while (env && env[i])
 	{
-		if (!add_env_var(&lst, ft_strdup(env[i++])))
-			return (free_env_lst(&lst), NULL);
+		name = get_env_var_name(env[i]);
+		value = get_env_var_value(env[i]);
+		if (!add_env_var(&lst, name, value, 0))
+			return (free(name), free(value), free_env_lst(&lst), NULL);
+		i++;
 	}
 	return (lst);
 }

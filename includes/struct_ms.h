@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/04 21:24:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 05:17:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 
 typedef struct s_env_var
 {
-	char				*var;
+	char				*var_name;
+	char				*var_value;
+	bool				temp;
 	struct s_env_var	*prev;
 	struct s_env_var	*next;
 }	t_env_var;
