@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 04:11:47 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/06 17:51:04 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,31 @@ bool	compare_wildcard(char *pattern, char *str)
 
 	i = 0;
 	tab = ft_split(pattern, '*');
-	if (!tab)
-		return (ft_strsfree(tab), !ft_strcmp(pattern, "*"));
+	if (!tab || !*tab)
+		return (ft_strsfree(tab), !errno);
 	tmp = str;
 	while (tab[i])
 	{
 		tmp = ft_strstr(tmp, tab[i]);
 		if (!tmp)
 			return (ft_strsfree(tab), false);
-		if (i++ == 0)
-			if (*str != *tmp && *pattern != '*')
+		if (i == 0)
+			if (*pattern != '*' && *str != *tmp)
 				return (ft_strsfree(tab), false);
+		tmp += ft_strlen(tab[i++]);
 	}
 	if (tab[i])
 		return (ft_strsfree(tab), false);
-	if (pattern[ft_strlen(pattern) - 1] != '*' && ft_strcmp(tmp, tab[i - 1]))
+	if (pattern[ft_strlen(pattern) - 1] != '*' && *tmp)
 		return (ft_strsfree(tab), false);
 	return (ft_strsfree(tab), true);
 }
+
+// tmp++
+
+// tsgdfgdtes
+// ts*ts
+
 
 t_arg	*wildcard(char *dir, char *pattern)
 {
@@ -97,13 +104,17 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 	*pattern = ft_substr(str, i, len - i + 1);
 }
 
-void	manage_wildcard(t_arg **head, char *str)
+bool	manage_wildcard(t_arg **head, char *str)
 {
+	char	*cwd;
 	char	*path;
 	char	*pattern;
 
-	path = getcwd(NULL, 0);
+	cwd = getcwd(path, 0);
+	if (!cwd)
+		return (perror("minishell: getcwd:"), false);
 	pattern = NULL;
 	split_path_pattern(str, &path, &pattern);
 	*head = wildcard(path, pattern);
+	return (true);
 }
