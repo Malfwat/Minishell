@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:02:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/05 15:24:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 20:40:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,31 @@ t_block	*new_block(void)
 	new = ft_calloc(1, sizeof(t_block));
 	if (!new)
 		return (NULL);
-	
 	return (new);
 }
 
-t_block	*last_sibling(t_block *head)
+t_block	**last_sibling(t_block *head)
 {
 	while (head && head->next)
 		head = head->next;
-	return (head);
+	return (&head->next);
 }
 
-t_block	*last_pipe(t_block *head)
+t_block	**last_pipe(t_block *head)
 {
 	while (head && head->pipe_next)
 		head = head->pipe_next;
-	return (head);
+	return (&head->pipe_next);
 }
 
-t_block	*last_sub(t_block *head)
+t_block	**last_sub(t_block *head)
 {
 	while (head && head->sub)
 		head = head->sub;
-	return (head);
+	return (&head->sub);
 }
 
-void	add_block_back(t_block **head, t_block *(*last)(t_block *))
+void	add_block_back(t_block **head, t_block **(*last)(t_block *))
 {
 	t_block	*tmp;
 
@@ -55,6 +54,6 @@ void	add_block_back(t_block **head, t_block *(*last)(t_block *))
 	else
 	{
 		tmp = *head;
-		last(tmp)->next = new_block();
+		*last(tmp) = new_block();
 	}
 }

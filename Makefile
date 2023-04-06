@@ -1,0 +1,108 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
+#    Updated: 2023/04/06 20:53:18 by hateisse         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME	=	minishell
+
+################################################################################
+#                                                                              #
+#                                                                              #
+#                                 VARIABLES                                    #
+#                                                                              #
+#                                                                              #
+################################################################################
+
+SRCS_DIR			=	srcs/
+
+BUILT_INS			=	cd.c	\
+						echo.c	\
+						pwd.c
+
+BUILT_INS_DIR		=	built_ins/
+		
+ENV					=	export_unset_env.c	\
+						init_env_var.c		\
+						manage_env_var.c
+				
+ENV_DIR				=	env/
+
+PARSING				=	input_output.c	\
+						parenthesis.c	\
+						utils.c			\
+						parsing.c		\
+						wildcard.c		\
+						word.c
+
+PARSING_DIR			=	parsing/
+
+STRUCT_UTILS		=	init_t_block.c		\
+						manage_cmd_args.c	\
+						manage_io_params.c
+
+STRUCT_UTILS_DIR	=	struct_utils/
+
+CC					=	cc
+
+CFLAGS				+= -Wall -Werror -Wextra -MMD -MP -c -g3
+
+INCLUDES			=	-I./includes/
+INCLUDES			+=	-I./libft/
+INCLUDES			+=	-I./libft/get_next_line/
+
+LIB_DIR				=	-L./libft/ 
+
+BUILD				= .build/
+
+SRCS				=	$(addprefix $(STRUCT_UTILS_DIR), $(STRUCT_UTILS))
+SRCS				+=	$(addprefix $(BUILT_INS_DIR), $(BUILT_INS))
+SRCS				+=	$(addprefix $(PARSING_DIR), $(PARSING))
+SRCS				+=	$(addprefix $(ENV_DIR), $(ENV))
+SRCS				+=	test.c
+
+OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
+
+DEPS				= 	$(OBJ:.o=.d)
+
+DIRS				=	$(addprefix $(BUILD), $(BUILT_INS_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(ENV_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
+
+################################################################################
+#                                                                              #
+#                                                                              #
+#                                   RULES                                      #
+#                                                                              #
+#                                                                              #
+################################################################################
+
+all:	$(NAME)
+
+$(BUILD):
+	mkdir $(BUILD) $(DIRS)
+		
+$(NAME):	$(BUILD) $(OBJ)
+	$(CC) $(OBJ) $(LIB_DIR) -lft -lreadline -o $(NAME)
+
+$(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
+	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 
+
+clean:
+	rm -rf $(BUILD)
+
+fclean:	clean
+	rm -rf $(NAME)
+
+re:	fclean all
+
+.PHONY:	clean fclean all re
+
+-include $(DEPS)

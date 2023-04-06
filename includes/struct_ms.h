@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/06 16:24:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 21:49:33 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,17 @@ typedef struct s_block
 	struct s_block	*next;
 	struct s_block	*sub;
 }	t_block;
+
+typedef struct s_prompt
+{
+	char	*git_branch_name;
+	char	*session_user;
+	char	*cwd;
+	int		width_without_mid_delim;
+	int		last_exit_code;
+	int		term_width;
+	char	*time;
+}	t_prompt;
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 17:51:04 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:23:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ bool	manage_wildcard(t_arg **head, char *str)
 	char	*path;
 	char	*pattern;
 
+	path = NULL;
 	cwd = getcwd(path, 0);
 	if (!cwd)
 		return (perror("minishell: getcwd:"), false);

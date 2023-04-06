@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 22:57:08 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/06 20:26:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_arg	*new_cmd_arg(char *arg)
 		return (NULL);
 	new->name = arg;
 	new->next = NULL;
-	return (NULL);
+	return (new);
 }
 
 t_arg	*last_arg(t_arg *head)

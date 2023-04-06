@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:08:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 21:31:01 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/06 19:48:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ bool	check_parenthesis_param(char *str, int *i, char **new_line, int *type)
 			return (false);
 		*new_line = ft_substr(str, start, *i - start + 1);
 		*type = PARENTHESIS;
-		return (true);
 		*i += 1;
+		return (true);
 	}
 	return (false);
 }
