@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 03:52:36 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/06 04:00:02 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ t_arg	*wildcard(char *dir, char *pattern)
 	while (dir_entry)
 	{
 		if (compare_wildcard(pattern, dir_entry->d_name))
+		{
+			printf("%s\n", dir_entry->d_name);
 			ft_addargs(&lst, dir_entry->d_name);
+		}
 		dir_entry = readdir(dirp);
 	}
 	if (errno)
@@ -85,7 +88,10 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 		i--;
 	if (i)
 	{
-		*path = ft_strjoin(tmp, ft_substr(str, 0, i++));
+		if ((*path)[0] != '/')
+			*path = ft_strjoin(tmp, ft_substr(str, 0, i++));
+		else
+			*path = ft_substr(str, 0, i++);
 		free(tmp);
 	}
 	*pattern = ft_substr(str, i, len - i + 1);
