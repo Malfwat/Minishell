@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 16:15:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 22:43:25 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*get_env_var_value(char *str)
 	return (ft_substr(str, i + 1, ft_strlen(&str[i + 1])));
 }
 
-char	**t_env_var_to_array(t_env_var	*lst)
+char	**build_envp(t_env_var	*lst)
 {
 	char		**tab;
 	int			len;
