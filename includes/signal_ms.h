@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   signal_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 03:46:27 by malfwa           ###   ########.fr       */
+/*   Created: 2023/04/07 04:49:51 by malfwa            #+#    #+#             */
+/*   Updated: 2023/04/07 04:50:57 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <env_function.h>
-#include <libft.h>
-#include <struct_ms.h>
+#ifndef SIGNAL_MS_H
+# define SIGNAL_MS_H
 
-int	cd(t_env_var	*head, char *str)
-{
-	if (!str)
-		str = getenv("HOME");
-	if (chdir(str) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
-	export(&head, ft_strdup("PWD="), getcwd(NULL, 0), 0);
-	return (0);
-}
+void	sigquit_handler(int num);
+void	set_sig_handler(void);
+
+#endif /* SIGNAL_MS_H */

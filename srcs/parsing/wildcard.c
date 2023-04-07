@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 19:23:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 04:59:55 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,6 @@ bool	compare_wildcard(char *pattern, char *str)
 		return (ft_strsfree(tab), false);
 	return (ft_strsfree(tab), true);
 }
-
-// tmp++
-
-// tsgdfgdtes
-// ts*ts
-
 
 t_arg	*wildcard(char *dir, char *pattern)
 {

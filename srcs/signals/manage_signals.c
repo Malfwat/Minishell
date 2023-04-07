@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   manage_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 03:46:27 by malfwa           ###   ########.fr       */
+/*   Created: 2023/04/07 04:01:41 by malfwa            #+#    #+#             */
+/*   Updated: 2023/04/07 04:49:17 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <env_function.h>
-#include <libft.h>
-#include <struct_ms.h>
+#include <signal.h>
+#include <readline/readline.h>
 
-int	cd(t_env_var	*head, char *str)
+void	sigquit_handler(int num)
 {
-	if (!str)
-		str = getenv("HOME");
-	if (chdir(str) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
-	export(&head, ft_strdup("PWD="), getcwd(NULL, 0), 0);
-	return (0);
+	(void)num;
+	// rl_replace_line(rl_prompt, 0);
+	rl_on_new_line();
+	rl_redisplay();
+	return ;
+}
+
+void	set_sig_handler(void)
+{
+	signal(SIGQUIT, sigquit_handler);
 }

@@ -6,16 +6,16 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 03:31:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 04:51:08 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <prompt.h>
 
+#include <signal_ms.h>
 // #include <libft.h>
 // #include <get_next_line.h>
-// #include <readline/history.h>
 // #include <fcntl.h>
 
 #include <history.h>
@@ -29,6 +29,7 @@ int	main(void)
 	t_block		*head;
 	t_prompt	prompt_params;
 
+	set_sig_handler();
 	if (!refresh_prompt_param(&prompt_params))
 		return (1);
 	res = NULL;
