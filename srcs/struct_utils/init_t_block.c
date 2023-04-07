@@ -6,18 +6,21 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:02:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 20:40:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 19:21:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
 #include <libft.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 t_block	*new_block(void)
 {
 	t_block	*new;
+	static int x;
 
+	printf("nb: %i\n", x++);
 	new = ft_calloc(1, sizeof(t_block));
 	if (!new)
 		return (NULL);
@@ -47,13 +50,8 @@ t_block	**last_sub(t_block *head)
 
 void	add_block_back(t_block **head, t_block **(*last)(t_block *))
 {
-	t_block	*tmp;
-
 	if (*head == NULL)
 		*head = new_block();
 	else
-	{
-		tmp = *head;
-		*last(tmp) = new_block();
-	}
+		*last(*head) = new_block();
 }

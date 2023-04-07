@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 16:06:51 by amouflet          #+#    #+#             */
-/*   Updated: 2023/01/25 15:44:17 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/07 21:42:04 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	here_doc(char *limiter, t_cmd *cmd)
 	char	*tmp;
 
 	if (pipe(test) == -1)
-		return (f_err_get_cmd(cmd->begin), exit(0), 0);
+		return (f_err_get_cmd(cmd->begin), -1);
 	str = get_next_line(0);
 	size = ft_strlen(str);
 	tmp = ft_strjoin(limiter, "\n");
