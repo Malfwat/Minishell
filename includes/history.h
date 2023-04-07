@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   history.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 03:29:24 by malfwa           ###   ########.fr       */
+/*   Created: 2023/04/07 03:14:25 by malfwa            #+#    #+#             */
+/*   Updated: 2023/04/07 03:15:48 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <env_function.h>
-#include <libft.h>
-#include <struct_ms.h>
+#ifndef	HISTORY_H
+# define HISTORY_H
 
-int	cd(t_env_var	*head, char *str)
-{
-	if (chdir(str) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
-	export(&head, ft_strdup("PWD="), getcwd(NULL, 0), 0);
-	return (0);
-}
+int		get_my_history(void);
+void	my_add_history(char *str, int fd);
+
+#endif	/* HISTORY_H */

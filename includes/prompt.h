@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:35:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 02:09:43 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 02:16:41 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 #include <sys/wait.h>
 
 #define BOLD "\033[1m"
+#define ITALIC "\033[3m"
 #define RED "\033[38;5;9m"
-#define LPURPLE "\033[38;5;189m"
 #define LGREY_BG "\033[48;5;235m"
 #define LGREY "\033[38;5;235m"
 #define LLGREY "\033[38;5;243m"
@@ -38,14 +38,11 @@
 #define LCYAN "\033[38;5;38m"
 #define LBLUE "\033[38;5;110m"
 #define ENDC "\033[0m"
-#define FOLDER_ICON "🗀   🖿     🗁"
-#define ARROW ""
 #define CORNER_LEFT_D "╰"
 #define CORNER_LEFT_U "╭"
 #define LINE "─"
 #define DOTS_START "░▒▓"
 #define DOTS_END "▓▒░"
-#define ITALIC "\033[3m"
 
 // prompt_utils_0.c
 
