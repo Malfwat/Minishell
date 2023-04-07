@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/07 03:13:50 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/07 04:55:29 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,10 @@ NAME	=	minishell
 ################################################################################
 
 SRCS_DIR			=	srcs/
+
+SIGNAL				=	manage_signals.c
+
+SIGNAL_DIR			=	signals/
 
 HISTORY				=	history_functions.c
 
@@ -78,6 +82,7 @@ SRCS				+=	$(addprefix $(PARSING_DIR), $(PARSING))
 SRCS				+=	$(addprefix $(ENV_DIR), $(ENV))
 SRCS				+=	$(addprefix $(PROMPT_DIR), $(PROMPT))
 SRCS				+=	$(addprefix $(HISTORY_DIR), $(HISTORY))
+SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	test.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
@@ -87,6 +92,7 @@ DEPS				= 	$(OBJ:.o=.d)
 DIRS				=	$(addprefix $(BUILD), $(BUILT_INS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(ENV_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(HISTORY_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(SIGNAL_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PROMPT_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
