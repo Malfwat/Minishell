@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 03:33:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 15:31:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ int	get_my_history(void)
 	int		fd;
 	char	*tmp;
 
-	tmp = ft_strjoin(getenv("HOME"), "/.my_history");
+	tmp = getenv("HOME");
+	if (!tmp)
+		return (-1);
+	tmp = ft_strjoin(tmp, "/.my_history");
 	fd = open(tmp, O_RDWR | O_APPEND | O_CREAT, 0644);
 	free(tmp);
 	if (fd == -1)

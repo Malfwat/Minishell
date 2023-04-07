@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 20:42:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 22:31:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <struct_ms.h>	
 # include <stdbool.h>
 # include <errno.h>
+
 
 enum e_operator
 {
@@ -38,23 +39,37 @@ enum e_errors
 
 // init_t_block.c
 
-t_block	*new_block(void);
-t_block	**last_sub(t_block *head);
-t_block	**last_pipe(t_block *head);
-t_block	**last_sibling(t_block *head);
-void	add_block_back(t_block **head, t_block **(*last)(t_block *));
+t_block		*new_block(void);
+t_block		**last_sub(t_block *head);
+t_block		**last_pipe(t_block *head);
+t_block		**last_sibling(t_block *head);
+void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 // built_in/
 
-void	pwd(void);
-int		cd(t_env_var	*head, char *str);
-void	echo(bool nl, int nb, ...);
+void		pwd(void);
+int			cd(t_env_var	*head, char *str);
+void		echo(bool nl, int nb, ...);
 
-// struct_utils
+// manage_io_params.c
 
-void	ft_add_io(t_block *block, char *io);
-void	ft_addargs(t_arg **head, char *arg);
-char	**t_arg_to_array(t_arg *head);
+void		ft_add_io(t_block *block, char *io);
+t_redirect	*new_redirect(char *arg);
+t_redirect	*last_redirect(t_redirect *head);
+void		ft_add_redirect(t_redirect **head, char *arg);
 
+// manage_cmd_args.c
+
+t_arg		*new_cmd_arg(char *arg);
+t_arg		*last_arg(t_arg *head);
+void		ft_addargs(t_arg **head, char *arg);
+char		**build_argv(char *cmd, t_arg *head);
+
+// free_struct.c
+
+void		flood_free(t_block *lst);
+void		free_redirect(t_redirect *ptr);
+void		free_cmd(t_cmd lst);
+void		free_t_args(t_arg *ptr);
 
 #endif /* MINISHELL_H */

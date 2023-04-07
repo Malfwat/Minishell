@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/06 20:26:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 22:31:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ft_addargs(t_arg **head, char *arg)
 		last_arg(*head)->next = new;
 }
 
-char	**t_arg_to_array(t_arg *head)
+char	**build_argv(char *cmd, t_arg *head)
 {
 	char	**tab;
 	int		len;
@@ -55,10 +55,11 @@ char	**t_arg_to_array(t_arg *head)
 	tmp = head;
 	while (tmp)
 		tmp = tmp->next;
-	tab = malloc(sizeof(char *) * (len + 1));
+	tab = malloc(sizeof(char *) * (len + 2));
 	if (!tab)
 		return (0);
-	len = 0;
+	tab[0] = cmd;
+	len = 1;
 	while (head)
 	{
 		tab[len++] = head->name; // a voir si tu preferes utiliser strdup

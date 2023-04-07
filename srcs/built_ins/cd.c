@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 03:46:27 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 16:53:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <libft.h>
 #include <struct_ms.h>
 
-int	cd(t_env_var	*head, char *str)
+int	cd(t_env_var *head, char *str)
 {
 	if (!str)
 		str = getenv("HOME");

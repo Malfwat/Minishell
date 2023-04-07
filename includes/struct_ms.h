@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/06 21:49:33 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 22:26:01 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define STRUCT_MS_H
 
 # include <stdbool.h>
+# include <unistd.h>
 
 typedef struct s_env_var
 {
@@ -37,15 +38,18 @@ typedef struct s_cmd
 	t_arg			*args;
 	char			*error_str;
 	int				exit_value;
-	int				pid;
+	pid_t			pid;
 	char			*output;
 	char			*input;
 }	t_cmd;
 
 typedef struct s_redirect
 {
+	bool				mode;
 	char				*file_name;
 	char				*heredoc;
+	int					fd;
+	int					errno_value;
 	bool				append;
 	struct s_redirect	*next;
 }	t_redirect;
@@ -53,15 +57,18 @@ typedef struct s_redirect
 typedef struct s_block
 {
 	char			*subshell_command;
+	char			*do_not_execute;
 	int				operator;
-	t_redirect		*input_redirect;
-	t_redirect		*output_redirect;
+	bool			input_source;
+	t_redirect		*io_redirect;
+	t_redirect		*heredoc;
 	t_cmd			cmd;
+	int				io_tab[3];
 	struct s_block	*pipe_next;
-	struct s_block	*prev;
 	struct s_block	*next;
 	struct s_block	*sub;
 }	t_block;
+
 
 typedef struct s_prompt
 {
@@ -75,4 +82,10 @@ typedef struct s_prompt
 }	t_prompt;
 
 
+typedef struct s_minishell
+{
+	t_prompt		prompt;
+	t_env_var		*envp;
+	struct termios	*term_params;
+}	t_minishell;
 #endif

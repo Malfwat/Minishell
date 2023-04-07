@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:11:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/05 16:16:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 17:13:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_substr_io_param(char *src, char *dest)
 		return (0);
 	while (src[i] && ft_strchr("><", src[i]))
 		*(dest++) = src[i++];
-	i += pass_whitespaces(src);
+	i += pass_whitespaces(&src[i]);
 	while (src[i] && !ft_strchr(SINGLE_DELIM, src[i])
 		&& !ft_strschr_here(4, &src[i], "&&", "||", "<<", ">>"))
 	{

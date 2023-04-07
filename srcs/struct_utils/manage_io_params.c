@@ -3,37 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 14:42:32 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 22:09:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <struct_ms.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <parsing_ms.h>
 #include <stdio.h>
 
-t_redirect	*new_redirect(char *arg)
+t_redirect	*new_redirect(char *arg, int mode)
 {
 	t_redirect	*new;
 
-	new = malloc(sizeof(t_redirect));
+	new = ft_calloc(1, sizeof(t_redirect));
 	if (!new)
-		return (NULL);
-	if (ft_strncmp(arg, "<<", 2))
-		new->heredoc = ft_memmove(arg, arg + 2, ft_strlen(arg) - 2);
+		return (free(arg), NULL);
+	if (!ft_strncmp(arg, "<<", 2))
+		new->heredoc = ft_strdup(arg + 2);
 	else if (arg[0] == '<')
-		new->file_name = ft_memmove(arg, arg + 1, ft_strlen(arg) - 1);
-	else if (ft_strncmp(arg, ">>", 2))
+		new->file_name = ft_strdup(arg + 1);
+	else if (!ft_strncmp(arg, ">>", 2))
 	{
 		new->append = true;
-		new->file_name = ft_memmove(arg, arg + 2, ft_strlen(arg) - 2);
+		new->file_name = ft_strdup(arg + 2);
 	}
 	else
-		new->file_name = ft_memmove(arg, arg + 1, ft_strlen(arg) - 1);
-	return (NULL);
+		new->file_name = ft_strdup(arg + 1);
+	new->mode = mode;
+	free(arg);
+	if (errno)
+		return (NULL);
+	return (new);
 }
 
 t_redirect	*last_redirect(t_redirect *head)
@@ -43,11 +49,11 @@ t_redirect	*last_redirect(t_redirect *head)
 	return (head);
 }
 
-void	ft_add_redirect(t_redirect **head, char *arg)
+void	ft_add_redirect(t_redirect **head, char *arg, int mode)
 {
 	t_redirect	*new;
 
-	new = new_redirect(arg);
+	new = new_redirect(arg, mode);
 	if (!new)
 		return ;
 	if (*head == NULL)
@@ -58,8 +64,16 @@ void	ft_add_redirect(t_redirect **head, char *arg)
 
 void	ft_add_io(t_block *block, char *io)
 {
-	if (io[0] == '<')
-		ft_add_redirect(&block->input_redirect, io);
+	if (!ft_strncmp(io, "<<", 2))
+	{
+		block->input_source = HEREDOC;
+		ft_add_redirect(&block->heredoc, io, INPUT_MODE);
+	}
+	else if (io[0] == '<')
+	{
+		block->input_source = FILE_INPUT;
+		ft_add_redirect(&block->io_redirect, io, INPUT_MODE);
+	}
 	else
-		ft_add_redirect(&block->output_redirect, io);
+		ft_add_redirect(&block->io_redirect, io, OUTPUT_MODE);
 }

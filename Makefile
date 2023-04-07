@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
+#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/07 04:55:29 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/07 18:37:45 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,7 @@ PARSING_DIR			=	parsing/
 
 STRUCT_UTILS		=	init_t_block.c		\
 						manage_cmd_args.c	\
+						free_structs.c		\
 						manage_io_params.c
 
 STRUCT_UTILS_DIR	=	struct_utils/
