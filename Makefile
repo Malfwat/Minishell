@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/06 20:53:18 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/07 02:06:51 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,13 @@ NAME	=	minishell
 ################################################################################
 
 SRCS_DIR			=	srcs/
+
+PROMPT				=	prompt_utils_0.c	\
+						prompt_utils_1.c	\
+						build_prompt_0.c	\
+						build_prompt_1.c
+
+PROMPT_DIR			=	prompt/
 
 BUILT_INS			=	cd.c	\
 						echo.c	\
@@ -65,6 +72,7 @@ SRCS				=	$(addprefix $(STRUCT_UTILS_DIR), $(STRUCT_UTILS))
 SRCS				+=	$(addprefix $(BUILT_INS_DIR), $(BUILT_INS))
 SRCS				+=	$(addprefix $(PARSING_DIR), $(PARSING))
 SRCS				+=	$(addprefix $(ENV_DIR), $(ENV))
+SRCS				+=	$(addprefix $(PROMPT_DIR), $(PROMPT))
 SRCS				+=	test.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
@@ -73,6 +81,7 @@ DEPS				= 	$(OBJ:.o=.d)
 
 DIRS				=	$(addprefix $(BUILD), $(BUILT_INS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(ENV_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(PROMPT_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 
