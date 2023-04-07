@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/06 20:44:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 22:28:36 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool	is_valid_param(char *param, int type, t_block *block)
 	if (type == -1)
 		return (false);
 	else if (!block->cmd.name && type == CMD_ARG && !block->sub)
-		block->cmd.name = param;
+		block->cmd.name = param; // appeler la fonction pour trouver path (path + cmd || cmd)
 	else if (block->cmd.name && type == CMD_ARG && !block->sub)
 		ft_addargs(&block->cmd.args, param);
 	else if (type == INPUT_OUTPUT)
@@ -48,7 +48,7 @@ bool	is_valid_param(char *param, int type, t_block *block)
 	else if (type == PARENTHESIS && !block->cmd.name && !block->sub)
 	{
 		block->subshell_command = param;
-		add_block_back(&block->sub, last_sub);
+		add_block_back(&block, last_sub);
 	}
 	else
 		return (false);
@@ -85,7 +85,7 @@ void	ft_error(int err, char *comment)
 	}
 }
 
-bool	parse_cmd(t_block **curr_block, char *cmd_line)
+bool	parse_cmds(t_block **curr_block, char *cmd_line)
 {
 	int		i;
 	int		type;
@@ -93,7 +93,6 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 
 	i = 0;
 	type = -1;
-	*curr_block = ft_calloc(1, sizeof(t_block));
 	if (!*curr_block)
 		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
@@ -103,7 +102,7 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
 		{
-			if (!parse_cmd(&((*curr_block)->sub), ft_substr(next_param, 1, \
+			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
 			ft_strlen(next_param) - 2)))
 				return (free(cmd_line), free(next_param), false);
 		}
@@ -125,8 +124,7 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 		printf("arg: %s [%d] curseur sur '%c'\n", next_param, type, cmd_line[i]);
 	}
 	if (errno)
-		return(free(cmd_line), free(next_param), \
-		perror("minishell"), false);
+		return(free(cmd_line), free(next_param), false);
 	if (next_param)
 	{
 		ft_error(CMD_SYNTAX_ERR, next_param);
@@ -136,4 +134,3 @@ bool	parse_cmd(t_block **curr_block, char *cmd_line)
 	free(cmd_line);
 	return (true);
 }
-
