@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 19:26:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/07 22:08:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include <stdlib.h>
 # include <struct_ms.h>
 # include <stdbool.h>
+# define INPUT_MODE 0
+# define OUTPUT_MODE 1
+# define HEREDOC 0
+# define FILE_INPUT 1
 
 // parenthesis.c
 
@@ -27,7 +31,7 @@ bool	check_parenthesis_param(char *str, int *i, char **new_line, int *type);
 char	*get_next_param(char *str, int *i, int *type);
 bool	is_delimiter(char *str, int *storage);
 bool	is_valid_param(char *param, int type, t_block *block);
-bool	parse_cmd(t_block **curr_block, char *cmd_line);
+bool	parse_cmds(t_block **curr_block, char *cmd_line);
 
 // utils.c 
 

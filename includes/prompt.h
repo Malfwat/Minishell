@@ -3,46 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:35:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 02:16:41 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 16:52:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROMPT_H
 # define PROMPT_H
 
-#include <errno.h>
-#include <minishell.h>
-#include <parsing_ms.h>
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <sys/wait.h>
+# include <errno.h>
+# include <minishell.h>
+# include <parsing_ms.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/ioctl.h>
+# include <sys/wait.h>
 
-#define BOLD "\033[1m"
-#define ITALIC "\033[3m"
-#define RED "\033[38;5;9m"
-#define LGREY_BG "\033[48;5;235m"
-#define LGREY "\033[38;5;235m"
-#define LLGREY "\033[38;5;243m"
-#define GREEN "\033[38;5;10m"
-#define LGREEN "\033[38;5;76m"
-#define DGREEN "\033[38;5;22m"
-#define LCYAN "\033[38;5;38m"
-#define LBLUE "\033[38;5;110m"
-#define ENDC "\033[0m"
-#define CORNER_LEFT_D "╰"
-#define CORNER_LEFT_U "╭"
-#define LINE "─"
-#define DOTS_START "░▒▓"
-#define DOTS_END "▓▒░"
+# define BOLD "\033[1m"
+# define ITALIC "\033[3m"
+# define RED "\033[38;5;9m"
+# define LGREY_BG "\033[48;5;235m"
+# define LGREY "\033[38;5;235m"
+# define LLGREY "\033[38;5;243m"
+# define GREEN "\033[38;5;10m"
+# define LGREEN "\033[38;5;76m"
+# define DGREEN "\033[38;5;22m"
+# define LCYAN "\033[38;5;38m"
+# define LBLUE "\033[38;5;110m"
+# define ENDC "\033[0m"
+# define CORNER_LEFT_D "╰"
+# define CORNER_LEFT_U "╭"
+
 
 // prompt_utils_0.c
 

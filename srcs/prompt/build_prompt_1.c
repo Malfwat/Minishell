@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_prompt_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 02:14:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/07 16:51:40 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	build_prompt_mid_delim(char **prompt, t_prompt params)
 		delim = ft_calloc(len + 1, sizeof(char) * 3);
 		if (!delim)
 			return (false);
-		ft_memset_uni(delim, LINE, len);
+		ft_memset_uni(delim, "─", len);
 	}
 	tmp = *prompt;
 	*prompt = ft_strsjoin(8, tmp, LGREY, "▓▒░", LLGREY, delim,
