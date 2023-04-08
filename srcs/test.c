@@ -143,7 +143,8 @@ void	execute_t_block_cmd(t_block *block, int *status, t_env_var *envp_lst)
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
-		execve(argv[0], argv, envp);
+		if (execve(argv[0], argv, envp) == -1)
+			return (free(envp), free(argv), exit_minishell());
 	}
 	free(envp);
 	free(argv);
