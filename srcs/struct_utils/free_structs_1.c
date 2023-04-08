@@ -12,10 +12,11 @@
 
 #include <struct_ms.h>
 #include <minishell.h>
+#include <stdlib.h>
 
 void	free_ms_params(t_minishell *ms_params)
 {
-	free_env_lst(envp_lst);
+	free_env_lst(ms_params->envp);
 	ms_params->envp = NULL;
 	free(ms_params);
 }
@@ -30,6 +31,6 @@ void	free_env_lst(t_env_var *envp_lst)
 		free(envp_lst->var_name);
 		free(envp_lst->var_value);
 		free(envp_lst);
-		envp_lst = tmp
+		envp_lst = tmp;
 	}
 }
