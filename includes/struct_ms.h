@@ -16,6 +16,7 @@
 
 # include <stdbool.h>
 # include <unistd.h>
+# include <termios.h>
 
 typedef struct s_env_var
 {
