@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 22:31:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 07:39:53 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ char	**build_argv(char *cmd, t_arg *head)
 	len = 0;
 	tmp = head;
 	while (tmp)
+	{
 		tmp = tmp->next;
+		len++;
+	}
 	tab = malloc(sizeof(char *) * (len + 2));
 	if (!tab)
 		return (0);
