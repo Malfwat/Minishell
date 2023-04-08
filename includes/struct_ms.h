@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 22:26:01 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 06:51:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stdbool.h>
 # include <unistd.h>
+# include <termios.h>
 
 typedef struct s_env_var
 {
@@ -86,6 +87,6 @@ typedef struct s_minishell
 {
 	t_prompt		prompt;
 	t_env_var		*envp;
-	struct termios	*term_params;
+	struct termios	term_params;
 }	t_minishell;
 #endif

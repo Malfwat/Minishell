@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 05:17:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 07:04:25 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	export(t_env_var **lst, char *name, char *value, bool temp)
 	if (!tmp)
 	{
 		if (!add_env_var(lst, name, value, temp))
-			return (free_env_lst(lst));
+			return (free_t_env(*lst));
 	}
 	else
 	{
@@ -51,7 +51,7 @@ void	env(t_env_var *lst)
 {
 	char	**tab;
 
-	tab = t_env_var_to_array(lst);
+	tab = build_envp(lst);
 	ft_print_array_str(tab);
 	ft_strsfree(tab);
 }

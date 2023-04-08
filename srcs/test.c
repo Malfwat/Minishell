@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 22:56:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 07:12:52 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <prompt.h>
-
+#include <env_function.h>
 #include <signal_ms.h>
 #include <parsing_ms.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <minishell.h>
 #include <history.h>
 
@@ -44,8 +42,8 @@ int	main(int ac, char **av)
 	char *str =  ft_strdup(av[1]);
 	head = new_block();
 
-	if (parse_cmds(&head, str))
-		execute_cmds(head, );
+	parse_cmds(&head, str);
+		// execute_cmds(head, );
 	if (errno)
 		return (perror("minishell"), flood_free(head), 0);
 	flood_free(head);
@@ -55,95 +53,47 @@ int	main(int ac, char **av)
 }
 
 
-int	here_doc(char *limiter, t_cmd *cmd)
+void restore_terminal(struct termios saved_term)
 {
-	int		test[2];
-	char	*str;
-	int		size;
-	char	*tmp;
-
-	if (pipe(test) == -1)
-		return (f_err_get_cmd(cmd->begin), -1);
-	str = get_next_line(0);
-	size = ft_strlen(str);
-	tmp = ft_strjoin(limiter, "\n");
-	while (ft_strncmp(str, tmp, size))
-	{
-		write(test[1], str, size);
-		free(str);
-		str = get_next_line(0);
-		size = ft_strlen(str);
-	}
-	free(str);
-	free(tmp);
-	close(test[1]);
-	return (test[0]);
+    tcsetattr(STDIN_FILENO, TCSANOW, &saved_term);
 }
 
-void	input_manager(t_redirect *ptr, int *fd)
+// void	free_ms_params(t_minishell ms_params)
+// {
+	
+// }
+
+void    exit_minishell(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
 {
-	if (ptr->file_name)
-		ptr->fd = open(ptr->file_name, O_RDONLY);
-	if (ptr->fd != -1)
-		*fd = ptr->fd;
-	ptr->errno_value = errno;
+    flood_free(lst);
+    free_t_env(envp_lst);
+    // free_ms_params(ms_params); // useless pour l'instant car il n'y a que envp qui set free la ligne plus haut
+    restore_terminal(ms_params.term_params);
+    exit(exit_value);
 }
 
-void	output_manager(t_redirect *ptr, int *fd)
-{
-	if (ptr->append)
-		ptr->fd = open(ptr->file_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
-	else
-		ptr->fd = open(ptr->file_name, O_WRONLY | O_TRUNC | O_CREAT, 00644);
-	if (ptr->fd != -1)
-		*fd = ptr->fd;
-	ptr->errno_value = errno;
-}
 
-bool	heredoc_manager(t_redirect *ptr)
-{
-	while (ptr)
-	{
-		ptr->fd = heredoc(ptr->heredoc);
-		if (!ptr->fd == -1)
-			return (false);
-		ptr = ptr->next;
-	}
-	return (true);
-}
-
-int	*io_manager(t_block *block)
-{
-	t_redirect	*tmp;
-
-	if (!heredoc_manager(block->heredoc))
-		return (NULL);
-	tmp = block->io_redirect;
-	while (tmp && !errno)
-	{
-		if (tmp->mode == INPUT_MODE)
-			input_manager(tmp, &block->io_tab[0]);
-		else if (tmp->mode == OUTPUT_MODE)
-			ouput_manager(tmp, &block->io_tab[1]);
-		tmp = tmp->next;
-	}
-	if (errno)
-		return (NULL);
-}
-
-void	execute_t_block_cmd(t_block *block, int *status, t_env_var *envp_lst)
+void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params)
 {
 	char **argv;
 	char **envp;
-	
+	int exit_value;
+
+	(void)status;
 	argv = build_argv(block->cmd.name, block->cmd.args);
-	envp = build_envp(envp_lst);
+	envp = build_envp(ms_params.envp);
 	if (!argv || !envp)
 		return (free(argv), free(envp), perror("minishell"));
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
 		execve(argv[0], argv, envp);
+		perror(argv[0]);
+		exit_value = 127;
+		if (!access(argv[0], F_OK))
+			exit_value = 126;
+		return (ft_strsfree(envp), ft_strsfree(argv), \
+		exit_minishell(block, ms_params.envp, ms_params, exit_value));
 	}
 	free(envp);
 	free(argv);
@@ -156,17 +106,18 @@ int	execute_cmds(int *status, t_block *block, int *pipe, t_minishell ms_params)
 	else if (block->subshell_command)
 		execute_cmds(status, block, pipe, ms_params);
 	else
-	{
-		while (block->pipe_next)
-		{
-			execute_t_block_cmd(block, &status, ms_params.envp);
-			// pipex
-		}
-		if (block->operator == AND_OPERATOR && *status != 0)
-			return (0);
-		else
-		{
+		pipex()
+	// 	while (block->pipe_next)
+	// 	{
+	// 		execute_t_block_cmd(block, status, ms_params.envp, ms_params);
+	// 		// pipex
+	// 	}
+	// 	if (block->operator == AND_OPERATOR && *status != 0)
+	// 		return (0);
+	// 	else
+	// 	{
 			
-		}
-	}
+	// 	}
+	// }
+	return (0);
 }
