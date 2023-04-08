@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 17:18:54 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 17:37:07 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,16 @@ void    exit_minishell(t_block *lst, t_env_var *envp_lst, t_minishell ms_params,
     exit(exit_value);
 }
 
-void	my_dup(int *io_fds)
+void	my_dup(t_block *block, int *io_fds)
 {
-	dup2(io_fds[0], 0);
-	dup2(io_fds[1], 1);
-	close(io_fds[0]);
-	close(io_fds[1]);
+	dup2(block->io_tab[0], 0);
+	dup2(block->io_tab[1], 1);
+	close(block->io_tab[0]);
+	close(block->io_tab[1]);
+	if (block->io_tab[0] != io_fds[0])
+		close(io_fds[0]);
+	if (block->io_tab[1] != io_fds[1])
+		close(io_fds[1]);
 }
 
 // int	*before_exec(int *fds, int *pipe_fds)
@@ -53,30 +57,32 @@ void	my_dup(int *io_fds)
 	
 // }
 
-// bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
-// {
-// 	int	pipe_fds[2];
-// 	int	tmp;
+bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
+{
+	int	pipe_fds[2];
+	int	tmp;
 	
-// 	tmp = io_fds[0];
-// 	while (block)
-// 	{
-// 		if (block->pipe_next)
-// 			pipe(pipe_fds);
-// 		if (errno)
-// 			return (perror("minishell"), false);
-// 		if (!block->pipe_next)
-// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
-// 		else
-// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
-// 		close(tmp);
-// 		close(pipe_fds[1]);
-// 		dup2(pipe_fds[0], tmp);
-// 		close(pipe_fds[0]);
-// 		block = block->pipe_next;
-// 	}
-// 	return (true);
-// }
+	tmp = io_fds[0];
+	while (block)
+	{
+		if (block->pipe_next)
+			pipe(pipe_fds);
+		if (errno)
+			return (perror("minishell"), false);
+		if (!block->pipe_next)
+			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
+		else
+			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
+		close(tmp);
+		close(pipe_fds[1]);
+		dup2(pipe_fds[0], tmp);
+		close(pipe_fds[0]);
+		block = block->pipe_next;
+		if (block && block->io_tab[0] == -1)
+			block->io_tab[0] = tmp;
+	}
+	return (true);
+}
 
 void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
 {
@@ -88,9 +94,9 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 	errno = 0;
 	argv = build_argv(block->cmd.name, block->cmd.args);
 	envp = build_envp(ms_params.envp);
-	my_dup(io_fds);
+	my_dup(block, io_fds);
 	if (errno)
-		return (free(argv), free(envp), perror("minishell"));
+		return (free(argv), ft_strsfree(envp), perror("minishell"));
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
@@ -138,7 +144,7 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 
 int	main(int ac, char **av, char **env)
 {
-	char		*res;
+	// char		*res;
 	int			type;
 	t_block		*head;
 	t_minishell	ms_params;
@@ -147,7 +153,7 @@ int	main(int ac, char **av, char **env)
 	// set_sig_handler();
 	// if (!refresh_prompt_param(&prompt_params))
 		// return (1);
-	res = NULL;
+	// res = NULL;
 	type = -1;
 	ms_params.envp = get_env_var(env);
 	(void)ac;
