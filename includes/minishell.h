@@ -65,11 +65,20 @@ t_arg		*last_arg(t_arg *head);
 void		ft_addargs(t_arg **head, char *arg);
 char		**build_argv(char *cmd, t_arg *head);
 
-// free_struct.c
+// free_struct_0.c
 
 void		flood_free(t_block *lst);
 void		free_redirect(t_redirect *ptr);
 void		free_cmd(t_cmd lst);
 void		free_t_args(t_arg *ptr);
+
+// free_struct_1.c
+void		free_ms_params(t_minishell *ms_params);
+void		free_env_lst(t_env_var *envp_lst);
+
+// term_utils
+bool		toggle_control_character(int control_character, int mode);
+bool		save_terminal_params(t_minishell *ms_params);
+bool		restore_terminal_params(struct termios saved_term);
 
 #endif /* MINISHELL_H */
