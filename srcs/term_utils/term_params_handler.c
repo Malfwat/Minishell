@@ -13,9 +13,9 @@
 #include <termios.h>
 #include <struct_ms.h>
 
-bool	restore_terminal_params(struct termios saved_term)
+bool	restore_terminal_params(struct termios saved_params)
 {
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &saved_term) == -1)
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &saved_params) == -1)
 		return (false);
 }
 
