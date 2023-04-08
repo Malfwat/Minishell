@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 22:31:56 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:38:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,13 @@ void		free_cmd(t_cmd lst);
 void		free_t_args(t_arg *ptr);
 
 // free_struct_1.c
-void		free_ms_params(t_minishell *ms_params);
+void		free_ms_params(t_minishell ms_params);
 void		free_env_lst(t_env_var *envp_lst);
 
 // term_utils
 bool		toggle_control_character(int control_character, int mode);
 bool		save_terminal_params(t_minishell *ms_params);
 bool		restore_terminal_params(struct termios saved_term);
+void		exit_minishell(t_block *lst, t_minishell ms_params, int exit_value);
 
 #endif /* MINISHELL_H */

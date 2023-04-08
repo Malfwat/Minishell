@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 21:25:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:36:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,17 @@ void restore_terminal(struct termios saved_term)
 	
 // }
 
-void    exit_minishell(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
-{
-    flood_free(lst);
-    free_env_lst(envp_lst);
-	(void)ms_params;
-    // free_ms_params(ms_params); // useless pour l'instant car il n'y a que envp qui set free la ligne plus haut
-    // restore_terminal(ms_params.term_params);
-    exit(exit_value);
-}
+// void    exit_minishell(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
+// {
+//     flood_free(lst);
+//     free_env_lst(envp_lst);
+// 	(void)ms_params;
+//     // free_ms_params(ms_params); // useless pour l'instant car il n'y a que envp qui set free la ligne plus haut
+//     // restore_terminal(ms_params.term_params);
+//     exit(exit_value);
+// }
+
+// exit_minishell se trouve dans term_utils/exit_minishell.c
 
 void	my_dup(t_block *block, int *io_fds)
 {
@@ -104,8 +106,11 @@ void	ms_perror(char *progname, char *subname, char *error)
 	ft_putendl_fd(error, 2);
 }
 
-void handle_execve_failure(char *program_name, char **argv, char **envp)
+void handle_execve_failure(t_block *block, t_minishell ms_params, char *program_name)
 {
+	int exit_value;
+
+	exit_value = 2;
 	if (errno != ENOENT)
 	{
 		if (errno == EACCES)
@@ -119,16 +124,14 @@ void handle_execve_failure(char *program_name, char **argv, char **envp)
 		ms_perror("minishell", program_name, "Command not found");
 		exit_value = 127; // 127 == command not found
 	}
-	ft_strsfree(envp)
-	free(argv),
-	exit_minishell(block, ms_params.envp, ms_params, exit_value);
+	exit_minishell(block, ms_params, exit_value);
+	// exit_minishell(block, ms_params.envp, ms_params, exit_value);
 }
 
 void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
 {
 	char **argv;
 	char **envp;
-	int exit_value = 0;
 
 	(void)status;
 	errno = 0;
@@ -141,7 +144,9 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 	if (!block->cmd.pid)
 	{
 		execve(argv[0], argv, envp);
-		handle_execve_failure(argv[0], argv, envp);
+		ft_strsfree(envp);
+		free(argv);
+		handle_execve_failure(block, ms_params, argv[0]);
 	}
 	waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 	ft_strsfree(envp);
@@ -204,9 +209,9 @@ int	main(int ac, char **av, char **env)
 		// execute_cmds(head, );
 	ft_strsfree(path);
 	if (errno)
-		return (exit_minishell(head, ms_params.envp, ms_params, 0), \
+		return (exit_minishell(head, ms_params, 0), \
 		perror("minishell"), flood_free(head), 0);
 	// free(rl_prompt);
 	// close(fd);
-	return (exit_minishell(head, ms_params.envp, ms_params, 0), 0);
+	return (exit_minishell(head, ms_params, 0), 0);
 }
