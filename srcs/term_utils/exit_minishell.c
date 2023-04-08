@@ -12,6 +12,7 @@
 
 #include <struct_ms.h>
 #include <minishell.h>
+#include <stdlib.h>
 
 void	exit_minishell(t_block *lst, t_minishell *ms_params)
 {
