@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/08 06:30:35 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/08 08:08:02 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ PARSING				=	input_output.c	\
 						io_functions.c	\
 						parenthesis.c	\
 						utils.c			\
+						check_cmd.c		\
 						parsing.c		\
 						wildcard.c		\
 						word.c
