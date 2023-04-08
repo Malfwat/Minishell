@@ -3,43 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 07:53:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 08:28:54 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:30:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <errno.h>
 #include <libft.h>
 
-static int	check_access(char *path, char **cmd)
+static bool check_access_and_set_path(char *path, char *cmd, char **dest)
 {
-	char	*str;
-	char	*tmp;
-
-	str = ft_strsjoin(3, path, "/", *cmd);
-	if (str && access(str, F_OK) == 0)
-	{
-		tmp = *cmd;
-		*cmd = str;
-		return (free(tmp), 1);
-	}
-	free(str);
-	return (0);
+	*dest = ft_strsjoin(3, path, "/", cmd);
+	if (errno)
+		return (false);
+	if (access(*dest, F_OK) == 0)
+		return (true);
+	free(*dest);
+	*dest = NULL;
+	return (true);
 }
 
-char	*check_cmd(char **path, char *cmd)
+bool	get_cmd_path(char **path, char **cmd, char **dest)
 {
 	int		i;
 
 	i = 0;
-	if (!ft_strncmp(cmd, "./", 2) || *cmd == '/')
-		return (cmd);
+	if (ft_strchr(*cmd, '/'))
+	{
+		*dest = *cmd;
+		return (true);
+	}
 	while (path && path[i])
-		if (check_access(path[i++], &cmd))
-			break ;
-	return (cmd);
+	{
+		errno = 0;
+		if (!check_access_and_set_path(path[i++], *cmd, dest))
+			return (false);
+		if (*dest)
+		{
+			free(*cmd);
+			*cmd = NULL;
+			return (true);
+		}
+	}
+	*dest = *cmd;
+	return (true);
 }

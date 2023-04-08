@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_test_env.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:15:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 06:42:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:17:25 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ int	main(int ac, char **av, char **envp)
 	unset(&env_lst, find_env_var(env_lst, "test"));
 	unset(&env_lst, find_env_var(env_lst, "test2"));
 	env(env_lst);
-	free_t_env(&env_lst);
+	free_env_lst(&env_lst);
 	return (0);
 }
