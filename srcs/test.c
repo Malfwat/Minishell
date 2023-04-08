@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 21:19:19 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:25:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,26 @@ void	ms_perror(char *progname, char *subname, char *error)
 	ft_putendl_fd(error, 2);
 }
 
+void handle_execve_failure(char *program_name, char **argv, char **envp)
+{
+	if (errno != ENOENT)
+	{
+		if (errno == EACCES)
+			exit_value = 126; // 126 == command found but cannot be executed
+		else if (errno)
+			exit_value = 2; // valeur fourre-tout
+		ms_perror("minishell", program_name, strerror(errno));
+	}
+	else
+	{
+		ms_perror("minishell", program_name, "Command not found");
+		exit_value = 127; // 127 == command not found
+	}
+	ft_strsfree(envp)
+	free(argv),
+	exit_minishell(block, ms_params.envp, ms_params, exit_value);
+}
+
 void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
 {
 	char **argv;
@@ -121,21 +141,7 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 	if (!block->cmd.pid)
 	{
 		execve(argv[0], argv, envp);
-		if (errno != ENOENT)
-		{
-			if (errno == EACCES)
-				exit_value = 126; // 126 == command found but cannot be executed
-			else if (errno)
-				exit_value = 2; // valeur fourre-tout
-			ms_perror("minishell", argv[0], strerror(errno));
-		}
-		else
-		{
-			ms_perror("minishell", argv[0], "Command not found");
-			exit_value = 127; // 127 == command not found
-		}
-		return (ft_strsfree(envp), free(argv), \
-		exit_minishell(block, ms_params.envp, ms_params, exit_value));
+		handle_execve_failure(argv[0], argv, envp);
 	}
 	waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 	ft_strsfree(envp);
