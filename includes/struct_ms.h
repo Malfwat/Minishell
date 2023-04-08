@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 06:51:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 17:06:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_minishell
 {
 	t_prompt		prompt;
 	t_env_var		*envp;
-	struct termios	term_params;
+	struct termios	saved_params;
 }	t_minishell;
+
 #endif

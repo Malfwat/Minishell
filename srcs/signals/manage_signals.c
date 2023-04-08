@@ -32,16 +32,3 @@ bool	set_sig_handler(void)
 	signal(SIGQUIT, sigquit_handler);
 	return (true);
 }
-
-bool	disable_cc_backslash(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		return (false);
-	term.c_lflag &= ~ECHOCTL;
-	term.c_cc[VQUIT] = _POSIX_VDISABLE;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-		return (false);
-	return (true);
-}
