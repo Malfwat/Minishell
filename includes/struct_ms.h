@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 17:06:01 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 17:27:08 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_block
 	t_redirect		*io_redirect;
 	t_redirect		*heredoc;
 	t_cmd			cmd;
-	int				io_tab[3];
+	int				io_tab[2];
 	struct s_block	*pipe_next;
 	struct s_block	*next;
 	struct s_block	*sub;
