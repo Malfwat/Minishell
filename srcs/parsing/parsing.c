@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 08:20:24 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:44:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <parsing_ms.h>
 #include <minishell.h>
 #include <libft.h>
+#include <errno.h>
 #include <stdio.h>
 
 bool	check_and_store_delimiter(char *str, int *storage)
@@ -34,23 +35,24 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	return (false);
 }
 
-bool	is_valid_param(char *param, int type, t_block *block, char **path)
+bool	is_valid_param(char **param, int type, t_block *block, char **path)
 {
-	errno = 0;
+	// errno = 0;
 	if (type == -1)
 		return (false);
 	else if (!block->cmd.name && type == CMD_ARG && !block->sub)
 	{
-		block->cmd.name = check_cmd(path, param);
-		errno = 0;	
+		if (!get_cmd_path(path, param, &block->cmd.name))
+			return (perror("minishell"), false);
+		errno = 0;
 	}
 	else if (block->cmd.name && type == CMD_ARG && !block->sub)
-		ft_addargs(&block->cmd.args, param);
+		ft_addargs(&block->cmd.args, *param);
 	else if (type == INPUT_OUTPUT)
-		ft_add_io(block, param);
+		ft_add_io(block, *param);
 	else if (type == PARENTHESIS && !block->cmd.name && !block->sub)
 	{
-		block->subshell_command = param;
+		block->subshell_command = *param;
 		add_block_back(&block, last_sub);
 	}
 	else
@@ -99,8 +101,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 	if (!*curr_block)
 		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
-	printf("arg: %s [%d] curseur sur '%c'\n", next_param, type, cmd_line[i]);
-	while (next_param && is_valid_param(next_param, type, *curr_block, path))
+	while (next_param && is_valid_param(&next_param, type, *curr_block, path))
 	{
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
@@ -124,7 +125,6 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
 		}
 		next_param = get_next_param(cmd_line, &i, &type);
-		printf("arg: %s [%d] curseur sur '%c'\n", next_param, type, cmd_line[i]);
 	}
 	if (errno)
 		return(free(cmd_line), free(next_param), false);

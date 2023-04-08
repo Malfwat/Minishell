@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 17:37:07 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 20:17:59 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void restore_terminal(struct termios saved_term)
 void    exit_minishell(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
 {
     flood_free(lst);
-    free_t_env(envp_lst);
+    free_env_lst(envp_lst);
 	(void)ms_params;
     // free_ms_params(ms_params); // useless pour l'instant car il n'y a que envp qui set free la ligne plus haut
     // restore_terminal(ms_params.term_params);
@@ -57,38 +57,38 @@ void	my_dup(t_block *block, int *io_fds)
 	
 // }
 
-bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
-{
-	int	pipe_fds[2];
-	int	tmp;
+// bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
+// {
+// 	int	pipe_fds[2];
+// 	int	tmp;
 	
-	tmp = io_fds[0];
-	while (block)
-	{
-		if (block->pipe_next)
-			pipe(pipe_fds);
-		if (errno)
-			return (perror("minishell"), false);
-		if (!block->pipe_next)
-			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
-		else
-			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
-		close(tmp);
-		close(pipe_fds[1]);
-		dup2(pipe_fds[0], tmp);
-		close(pipe_fds[0]);
-		block = block->pipe_next;
-		if (block && block->io_tab[0] == -1)
-			block->io_tab[0] = tmp;
-	}
-	return (true);
-}
+// 	tmp = io_fds[0];
+// 	while (block)
+// 	{
+// 		if (block->pipe_next)
+// 			pipe(pipe_fds);
+// 		if (errno)
+// 			return (perror("minishell"), false);
+// 		if (!block->pipe_next)
+// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
+// 		else
+// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
+// 		close(tmp);
+// 		close(pipe_fds[1]);
+// 		dup2(pipe_fds[0], tmp);
+// 		close(pipe_fds[0]);
+// 		block = block->pipe_next;
+// 		if (block && block->io_tab[0] == -1)
+// 			block->io_tab[0] = tmp;ad,
+// 	}
+// 	return (true);
+// }
 
 void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
 {
 	char **argv;
 	char **envp;
-	int exit_value;
+	int exit_value = 0;
 
 	(void)status;
 	errno = 0;
@@ -100,17 +100,24 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
-		errno = 0;
+		
+		// errno = 0;
 		execve(argv[0], argv, envp);
 		// exit(0);
-		exit_value = 127;
-		if (!access(argv[0], F_OK))
+		// exit_value = 127;
+		if (errno != ENOENT)
 		{
+			ft_putstr_fd("minishell: ", 2);
 			perror(argv[0]);
 			exit_value = 126;
 		}
 		else
-			printf("%s: Command not found\n", argv[0]);
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(argv[0], 2);
+			ft_putendl_fd(": Command not found", 2);
+		}
+			
 			
 		return (ft_strsfree(envp), free(argv), \
 		exit_minishell(block, ms_params.envp, ms_params, exit_value));
@@ -175,7 +182,8 @@ int	main(int ac, char **av, char **env)
 		// execute_cmds(head, );
 	ft_strsfree(path);
 	if (errno)
-		return (perror("minishell"), flood_free(head), 0);
+		return (exit_minishell(head, ms_params.envp, ms_params, 0), \
+		perror("minishell"), flood_free(head), 0);
 	// free(rl_prompt);
 	// close(fd);
 	return (exit_minishell(head, ms_params.envp, ms_params, 0), 0);

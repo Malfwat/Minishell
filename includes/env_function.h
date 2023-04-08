@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_function.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 07:04:04 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:17:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 t_env_var	*new_env_var(char *name, char *value, bool temp);
 t_env_var	*get_last_env_var(t_env_var *tmp);
-void		free_t_env(t_env_var *lst);
 t_env_var	*get_env_var(char **env);
 bool		add_env_var(t_env_var **head, char *name, char *value, bool temp);
 

@@ -6,6 +6,7 @@
 		"stdbool.h": "c",
 		"minishell.h": "c",
 		"wait.h": "c",
-		"struct_ms.h": "c"
+		"struct_ms.h": "c",
+		"typeinfo": "c"
 	}
 }

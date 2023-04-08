@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_structs_2.c                                   :+:      :+:    :+:   */
+/*   free_structs_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/08 04:25:21 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:15:28 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_ms_params(t_minishell *ms_params)
 
 void	free_env_lst(t_env_var *envp_lst)
 {
-	t_env_var *tmp;
+	t_env_var	*tmp;
 
 	while (envp_lst)
 	{
