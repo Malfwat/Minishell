@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 
 int	main(void)
 {
-	dup2(7, STDOUT_FILENO)
+	int	fd;
 
-	void	*a;
-	void	*b;
-
-
-	a = 0x001
-	dup2(a, b)
-	b == 0x001
-	errno = 2;
-	perror("");
+	fd = open("/dev/stdout", O_RDONLY | O_WRONLY | O_CREAT, 00644);
+	
+	dup2(fd, 1);
+	write(1, "lol\n", 4);
+	return (0);
 }

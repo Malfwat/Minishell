@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 20:17:59 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 20:31:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 #include <minishell.h>
 #include <history.h>
-
+#include <string.h>
 
 void restore_terminal(struct termios saved_term)
 {
@@ -84,6 +84,21 @@ void	my_dup(t_block *block, int *io_fds)
 // 	return (true);
 // }
 
+void	ms_perror(char *progname, char *subname, char *error)
+{
+	if (progname)
+	{
+		ft_putstr_fd(progname, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	if (subname)
+	{
+		ft_putstr_fd(subname, 2);
+		ft_putstr_fd(": ", 2);
+	}
+	ft_putendl_fd(error, 2);
+}
+
 void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
 {
 	char **argv;
@@ -107,18 +122,11 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 		// exit_value = 127;
 		if (errno != ENOENT)
 		{
-			ft_putstr_fd("minishell: ", 2);
-			perror(argv[0]);
+			ms_perror("minishell", argv[0], strerror(errno))
 			exit_value = 126;
 		}
 		else
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(argv[0], 2);
-			ft_putendl_fd(": Command not found", 2);
-		}
-			
-			
+			ms_perror("minishell", argv[0], "Command not found");
 		return (ft_strsfree(envp), free(argv), \
 		exit_minishell(block, ms_params.envp, ms_params, exit_value));
 	}
