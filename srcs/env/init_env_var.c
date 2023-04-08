@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 23:59:34 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 05:17:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 07:04:46 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void	free_env_lst(t_env_var **lst)
+void	free_t_env(t_env_var *lst)
 {
 	t_env_var	*tmp;
 
-	if (!lst)
-		return ;
-	while (*lst)
+	while (lst)
 	{
-		tmp = (*lst)->next;
-		free((*lst)->var_name);
-		free((*lst)->var_value);
-		free(*lst);
-		*lst = tmp;
+		tmp = lst->next;
+		free(lst->var_name);
+		free(lst->var_value);
+		free(lst);
+		lst = tmp;
 	}
 }
 
@@ -86,7 +84,7 @@ t_env_var	*get_env_var(char **env)
 		name = get_env_var_name(env[i]);
 		value = get_env_var_value(env[i]);
 		if (!add_env_var(&lst, name, value, 0))
-			return (free(name), free(value), free_env_lst(&lst), NULL);
+			return (free(name), free(value), free_t_env(lst), NULL);
 		i++;
 	}
 	return (lst);

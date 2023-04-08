@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/07 18:37:45 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/08 06:30:35 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ ENV					=	export_unset_env.c	\
 ENV_DIR				=	env/
 
 PARSING				=	input_output.c	\
+						io_functions.c	\
 						parenthesis.c	\
 						utils.c			\
 						parsing.c		\
