@@ -17,12 +17,14 @@ bool	restore_terminal_params(struct termios saved_params)
 {
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &saved_params) == -1)
 		return (false);
+	return (true);
 }
 
 bool	save_terminal_params(t_minishell *ms_params)
 {
 	if (tcgetattr(STDIN_FILENO, &ms_params->saved_params) == -1)
 		return (false);
+	return (true);
 }
 
 bool	toggle_control_character(int control_character, int mode)
