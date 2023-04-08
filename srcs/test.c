@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 20:31:58 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 21:19:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 #include <minishell.h>
 #include <history.h>
 #include <string.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 void restore_terminal(struct termios saved_term)
 {
@@ -109,27 +114,30 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 	errno = 0;
 	argv = build_argv(block->cmd.name, block->cmd.args);
 	envp = build_envp(ms_params.envp);
-	my_dup(block, io_fds);
 	if (errno)
 		return (free(argv), ft_strsfree(envp), perror("minishell"));
+	my_dup(block, io_fds);
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
-		
-		// errno = 0;
 		execve(argv[0], argv, envp);
-		// exit(0);
-		// exit_value = 127;
 		if (errno != ENOENT)
 		{
-			ms_perror("minishell", argv[0], strerror(errno))
-			exit_value = 126;
+			if (errno == EACCES)
+				exit_value = 126; // 126 == command found but cannot be executed
+			else if (errno)
+				exit_value = 2; // valeur fourre-tout
+			ms_perror("minishell", argv[0], strerror(errno));
 		}
 		else
+		{
 			ms_perror("minishell", argv[0], "Command not found");
+			exit_value = 127; // 127 == command not found
+		}
 		return (ft_strsfree(envp), free(argv), \
 		exit_minishell(block, ms_params.envp, ms_params, exit_value));
 	}
+	waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 	ft_strsfree(envp);
 	free(argv);
 }
