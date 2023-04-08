@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
+#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/08 08:08:02 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/08 21:39:01 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,8 @@ STRUCT_UTILS		=	init_t_block.c		\
 
 STRUCT_UTILS_DIR	=	struct_utils/
 
-TERM_UTILS			=	term_params_handler.c
+TERM_UTILS			=	term_params_handler.c	\
+						exit_minishell.c
 
 TERM_UTILS_DIR		=	term_utils/
 
