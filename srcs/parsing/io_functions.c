@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 07:00:18 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 20:02:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 #include <get_next_line.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <env_function.h>
+#include <libft.h>
+#include <struct_ms.h>
 
 int	heredoc(char *limiter)
 {

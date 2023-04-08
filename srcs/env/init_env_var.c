@@ -3,31 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   init_env_var.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 23:59:34 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 07:04:46 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:18:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <env_function.h>
 #include <libft.h>
+#include <minishell.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-void	free_t_env(t_env_var *lst)
-{
-	t_env_var	*tmp;
-
-	while (lst)
-	{
-		tmp = lst->next;
-		free(lst->var_name);
-		free(lst->var_value);
-		free(lst);
-		lst = tmp;
-	}
-}
 
 t_env_var	*get_last_env_var(t_env_var *tmp)
 {
@@ -84,7 +71,7 @@ t_env_var	*get_env_var(char **env)
 		name = get_env_var_name(env[i]);
 		value = get_env_var_value(env[i]);
 		if (!add_env_var(&lst, name, value, 0))
-			return (free(name), free(value), free_t_env(lst), NULL);
+			return (free(name), free(value), free_env_lst(lst), NULL);
 		i++;
 	}
 	return (lst);
