@@ -62,10 +62,15 @@ PARSING_DIR			=	parsing/
 
 STRUCT_UTILS		=	init_t_block.c		\
 						manage_cmd_args.c	\
-						free_structs.c		\
+						free_structs_0.c		\
+						free_structs_1.c		\
 						manage_io_params.c
 
 STRUCT_UTILS_DIR	=	struct_utils/
+
+TERM_UTILS			=	term_params_handler.c
+
+TERM_UTILS_DIR		=	term_utils/
 
 CC					=	cc
 
@@ -86,6 +91,7 @@ SRCS				+=	$(addprefix $(ENV_DIR), $(ENV))
 SRCS				+=	$(addprefix $(PROMPT_DIR), $(PROMPT))
 SRCS				+=	$(addprefix $(HISTORY_DIR), $(HISTORY))
 SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
+SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
 SRCS				+=	test.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
@@ -99,6 +105,7 @@ DIRS				+=	$(addprefix $(BUILD), $(SIGNAL_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PROMPT_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 
 ################################################################################
 #                                                                              #
