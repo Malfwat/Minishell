@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 07:04:25 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 19:18:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
 #include <env_function.h>
 #include <libft.h>
+#include <minishell.h>
 
 void	export(t_env_var **lst, char *name, char *value, bool temp)
 {
@@ -22,7 +23,7 @@ void	export(t_env_var **lst, char *name, char *value, bool temp)
 	if (!tmp)
 	{
 		if (!add_env_var(lst, name, value, temp))
-			return (free_t_env(*lst));
+			return (free_env_lst(*lst));
 	}
 	else
 	{
