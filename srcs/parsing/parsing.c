@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 22:28:36 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/08 08:20:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,16 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	return (false);
 }
 
-bool	is_valid_param(char *param, int type, t_block *block)
+bool	is_valid_param(char *param, int type, t_block *block, char **path)
 {
 	errno = 0;
 	if (type == -1)
 		return (false);
 	else if (!block->cmd.name && type == CMD_ARG && !block->sub)
-		block->cmd.name = param; // appeler la fonction pour trouver path (path + cmd || cmd)
+	{
+		block->cmd.name = check_cmd(path, param);
+		errno = 0;	
+	}
 	else if (block->cmd.name && type == CMD_ARG && !block->sub)
 		ft_addargs(&block->cmd.args, param);
 	else if (type == INPUT_OUTPUT)
@@ -85,7 +88,7 @@ void	ft_error(int err, char *comment)
 	}
 }
 
-bool	parse_cmds(t_block **curr_block, char *cmd_line)
+bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 {
 	int		i;
 	int		type;
@@ -97,13 +100,13 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
 	printf("arg: %s [%d] curseur sur '%c'\n", next_param, type, cmd_line[i]);
-	while (next_param && is_valid_param(next_param, type, *curr_block))
+	while (next_param && is_valid_param(next_param, type, *curr_block, path))
 	{
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
 		{
 			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
-			ft_strlen(next_param) - 2)))
+			ft_strlen(next_param) - 2), path))
 				return (free(cmd_line), free(next_param), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
