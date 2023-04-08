@@ -86,6 +86,7 @@ typedef struct s_minishell
 {
 	t_prompt		prompt;
 	t_env_var		*envp;
-	struct termios	*term_params;
+	struct termios	saved_term;
 }	t_minishell;
+
 #endif
