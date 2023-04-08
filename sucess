@@ -1,1 +1,18 @@
-capppt: Command not found
+total 348
+drwxrwxr-x 11 malfwa malfwa   4096 avril  8 17:18 .
+drwxrwxr-x 11 malfwa malfwa   4096 avril  8 02:27 ..
+drwxrwxr-x 10 malfwa malfwa   4096 avril  8 17:18 .build
+drwxrwxr-x  2 malfwa malfwa   4096 avril  8 15:34 draft
+drwxrwxr-x  4 malfwa malfwa   4096 avril  8 15:34 example_of_usage
+drwxrwxr-x  8 malfwa malfwa   4096 avril  8 17:07 .git
+-rw-rw-r--  1 malfwa malfwa     16 avril  3 12:33 .gitignore
+drwxrwxr-x  2 malfwa malfwa   4096 avril  8 16:56 includes
+drwxrwxr-x  3 malfwa malfwa   4096 avril  8 15:34 libft
+-rw-rw-r--  1 malfwa malfwa   4356 avril  8 16:56 Makefile
+-rwxrwxr-x  1 malfwa malfwa 286984 avril  8 17:18 minishell
+-rwxrwxr-x  1 malfwa malfwa     27 avril  8 15:34 script2.sh
+-rwxrwxr-x  1 malfwa malfwa     27 avril  8 15:34 script.sh
+drwxrwxr-x 11 malfwa malfwa   4096 avril  8 16:56 srcs
+-rw-rw-r--  1 malfwa malfwa      0 avril  8 17:18 sucess
+drwxrwxr-x  2 malfwa malfwa   4096 avril  8 15:34 unit_test
+drwxrwxr-x  2 malfwa malfwa   4096 avril  8 15:34 .vscode

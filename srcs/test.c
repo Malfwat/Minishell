@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 17:02:25 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/08 17:18:54 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,35 +48,35 @@ void	my_dup(int *io_fds)
 	close(io_fds[1]);
 }
 
-int	*before_exec(int *fds, int *pipe_fds)
-{
+// int	*before_exec(int *fds, int *pipe_fds)
+// {
 	
-}
+// }
 
-bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
-{
-	int	pipe_fds[2];
-	int	tmp;
+// bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
+// {
+// 	int	pipe_fds[2];
+// 	int	tmp;
 	
-	tmp = io_fds[0];
-	while (block)
-	{
-		if (block->pipe_next)
-			pipe(pipe_fds);
-		if (errno)
-			return (perror("minishell"), false);
-		if (!block->pipe_next)
-			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
-		else
-			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
-		close(tmp);
-		close(pipe_fds[1]);
-		dup2(pipe_fds[0], tmp);
-		close(pipe_fds[0]);
-		block = block->pipe_next;
-	}
-	return (true);
-}
+// 	tmp = io_fds[0];
+// 	while (block)
+// 	{
+// 		if (block->pipe_next)
+// 			pipe(pipe_fds);
+// 		if (errno)
+// 			return (perror("minishell"), false);
+// 		if (!block->pipe_next)
+// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
+// 		else
+// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
+// 		close(tmp);
+// 		close(pipe_fds[1]);
+// 		dup2(pipe_fds[0], tmp);
+// 		close(pipe_fds[0]);
+// 		block = block->pipe_next;
+// 	}
+// 	return (true);
+// }
 
 void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
 {
@@ -106,10 +106,10 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 		else
 			printf("%s: Command not found\n", argv[0]);
 			
-		return (free(envp), free(argv), \
+		return (ft_strsfree(envp), free(argv), \
 		exit_minishell(block, ms_params.envp, ms_params, exit_value));
 	}
-	free(envp);
+	ft_strsfree(envp);
 	free(argv);
 }
 
@@ -167,10 +167,10 @@ int	main(int ac, char **av, char **env)
 	io_manager(head);
 	execute_t_block_cmd(head, &type, ms_params, head->io_tab);
 		// execute_cmds(head, );
+	ft_strsfree(path);
 	if (errno)
 		return (perror("minishell"), flood_free(head), 0);
-	exit_minishell(head, ms_params.envp, ms_params, 0);
 	// free(rl_prompt);
 	// close(fd);
-	printf("[%d] res: '%s'\n", type, res);
+	return (exit_minishell(head, ms_params.envp, ms_params, 0), 0);
 }
