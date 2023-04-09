@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 22:09:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:09:35 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <parsing_ms.h>
 #include <stdio.h>
+#include <minishell.h>
 
 t_redirect	*new_redirect(char *arg, int mode)
 {
@@ -36,6 +37,7 @@ t_redirect	*new_redirect(char *arg, int mode)
 	else
 		new->file_name = ft_strdup(arg + 1);
 	new->mode = mode;
+	new->fd = INIT_FD_VALUE;
 	free(arg);
 	if (errno)
 		return (NULL);
