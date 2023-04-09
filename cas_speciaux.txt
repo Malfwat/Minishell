@@ -1,0 +1,5 @@
+- Si subshell, entree/sortie definit par chevron ne peuvent etre qu'apres la fin de la parenthese
+	ex correct: (echo 1 && echo 2) > in
+	ex incorrect: >in (echo 1 && echo 2)
+
+- 

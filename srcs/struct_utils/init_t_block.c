@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:02:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:16:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:40:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <libft.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <minishell.h>
 
 t_block	*new_block(void)
 {
@@ -22,8 +23,8 @@ t_block	*new_block(void)
 	new = ft_calloc(1, sizeof(t_block));
 	if (!new)
 		return (NULL);
-	new->io_tab[0] = -2;
-	new->io_tab[1] = -2;
+	new->io_tab[0] = INIT_FD_VALUE;
+	new->io_tab[1] = INIT_FD_VALUE;
 	return (new);
 }
 

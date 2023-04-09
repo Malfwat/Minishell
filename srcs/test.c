@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/09 16:45:07 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 00:02:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void restore_terminal(struct termios saved_term)
 	
 // }
 
-// void    exit_minishell(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
+// void    exit_ms(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
 // {
 //     flood_free(lst);
 //     free_env_lst(envp_lst);
@@ -45,18 +45,21 @@ void restore_terminal(struct termios saved_term)
 //     exit(exit_value);
 // }
 
-// exit_minishell se trouve dans term_utils/exit_minishell.c
+// exit_ms se trouve dans term_utils/exit_ms.c
 
-void	my_dup(t_block *block, int *io_fds)
+bool	my_dup(t_block *block)
 {
-	dup2(block->io_tab[0], 0);
-	dup2(block->io_tab[1], 1);
-	close(block->io_tab[0]);
-	close(block->io_tab[1]);
-	if (block->io_tab[0] != io_fds[0])
-		close(io_fds[0]);
-	if (block->io_tab[1] != io_fds[1])
-		close(io_fds[1]);
+	if (block->io_tab[0] != INIT_FD_VALUE)
+	{
+		if (dup2(block->io_tab[0], 0) == -1 || close(block->io_tab[0]) == -1) 
+			return (false);
+	}
+	if (block->io_tab[1] != INIT_FD_VALUE)
+	{
+		if (dup2(block->io_tab[1], 1) == -1 || close(block->io_tab[1]) == -1)
+			return (false);
+	}
+	return (true);
 }
 
 // int	*before_exec(int *fds, int *pipe_fds)
@@ -91,11 +94,11 @@ void	my_dup(t_block *block, int *io_fds)
 // 	return (true);
 // }
 
-void	ms_perror(char *progname, char *subname, char *error)
+void	ms_perror(char *program, char *subname, char *error)
 {
-	if (progname)
+	if (program)
 	{
-		ft_putstr_fd(progname, 2);
+		ft_putstr_fd(program, 2);
 		ft_putstr_fd(": ", 2);
 	}
 	if (subname)
@@ -124,60 +127,67 @@ void handle_execve_failure(t_block *block, t_minishell ms_params, char *program_
 		ms_perror("minishell", program_name, "Command not found");
 		exit_value = 127; // 127 == command not found
 	}
-	exit_minishell(block, ms_params, exit_value);
-	// exit_minishell(block, ms_params.envp, ms_params, exit_value);
+	errno = 0;
+	exit_ms(block, ms_params, exit_value, NULL);
+	// exit_ms(block, ms_params.envp, ms_params, exit_value);
 }
 
 
-// void	close_block_fds(t_block *block)
-// {
-// 	if (block->io_tab[0] > 2)
-// 	{
-// 		close(block->io_tab[0]);
-// 		block->io_tab[0] = -2; // valeur quand non initialise
-// 	}
-// 	if (block->io_tab[1] > 2)
-// 	{
-// 		block->io_tab[1] = -2;
-// 		close(block->io_tab[1]);
-// 	}
-// }
+void	close_block_fds(t_block *block)
+{
+	if (block->io_tab[0] > 2)
+	{
+		close(block->io_tab[0]);
+		block->io_tab[0] = -2; // valeur quand non initialise
+	}
+	if (block->io_tab[1] > 2)
+	{
+		block->io_tab[1] = -2;
+		close(block->io_tab[1]);
+	}
+}
 
 void	execute_t_block_cmd(t_block *block, t_minishell ms_params)
 {
 	char	**argv;
 	char	**envp;
 
-	(void)status;
 	errno = 0;
 	argv = build_argv(block->cmd.name, block->cmd.args);
 	envp = build_envp(ms_params.envp);
 	if (errno)
-		return (free(argv), ft_strsfree(envp), perror("minishell"));
-	my_dup(block, io_fds);
+		return (free(argv), ft_strsfree(envp), exit_ms(block, ms_params, 2, "exec"));
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
+		if (errno || !my_dup(block))
+			return (free(argv), ft_strsfree(envp), exit_ms(block, ms_params, 2, "exec"));
 		execve(argv[0], argv, envp);
 		ft_strsfree(envp);
 		free(argv);
 		handle_execve_failure(block, ms_params, argv[0]);
 	}
-	waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
+		
+	if (block->io_tab[0] >= 0)
+		close(block->io_tab[0]);
+	if (block->io_tab[1] >= 0)
+		close(block->io_tab[1]);
 	ft_strsfree(envp);
 	free(argv);
+	if (ms_params.children == -1)
+		
+	store_pid(block->cmd.pid, &ms_params.children);
+	// waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 }
 
-t_block *find_next_block(t_block *block, bool skip_subshell_parent)
+t_block *find_next_block(t_block *block, bool ignore_sub)
 {
-	if (block->sub && skip_subshell_parent == true)
-		return (find_next_block(block->sub, skip_subshell_parent));
-	else if (block->sub && skip_subshell_parent == false)
+	if (block->sub && !ignore_sub)
 		return (block->sub);
-	else if (block->next)
-		return (block->next);
 	else if (block->pipe_next)
 		return (block->pipe_next);
+	else if (block->next)
+		return (block->next);
 	return (NULL);
 }
 
@@ -185,32 +195,172 @@ t_block	*find_next_executable_block(t_block *block)
 {
 	int		exit_value;
 	int		current_operator;
-	t_block	*tmp;
 
 	current_operator = block->operator;
 	exit_value = block->cmd.exit_value;
-	block = find_next_block(block, false);
 	while (block)
 	{
-		if (block->operator == AND_OPERATOR && exit_value == 0)
-			return (find_next_block(block, false));
+		if (block->operator == AND_OPERATOR && exit_value == SUCCESS)
+			return (find_next_block(block, true));
 		else if (block->operator == OR_OPERATOR && exit_value > 0)
-			return (find_next_block(block, false));
+			return (find_next_block(block, true));
 		else if (block->operator == PIPE_OPERATOR)
-			return (find_next_block(block, false));
+			return (find_next_block(block, true));
 		else if (block->operator == SEMI_COLON)
-			return (find_next_block(block, false));
+			return (find_next_block(block, true));
 		else
-			block = find_next_block(block, false);
+			block = find_next_block(block, true);
 	}
 	return (NULL);
 }
 
-bool	create_subshell_pipe()
+bool	create_pipe(t_block *block)
+{
+	t_block	*next_block;
+	int		tube[2];
 
-int	execute_cmds(t_block *prev_block, t_block *block, t_minishell ms_params)
+	next_block = find_next_block(block, true);
+	if (pipe(tube) == -1)
+		return (false);
+	if (next_block->io_tab[0] == INIT_FD_VALUE || next_block->io_is_overwritable[0])
+	{
+		next_block->io_tab[0] = tube[0];
+		next_block->io_is_overwritable[0] = true; // Penser a init a false la ou on creer le block
+	}
+	if (block->io_tab[1] == INIT_FD_VALUE || !next_block->io_is_overwritable[1])
+	{
+		block->io_tab[1] = tube[1];
+		block->io_is_overwritable[1] = true;
+	}
+	return (true);
+}
+
+void	inherit_subshell_parent_fd(t_block *block)
+{
+	t_fd input_fd;
+	t_fd output_fd;
+
+	input_fd = block->io_tab[0];
+	output_fd = block->io_tab[1];
+	while (block)
+	{
+		if (block->io_tab[0] == INIT_FD_VALUE)
+			block->io_tab[0] = input_fd;
+		if (block->io_tab[1] == INIT_FD_VALUE)
+			block->io_tab[1] = output_fd;
+		block = find_next_block(block, true);
+	}
+}
+
+bool	create_subshell_pipe(t_block *block)
+{
+	int fd_in_parent;
+	int fd_out_parent;
+
+	if (block->pipe_next)
+		create_pipe(block);
+	fd_out_parent = block->io_tab[0];
+ 	// on veut chercher les block du subshell(on veut pas ceux d'un sous subshell ceci-dit)
+	fd_in_parent = block->io_tab[1];
+	block = find_next_block(block, false);
+	while (block)
+	{
+		if (block->io_tab[0] == INIT_FD_VALUE || block->io_is_overwritable[0])
+		{
+			block->io_tab[0] = fd_in_parent;
+			block->io_is_overwritable[0] = true;
+		}
+		if (block->io_tab[1] == INIT_FD_VALUE || block->io_is_overwritable[1])
+		{
+			block->io_is_overwritable[1] = true;
+			block->io_tab[1] = fd_out_parent;
+		}
+		block = find_next_block(block, true);
+	}
+	return (true);
+}
+
+void	infanticides(t_pids *preys)
+{
+	while (preys)
+	{
+		kill(preys->pid, SIGTERM);
+		preys = preys->next;
+	}
+}
+
+bool	store_pid(pid_t pid, t_pids **nursery)
+{
+	t_pids	*new;
+	t_pids	*lst;
+
+	new = ft_calloc(1, sizeof(t_pids));
+	if (!new)
+		return (infanticides(*nursery), false);
+	if (!*nursery)
+	{
+		*nursery = new;
+		return (true);
+	}
+	else
+	{
+		lst = *nursery;
+		while (lst->next)
+			lst = lst->next;
+		lst->next = new;
+	}
+	return (true);
+}
+
+void	free_children(t_pids *children)
+{
+	t_pids	*tmp;
+	
+	while (children)
+	{
+		tmp = children->next;
+		free(children);
+		children = tmp;
+	}
+}
+
+int	wait_children(t_pids *children)
+{
+	int	status;
+
+	while (children)
+	{
+		waitpid(children->pid, &status, 0);
+		children = children->next;
+	}
+	return (status);
+}
+
+pid_t	create_subshell(t_block *block, t_minishell ms_params)
+{
+	pid_t	sub_pid;
+	
+	sub_pid = fork();
+	if (!sub_pid)
+	{
+		free_children(ms_params.children);
+		ms_params.children = NULL;
+		if (block->operator == PIPE_OPERATOR || block->io_tab[1] != INIT_FD_VALUE
+			|| block->io_tab[0] != INIT_FD_VALUE)
+			create_subshell_pipe(block); // Penser a gerer si les cas d'erreur (ouverture pipe)
+		else
+			inherit_subshell_parent_fd(block);
+		execute_cmds(block->sub, ms_params); // on passe au contenu du subshell immediatement
+		exit_ms(block, ms_params, wait_children(ms_params.children), NULL);
+	}
+	return (sub_pid);
+}
+
+int	execute_cmds(t_block *block, t_minishell ms_params)
 {
 	t_block	*next_block_to_execute;
+	pid_t	sub_pid;
+	// int		status
 
 	if (!block)
 		return (0);
@@ -229,11 +379,21 @@ int	execute_cmds(t_block *prev_block, t_block *block, t_minishell ms_params)
 						echo 2 lui est redirige vers le pipe du subshell parent
 						puis cat prend la sortie du subshell precedent en entree (dup2)
 						et travaille avec ca.
+			Meme chose pour pour le cas d'une entree
+			Penser a gerer que le pipe dans un subshell prevaut sur le pipe en dehors
 		*/
-		execute_cmds(block, block->sub, ms_params); // on recursive pour trouver un vrai block
+		/*
+		*	Penser au fait que le fd du pipe du subshell sera donne a ses enfants
+		*	et qu'il faudra eviter de double-close un meme fd
+		*/
+		sub_pid = create_subshell(block, ms_params);
+		store_pid(sub_pid, &ms_params.children);
+		// waitpid(sub_pid, &status, 0);
 	}
 	else
 	{
+		if (block->operator == PIPE_OPERATOR)
+			create_pipe(block);
 		execute_t_block_cmd(block, ms_params);
 		// imaginons : fufhu && echo 2 || echo 3
 		// la premiere commande echoue, le prochain block executable sera le echo 3
@@ -241,6 +401,8 @@ int	execute_cmds(t_block *prev_block, t_block *block, t_minishell ms_params)
 		next_block_to_execute = find_next_executable_block(block);
 		if (!next_block_to_execute)
 			return (0); // aucun block executable
+		else
+			execute_cmds(next_block_to_execute, ms_params);
 	}
 	return (0);
 }
@@ -252,6 +414,7 @@ int	main(int ac, char **av, char **env)
 	t_block		*head;
 	t_minishell	ms_params;
 
+	save_terminal_params(&ms_params);
 	// t_prompt	prompt_params;
 
 	// set_sig_handler();
@@ -272,16 +435,25 @@ int	main(int ac, char **av, char **env)
 	head = new_block();
 	char **path = ft_split(getenv("PATH"), ':');
 	if (!path)
-		return (0);
+		return (perror(""), 0);
 	parse_cmds(&head, str, path);
-	io_manager(head);
-	execute_t_block_cmd(head, &type, ms_params, head->io_tab);
-		// execute_cmds(head, );
 	ft_strsfree(path);
 	if (errno)
-		return (exit_minishell(head, ms_params, 0), \
-		perror("minishell"), flood_free(head), 0);
+		return (exit_ms(head, ms_params, 2, "parsing"), 0);
+	io_manager(head);
+	io_manager(head);
+	if (errno)
+		ms_perror("minishell", "io_manager", strerror(errno));
+	execute_cmds(head, ms_params);
+	//execute_t_block_cmd(head, &type, ms_params, head->io_tab);
+		// execute_cmds(head, );
 	// free(rl_prompt);
 	// close(fd);
-	return (exit_minishell(head, ms_params, 0), 0);
+	// ft_putnbr_fd(isatty(ms_params.stdin_fileno), 36);
+	wait(NULL);
+	wait(NULL);
+	wait(NULL);
+	wait(NULL);
+	wait(NULL);
+	return (exit_ms(head, ms_params, 0, NULL), 0);
 }
