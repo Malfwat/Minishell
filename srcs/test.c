@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 21:36:56 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/09 16:45:07 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,25 @@ void handle_execve_failure(t_block *block, t_minishell ms_params, char *program_
 	// exit_minishell(block, ms_params.envp, ms_params, exit_value);
 }
 
-void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int *io_fds)
+
+// void	close_block_fds(t_block *block)
+// {
+// 	if (block->io_tab[0] > 2)
+// 	{
+// 		close(block->io_tab[0]);
+// 		block->io_tab[0] = -2; // valeur quand non initialise
+// 	}
+// 	if (block->io_tab[1] > 2)
+// 	{
+// 		block->io_tab[1] = -2;
+// 		close(block->io_tab[1]);
+// 	}
+// }
+
+void	execute_t_block_cmd(t_block *block, t_minishell ms_params)
 {
-	char **argv;
-	char **envp;
+	char	**argv;
+	char	**envp;
 
 	(void)status;
 	errno = 0;
@@ -153,28 +168,82 @@ void	execute_t_block_cmd(t_block *block, int *status, t_minishell ms_params, int
 	free(argv);
 }
 
-// int	execute_cmds(int *status, t_block *block, int *pipe, t_minishell ms_params)
-// {
-// 	if (block->do_not_execute)
-// 		return (ft_putstr_fd(block->do_not_execute, 2), false);
-// 	else if (block->subshell_command)
-// 		execute_cmds(status, block, pipe, ms_params);
-// 	else
-// 		pipex()
-// 	// 	while (block->pipe_next)
-// 	// 	{
-// 	// 		execute_t_block_cmd(block, status, ms_params.envp, ms_params);
-// 	// 		// pipex
-// 	// 	}
-// 	// 	if (block->operator == AND_OPERATOR && *status != 0)
-// 	// 		return (0);
-// 	// 	else
-// 	// 	{
-			
-// 	// 	}
-// 	// }
-// 	return (0);
-// }
+t_block *find_next_block(t_block *block, bool skip_subshell_parent)
+{
+	if (block->sub && skip_subshell_parent == true)
+		return (find_next_block(block->sub, skip_subshell_parent));
+	else if (block->sub && skip_subshell_parent == false)
+		return (block->sub);
+	else if (block->next)
+		return (block->next);
+	else if (block->pipe_next)
+		return (block->pipe_next);
+	return (NULL);
+}
+
+t_block	*find_next_executable_block(t_block *block)
+{
+	int		exit_value;
+	int		current_operator;
+	t_block	*tmp;
+
+	current_operator = block->operator;
+	exit_value = block->cmd.exit_value;
+	block = find_next_block(block, false);
+	while (block)
+	{
+		if (block->operator == AND_OPERATOR && exit_value == 0)
+			return (find_next_block(block, false));
+		else if (block->operator == OR_OPERATOR && exit_value > 0)
+			return (find_next_block(block, false));
+		else if (block->operator == PIPE_OPERATOR)
+			return (find_next_block(block, false));
+		else if (block->operator == SEMI_COLON)
+			return (find_next_block(block, false));
+		else
+			block = find_next_block(block, false);
+	}
+	return (NULL);
+}
+
+bool	create_subshell_pipe()
+
+int	execute_cmds(t_block *prev_block, t_block *block, t_minishell ms_params)
+{
+	t_block	*next_block_to_execute;
+
+	if (!block)
+		return (0);
+	if (block->do_not_execute)
+		return (ft_putstr_fd(block->do_not_execute, 2), close_block_fds(block), false);
+	else if (block->subshell_command)
+	{
+		/*	subshell: si le subshell a un pipe a sa sortie:
+		*	1- Changer la sortie du subshell vers un pipe (que si pas de sortie indique)
+		*	2- Changer la sortie de chaque cmd dans le subshell vers la sortie de ce pipe
+				QUE:
+					- S'ils n'ont pas de sortie indique (> >>)
+					- Et n'ont pas un operator pipe. ex (echo 1 | echo 2) | cat
+						Ici echo 1 n'est pas redirige
+						vers le pipe du parent subshell mais vers le pipe de echo 2
+						echo 2 lui est redirige vers le pipe du subshell parent
+						puis cat prend la sortie du subshell precedent en entree (dup2)
+						et travaille avec ca.
+		*/
+		execute_cmds(block, block->sub, ms_params); // on recursive pour trouver un vrai block
+	}
+	else
+	{
+		execute_t_block_cmd(block, ms_params);
+		// imaginons : fufhu && echo 2 || echo 3
+		// la premiere commande echoue, le prochain block executable sera le echo 3
+		// c'est ce block que find_next... est cense renvoye
+		next_block_to_execute = find_next_executable_block(block);
+		if (!next_block_to_execute)
+			return (0); // aucun block executable
+	}
+	return (0);
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -182,6 +251,7 @@ int	main(int ac, char **av, char **env)
 	int			type;
 	t_block		*head;
 	t_minishell	ms_params;
+
 	// t_prompt	prompt_params;
 
 	// set_sig_handler();
