@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 21:38:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:14:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 # include <struct_ms.h>	
 # include <stdbool.h>
 # include <errno.h>
-
+# define INIT_FD_VALUE -2
+# define SUCCESS 0
 
 enum e_operator
 {
@@ -54,9 +55,9 @@ void		echo(bool nl, int nb, ...);
 // manage_io_params.c
 
 void		ft_add_io(t_block *block, char *io);
-t_redirect	*new_redirect(char *arg);
+t_redirect	*new_redirect(char *arg, int mode);
 t_redirect	*last_redirect(t_redirect *head);
-void		ft_add_redirect(t_redirect **head, char *arg);
+void		ft_add_redirect(t_redirect **head, char *arg, int mode);
 
 // manage_cmd_args.c
 
@@ -79,7 +80,8 @@ void		free_env_lst(t_env_var *envp_lst);
 // term_utils
 bool		toggle_control_character(int control_character, int mode);
 bool		save_terminal_params(t_minishell *ms_params);
-bool		restore_terminal_params(struct termios saved_term);
-void		exit_minishell(t_block *lst, t_minishell ms_params, int exit_value);
+bool		restore_terminal_params(struct termios saved_term, t_fd stdin_fileno);
+void		exit_ms(t_block *lst, t_minishell ms_params, int exitv, char *context);
+void		ms_perror(char *program, char *subname, char *error);
 
 #endif /* MINISHELL_H */

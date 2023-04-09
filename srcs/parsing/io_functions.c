@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 20:02:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/09 22:20:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,29 @@ bool	heredoc_manager(t_redirect *ptr)
 	return (true);
 }
 
+t_block *find_next_block(t_block *block, bool ignore_sub);
+
+
 bool	io_manager(t_block *block)
 {
 	t_redirect	*tmp;
 
 	if (!heredoc_manager(block->heredoc))
 		return (false);
-	tmp = block->io_redirect;
-	while (tmp && !errno)
+	while (block)
 	{
-		if (tmp->mode == INPUT_MODE)
-			input_manager(tmp, &block->io_tab[0]);
-		else if (tmp->mode == OUTPUT_MODE)
-			output_manager(tmp, &block->io_tab[1]);
-		tmp = tmp->next;
+		tmp = block->io_redirect;
+		while (tmp && !errno)
+		{
+			if (tmp->mode == INPUT_MODE)
+				input_manager(tmp, &block->io_tab[0]);
+			else if (tmp->mode == OUTPUT_MODE)
+				output_manager(tmp, &block->io_tab[1]);
+			tmp = tmp->next;
+		}
+		if (block->sub)
+			io_manager(block->sub);
+		block = find_next_block(block, false);
 	}
 	if (errno)
 		return (NULL);
