@@ -6,15 +6,14 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:02:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/09 21:40:53 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:58:35 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
 #include <libft.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <minishell.h>
+#include <ms_define.h>
 
 t_block	*new_block(void)
 {
