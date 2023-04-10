@@ -6,12 +6,13 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 16:51:40 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:08:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <prompt.h>
 #include <libft.h>
+#include <ms_define.h>
 
 void	build_prompt_exit_status(char **prompt, t_prompt params)
 {

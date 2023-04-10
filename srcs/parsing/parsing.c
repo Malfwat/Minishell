@@ -6,11 +6,12 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/08 19:44:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:07:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
+#include <ms_define.h>
 #include <parsing_ms.h>
 #include <minishell.h>
 #include <libft.h>

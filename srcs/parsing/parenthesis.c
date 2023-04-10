@@ -6,13 +6,14 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:08:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/06 19:48:55 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:06:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <stdbool.h>
-#include <minishell.h>
+#include <parsing_ms.h>
+#include <ms_define.h>
 
 int	find_closing_parenthesis(char *str)
 {

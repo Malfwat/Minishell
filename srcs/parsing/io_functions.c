@@ -6,72 +6,101 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/09 22:20:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:49:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing_ms.h>
 #include <libft.h>
-#include <get_next_line.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <ms_define.h>
 #include <stdio.h>
-#include <env_function.h>
-#include <libft.h>
+// #include <env_function.h>
 #include <struct_ms.h>
 
 int	heredoc(char *limiter)
 {
 	int		test[2];
 	char	*str;
-	int		size;
 	char	*tmp;
 
 	if (pipe(test) == -1)
 		return (-1);
 	get_next_line(0, &str);
-	size = ft_strlen(str);
 	tmp = ft_strjoin(limiter, "\n");
-	while (ft_strncmp(str, tmp, size) && !errno)
+	while (ft_strcmp(str, tmp) && !errno)
 	{
-		write(test[1], str, size);
+		write(test[1], str, ft_strlen(str));
 		free(str);
 		get_next_line(0, &str);
-		size = ft_strlen(str);
 	}
 	free(str);
 	free(tmp);
 	close(test[1]);
 	return (test[0]);
 }
+#include <stdio.h>
 
-void	input_manager(t_redirect *ptr, int *fd)
+void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block)
 {
 	if (ptr->file_name)
+	{
 		ptr->fd = open(ptr->file_name, O_RDONLY);
+		dprintf(2,"open:% d\n", ptr->fd);
+	}
 	if (ptr->fd != -1)
-		*fd = ptr->fd;
+	{
+		if (block->input_source == FILE_INPUT)
+		{
+			if (*fd != INIT_FD_VALUE)
+			{
+				dprintf(2,"close: %d\n", ptr->fd);
+				close(*fd);
+			}
+			*fd = ptr->fd;
+		}
+	}
 	ptr->errno_value = errno;
 }
 
-void	output_manager(t_redirect *ptr, int *fd)
+void	output_manager(t_redirect *ptr, t_fd *fd)
 {
 	if (ptr->append)
+	{
 		ptr->fd = open(ptr->file_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
+		dprintf(2,"open:%d\n", ptr->fd);
+	}
 	else
+	{
 		ptr->fd = open(ptr->file_name, O_WRONLY | O_TRUNC | O_CREAT, 00644);
+		dprintf(2,"open:%d\n", ptr->fd);
+	}
 	if (ptr->fd != -1)
+	{
+		if (*fd != INIT_FD_VALUE)
+		{
+			close(*fd);
+			dprintf(2,"close:%d\n", *fd);
+		}
 		*fd = ptr->fd;
+	}
 	ptr->errno_value = errno;
 }
 
-bool	heredoc_manager(t_redirect *ptr)
+bool	heredoc_manager(t_redirect *ptr, t_block *block)
 {
 	while (ptr)
 	{
 		ptr->fd = heredoc(ptr->heredoc);
 		if (ptr->fd == -1)
 			return (false);
+		if (block->input_source == HEREDOC)
+		{
+			if (block->io_tab[0] != INIT_FD_VALUE)
+				close(block->io_tab[0]);
+			block->io_tab[0] = ptr->fd;
+		}
 		ptr = ptr->next;
 	}
 	return (true);
@@ -84,7 +113,7 @@ bool	io_manager(t_block *block)
 {
 	t_redirect	*tmp;
 
-	if (!heredoc_manager(block->heredoc))
+	if (!heredoc_manager(block->heredoc, block))
 		return (false);
 	while (block)
 	{
@@ -92,14 +121,14 @@ bool	io_manager(t_block *block)
 		while (tmp && !errno)
 		{
 			if (tmp->mode == INPUT_MODE)
-				input_manager(tmp, &block->io_tab[0]);
+				input_manager(tmp, &block->io_tab[0], block);
 			else if (tmp->mode == OUTPUT_MODE)
 				output_manager(tmp, &block->io_tab[1]);
 			tmp = tmp->next;
 		}
 		if (block->sub)
 			io_manager(block->sub);
-		block = find_next_block(block, false);
+		block = find_next_block(block, true);
 	}
 	if (errno)
 		return (NULL);
