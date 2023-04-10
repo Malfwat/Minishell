@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 20:54:09 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 21:40:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	close_block_fds(t_block *block)
 		close(block->io_tab[1]);
 	}
 }
-#include <stdio.h>
 
 bool	my_dup(t_block *block)
 {
@@ -86,18 +85,18 @@ bool	my_dup(t_block *block)
 	{
 		if (dup2(block->io_tab[0], 0) == -1 || close(block->io_tab[0]) == -1) 
 			return (false);
-		//dprintf(2,"(dup to %d)open:%d\n", 0, block->io_tab[0]);
+		printf("(dup to %d)open:%d\n", 0, block->io_tab[0]);
 	}
 	if (block->io_tab[1] != INIT_FD_VALUE)
 	{
 		if (dup2(block->io_tab[1], 1) == -1 || close(block->io_tab[1]) == -1)
 			return (false);
-		//(2,"(dup to %d)open:%d\n", 1, block->io_tab[1]);
+		printf("(dup to %d)open:%d\n", 1, block->io_tab[1]);
 	}
 	if (block->pipe_next)
 	{
 		close(block->pipe_next->io_tab[0]);
-		//dprintf(2,"close:%d\n", block->pipe_next->io_tab[0]);
+		printf("close:%d\n", block->pipe_next->io_tab[0]);
 	}
 	return (true);
 }
@@ -187,14 +186,22 @@ bool	create_pipe(t_block *block)
 	if (next_block->io_tab[0] == INIT_FD_VALUE || next_block->io_is_overwritable[0])
 	{
 		// check if fd is lost
+		if (next_block->io_tab[0] != INIT_FD_VALUE)
+			close(next_block->io_tab[0]);
 		next_block->io_tab[0] = tube[0];
 		next_block->io_is_overwritable[0] = true; // Penser a init a false la ou on creer le block
 	}
+	else
+		close(tube[0]);
 	if (block->io_tab[1] == INIT_FD_VALUE || !next_block->io_is_overwritable[1])
 	{
+		if (next_block->io_tab[1] != INIT_FD_VALUE)
+			close(next_block->io_tab[1]);
 		block->io_tab[1] = tube[1];
 		block->io_is_overwritable[1] = true;
 	}
+	else
+		close(tube[1]);
 	return (true);
 }
 
@@ -341,6 +348,8 @@ int	main(int ac, char **av, char **env)
 	t_block		*head;
 	t_minishell	ms_params;
 
+	if (!isatty(0) || !isatty(1) || !isatty(2))
+		return (perror("minishell"), 1);
 	ft_memset(&ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(&ms_params);
 	// t_prompt	prompt_params;
@@ -352,8 +361,6 @@ int	main(int ac, char **av, char **env)
 	type = -1;
 	ms_params.envp = get_env_var(env);
 	(void)ac;
-	if (!isatty(0) || !isatty(1) || !isatty(2))
-		return (perror("minishell"), 1);
 	// int fd = get_my_history();
 	// if (fd == -1)
 		// return (2);

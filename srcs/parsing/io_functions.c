@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 20:49:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 21:02:01 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <ms_define.h>
-#include <stdio.h>
 // #include <env_function.h>
 #include <struct_ms.h>
 
@@ -40,24 +39,17 @@ int	heredoc(char *limiter)
 	close(test[1]);
 	return (test[0]);
 }
-#include <stdio.h>
 
 void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block)
 {
 	if (ptr->file_name)
-	{
 		ptr->fd = open(ptr->file_name, O_RDONLY);
-		dprintf(2,"open:% d\n", ptr->fd);
-	}
 	if (ptr->fd != -1)
 	{
 		if (block->input_source == FILE_INPUT)
 		{
 			if (*fd != INIT_FD_VALUE)
-			{
-				dprintf(2,"close: %d\n", ptr->fd);
 				close(*fd);
-			}
 			*fd = ptr->fd;
 		}
 	}
@@ -67,22 +59,13 @@ void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block)
 void	output_manager(t_redirect *ptr, t_fd *fd)
 {
 	if (ptr->append)
-	{
 		ptr->fd = open(ptr->file_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
-		dprintf(2,"open:%d\n", ptr->fd);
-	}
 	else
-	{
 		ptr->fd = open(ptr->file_name, O_WRONLY | O_TRUNC | O_CREAT, 00644);
-		dprintf(2,"open:%d\n", ptr->fd);
-	}
 	if (ptr->fd != -1)
 	{
 		if (*fd != INIT_FD_VALUE)
-		{
 			close(*fd);
-			dprintf(2,"close:%d\n", *fd);
-		}
 		*fd = ptr->fd;
 	}
 	ptr->errno_value = errno;
