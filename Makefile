@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/09 22:14:22 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/10 17:22:16 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,7 +93,7 @@ SRCS				+=	$(addprefix $(PROMPT_DIR), $(PROMPT))
 SRCS				+=	$(addprefix $(HISTORY_DIR), $(HISTORY))
 SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
-SRCS				+=	test.c
+SRCS				+=	main.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
 

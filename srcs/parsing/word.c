@@ -6,12 +6,13 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/05 16:03:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:07:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing_ms.h>
 #include <stdbool.h>
+#include <ms_define.h>
 #include <minishell.h>
 #include <libft.h>
 
