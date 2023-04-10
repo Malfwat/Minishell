@@ -1,0 +1,10 @@
+(dup)open: 3open: 4
+open:5
+(dup to 0)open:4
+(dup to 1)open:5
+(dup to 1)open:5
+(dup to 0)open:4
+(dup to 1)open:5
+close:4
+close:4
+(dup to 0)open:4

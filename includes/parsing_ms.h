@@ -6,22 +6,18 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:10:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:05:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
-# define SINGLE_DELIM " \t><|;"
 # include <stdlib.h>
 # include <sys/types.h>
 # include <struct_ms.h>
 # include <errno.h>
 # include <stdbool.h>
-# define INPUT_MODE 0
-# define OUTPUT_MODE 1
-# define HEREDOC 0
-# define FILE_INPUT 1
+
 
 // parenthesis.c
 
@@ -61,8 +57,8 @@ bool	check_io_param(char *str, int *i, char **new_line, int *type);
 // io_functions.c
 
 int		heredoc(char *limiter);
-bool	heredoc_manager(t_redirect *ptr);
-void	input_manager(t_redirect *ptr, int *fd);
+bool	heredoc_manager(t_redirect *ptr, t_block *block);
+void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block);
 bool	io_manager(t_block *block);
 void	output_manager(t_redirect *ptr, int *fd);
 

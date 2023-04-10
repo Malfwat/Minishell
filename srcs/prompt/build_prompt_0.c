@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   build_prompt_0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:45:02 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 01:56:02 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/10 20:08:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <prompt.h>
 #include <libft.h>
+#include <ms_define.h>
 
 void	build_prompt_time(char **prompt, t_prompt params)
 {
