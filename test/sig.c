@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 00:03:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 00:20:30 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 15:42:41 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int main(void)
 		return (0);
 	}
 	// wait(NULL);
-	// sleep(200);
-	// printf("yo %i\n", kill(pid, SIGTERM));
+	// sleep(200)in	// printf("yo %i\n", kill(pid, SIGTERM));
 	return (0);
 }

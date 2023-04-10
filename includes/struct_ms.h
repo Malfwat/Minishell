@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/09 23:13:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:57:41 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ typedef struct s_minishell
 	t_prompt		prompt;
 	t_env_var		*envp;
 	t_pids			*children;
+	t_block			*head;
 	t_fd			stdin_fileno;
 	struct termios	saved_params;
 }	t_minishell;

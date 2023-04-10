@@ -6,17 +6,15 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/09 22:09:35 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:59:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <struct_ms.h>
-#include <stdlib.h>
 #include <errno.h>
 #include <parsing_ms.h>
-#include <stdio.h>
-#include <minishell.h>
+#include <ms_define.h>
 
 t_redirect	*new_redirect(char *arg, int mode)
 {

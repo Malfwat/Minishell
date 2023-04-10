@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 00:02:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:54:09 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
-#include <prompt.h>
-#include <env_function.h>
+#include <minishell.h>
+#include <ms_define.h>
 #include <signal_ms.h>
 #include <parsing_ms.h>
+#include <prompt.h>
+#include <env_function.h>
+#include <libft.h>
 #include <sys/stat.h>
-#include <minishell.h>
 #include <history.h>
 #include <string.h>
 #include <signal.h>
@@ -24,75 +25,6 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-
-void restore_terminal(struct termios saved_term)
-{
-    tcsetattr(STDIN_FILENO, TCSANOW, &saved_term);
-}
-
-// void	free_ms_params(t_minishell ms_params)
-// {
-	
-// }
-
-// void    exit_ms(t_block *lst, t_env_var *envp_lst, t_minishell ms_params, int exit_value)
-// {
-//     flood_free(lst);
-//     free_env_lst(envp_lst);
-// 	(void)ms_params;
-//     // free_ms_params(ms_params); // useless pour l'instant car il n'y a que envp qui set free la ligne plus haut
-//     // restore_terminal(ms_params.term_params);
-//     exit(exit_value);
-// }
-
-// exit_ms se trouve dans term_utils/exit_ms.c
-
-bool	my_dup(t_block *block)
-{
-	if (block->io_tab[0] != INIT_FD_VALUE)
-	{
-		if (dup2(block->io_tab[0], 0) == -1 || close(block->io_tab[0]) == -1) 
-			return (false);
-	}
-	if (block->io_tab[1] != INIT_FD_VALUE)
-	{
-		if (dup2(block->io_tab[1], 1) == -1 || close(block->io_tab[1]) == -1)
-			return (false);
-	}
-	return (true);
-}
-
-// int	*before_exec(int *fds, int *pipe_fds)
-// {
-	
-// }
-
-// bool	pipex(t_block *block, int *status, t_minishell ms_params, int *io_fds)
-// {
-// 	int	pipe_fds[2];
-// 	int	tmp;
-	
-// 	tmp = io_fds[0];
-// 	while (block)
-// 	{
-// 		if (block->pipe_next)
-// 			pipe(pipe_fds);
-// 		if (errno)
-// 			return (perror("minishell"), false);
-// 		if (!block->pipe_next)
-// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, io_fds[1]});
-// 		else
-// 			execute_t_block_cmd(block, status, ms_params, (int []){tmp, pipe_fds[1]});
-// 		close(tmp);
-// 		close(pipe_fds[1]);
-// 		dup2(pipe_fds[0], tmp);
-// 		close(pipe_fds[0]);
-// 		block = block->pipe_next;
-// 		if (block && block->io_tab[0] == -1)
-// 			block->io_tab[0] = tmp;ad,
-// 	}
-// 	return (true);
-// }
 
 void	ms_perror(char *program, char *subname, char *error)
 {
@@ -109,7 +41,7 @@ void	ms_perror(char *program, char *subname, char *error)
 	ft_putendl_fd(error, 2);
 }
 
-void handle_execve_failure(t_block *block, t_minishell ms_params, char *program_name)
+void handle_execve_failure(t_minishell ms_params, char *program_name)
 {
 	int exit_value;
 
@@ -128,8 +60,8 @@ void handle_execve_failure(t_block *block, t_minishell ms_params, char *program_
 		exit_value = 127; // 127 == command not found
 	}
 	errno = 0;
-	exit_ms(block, ms_params, exit_value, NULL);
-	// exit_ms(block, ms_params.envp, ms_params, exit_value);
+	exit_ms(ms_params, exit_value, NULL);
+	// exit_ms(ms_params.envp, ms_params, exit_value);
 }
 
 
@@ -146,37 +78,67 @@ void	close_block_fds(t_block *block)
 		close(block->io_tab[1]);
 	}
 }
+#include <stdio.h>
 
-void	execute_t_block_cmd(t_block *block, t_minishell ms_params)
+bool	my_dup(t_block *block)
+{
+	if (block->io_tab[0] != INIT_FD_VALUE)
+	{
+		if (dup2(block->io_tab[0], 0) == -1 || close(block->io_tab[0]) == -1) 
+			return (false);
+		//dprintf(2,"(dup to %d)open:%d\n", 0, block->io_tab[0]);
+	}
+	if (block->io_tab[1] != INIT_FD_VALUE)
+	{
+		if (dup2(block->io_tab[1], 1) == -1 || close(block->io_tab[1]) == -1)
+			return (false);
+		//(2,"(dup to %d)open:%d\n", 1, block->io_tab[1]);
+	}
+	if (block->pipe_next)
+	{
+		close(block->pipe_next->io_tab[0]);
+		//dprintf(2,"close:%d\n", block->pipe_next->io_tab[0]);
+	}
+	return (true);
+}
+
+void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 {
 	char	**argv;
 	char	**envp;
 
 	errno = 0;
 	argv = build_argv(block->cmd.name, block->cmd.args);
-	envp = build_envp(ms_params.envp);
+	envp = build_envp(ms_params->envp);
 	if (errno)
-		return (free(argv), ft_strsfree(envp), exit_ms(block, ms_params, 2, "exec"));
+		return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec"));
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
 		if (errno || !my_dup(block))
-			return (free(argv), ft_strsfree(envp), exit_ms(block, ms_params, 2, "exec"));
+			return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec"));
 		execve(argv[0], argv, envp);
 		ft_strsfree(envp);
 		free(argv);
-		handle_execve_failure(block, ms_params, argv[0]);
+		// if (!isatty(0))
+			// close(0);
+		if (block->io_tab[0] >= 0)
+			close(block->io_tab[0]);
+		if (block->io_tab[1] >= 0)
+			close(block->io_tab[1]);
+		if (block->pipe_next)
+			close(block->pipe_next->io_tab[0]);
+		handle_execve_failure(*ms_params, block->cmd.name);
 	}
-		
 	if (block->io_tab[0] >= 0)
 		close(block->io_tab[0]);
 	if (block->io_tab[1] >= 0)
 		close(block->io_tab[1]);
 	ft_strsfree(envp);
 	free(argv);
-	if (ms_params.children == -1)
-		
-	store_pid(block->cmd.pid, &ms_params.children);
+	if (block->cmd.pid == -1)
+		exit_ms(*ms_params, 2, "exec");
+	store_pid(block->cmd.pid, &ms_params->children);
 	// waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 }
 
@@ -224,6 +186,7 @@ bool	create_pipe(t_block *block)
 		return (false);
 	if (next_block->io_tab[0] == INIT_FD_VALUE || next_block->io_is_overwritable[0])
 	{
+		// check if fd is lost
 		next_block->io_tab[0] = tube[0];
 		next_block->io_is_overwritable[0] = true; // Penser a init a false la ou on creer le block
 	}
@@ -231,51 +194,6 @@ bool	create_pipe(t_block *block)
 	{
 		block->io_tab[1] = tube[1];
 		block->io_is_overwritable[1] = true;
-	}
-	return (true);
-}
-
-void	inherit_subshell_parent_fd(t_block *block)
-{
-	t_fd input_fd;
-	t_fd output_fd;
-
-	input_fd = block->io_tab[0];
-	output_fd = block->io_tab[1];
-	while (block)
-	{
-		if (block->io_tab[0] == INIT_FD_VALUE)
-			block->io_tab[0] = input_fd;
-		if (block->io_tab[1] == INIT_FD_VALUE)
-			block->io_tab[1] = output_fd;
-		block = find_next_block(block, true);
-	}
-}
-
-bool	create_subshell_pipe(t_block *block)
-{
-	int fd_in_parent;
-	int fd_out_parent;
-
-	if (block->pipe_next)
-		create_pipe(block);
-	fd_out_parent = block->io_tab[0];
- 	// on veut chercher les block du subshell(on veut pas ceux d'un sous subshell ceci-dit)
-	fd_in_parent = block->io_tab[1];
-	block = find_next_block(block, false);
-	while (block)
-	{
-		if (block->io_tab[0] == INIT_FD_VALUE || block->io_is_overwritable[0])
-		{
-			block->io_tab[0] = fd_in_parent;
-			block->io_is_overwritable[0] = true;
-		}
-		if (block->io_tab[1] == INIT_FD_VALUE || block->io_is_overwritable[1])
-		{
-			block->io_is_overwritable[1] = true;
-			block->io_tab[1] = fd_out_parent;
-		}
-		block = find_next_block(block, true);
 	}
 	return (true);
 }
@@ -297,6 +215,7 @@ bool	store_pid(pid_t pid, t_pids **nursery)
 	new = ft_calloc(1, sizeof(t_pids));
 	if (!new)
 		return (infanticides(*nursery), false);
+	new->pid = pid;
 	if (!*nursery)
 	{
 		*nursery = new;
@@ -336,27 +255,33 @@ int	wait_children(t_pids *children)
 	return (status);
 }
 
-pid_t	create_subshell(t_block *block, t_minishell ms_params)
+pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 {
 	pid_t	sub_pid;
-	
+	// int		i1;
+	// int		i2;
+
 	sub_pid = fork();
 	if (!sub_pid)
 	{
-		free_children(ms_params.children);
-		ms_params.children = NULL;
-		if (block->operator == PIPE_OPERATOR || block->io_tab[1] != INIT_FD_VALUE
-			|| block->io_tab[0] != INIT_FD_VALUE)
-			create_subshell_pipe(block); // Penser a gerer si les cas d'erreur (ouverture pipe)
-		else
-			inherit_subshell_parent_fd(block);
+		free_children(ms_params->children);
+		ms_params->children = NULL;
+		my_dup(block);
 		execute_cmds(block->sub, ms_params); // on passe au contenu du subshell immediatement
-		exit_ms(block, ms_params, wait_children(ms_params.children), NULL);
+		exit_ms(*ms_params, wait_children(ms_params->children), NULL);
 	}
+	if (block->io_tab[0] != INIT_FD_VALUE && close(block->io_tab[0]) == -1)
+	{
+		if (block->io_tab[1] != INIT_FD_VALUE)
+			close(block->io_tab[1]);
+		exit_ms(*ms_params, 2, "subshell");
+	}
+	if (block->io_tab[1] != INIT_FD_VALUE && close(block->io_tab[1]) == -1)
+		exit_ms(*ms_params, 2, "subshell");
 	return (sub_pid);
 }
 
-int	execute_cmds(t_block *block, t_minishell ms_params)
+int	execute_cmds(t_block *block, t_minishell *ms_params)
 {
 	t_block	*next_block_to_execute;
 	pid_t	sub_pid;
@@ -386,8 +311,10 @@ int	execute_cmds(t_block *block, t_minishell ms_params)
 		*	Penser au fait que le fd du pipe du subshell sera donne a ses enfants
 		*	et qu'il faudra eviter de double-close un meme fd
 		*/
+		if (block->pipe_next)
+			create_pipe(block);
 		sub_pid = create_subshell(block, ms_params);
-		store_pid(sub_pid, &ms_params.children);
+		store_pid(sub_pid, &ms_params->children);
 		// waitpid(sub_pid, &status, 0);
 	}
 	else
@@ -414,6 +341,7 @@ int	main(int ac, char **av, char **env)
 	t_block		*head;
 	t_minishell	ms_params;
 
+	ft_memset(&ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(&ms_params);
 	// t_prompt	prompt_params;
 
@@ -439,21 +367,17 @@ int	main(int ac, char **av, char **env)
 	parse_cmds(&head, str, path);
 	ft_strsfree(path);
 	if (errno)
-		return (exit_ms(head, ms_params, 2, "parsing"), 0);
-	io_manager(head);
+		return (exit_ms(ms_params, 2, "parsing"), 0);
 	io_manager(head);
 	if (errno)
 		ms_perror("minishell", "io_manager", strerror(errno));
-	execute_cmds(head, ms_params);
+	ms_params.head = head;
+	execute_cmds(head, &ms_params);
 	//execute_t_block_cmd(head, &type, ms_params, head->io_tab);
 		// execute_cmds(head, );
 	// free(rl_prompt);
 	// close(fd);
 	// ft_putnbr_fd(isatty(ms_params.stdin_fileno), 36);
-	wait(NULL);
-	wait(NULL);
-	wait(NULL);
-	wait(NULL);
-	wait(NULL);
-	return (exit_ms(head, ms_params, 0, NULL), 0);
+	wait_children(ms_params.children);
+	return (exit_ms(ms_params, 0, NULL), 0);
 }

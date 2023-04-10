@@ -12,6 +12,9 @@
 		"signal_ms.h": "c",
 		"env_function.h": "c",
 		"stat.h": "c",
-		"errno.h": "c"
+		"errno.h": "c",
+		"ms_define.h": "c",
+		"libft.h": "c",
+		"get_next_line.h": "c"
 	}
 }
