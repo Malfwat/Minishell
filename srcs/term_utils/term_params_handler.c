@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:37:26 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/10 20:49:18 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 20:59:51 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ bool	restore_terminal_params(struct termios saved_params, t_fd stdin_fileno)
 bool	save_terminal_params(t_minishell *ms_params)
 {
 	ms_params->stdin_fileno = dup(0);
-	dprintf(2,"(dup)open: %d", ms_params->stdin_fileno);
 	if (tcgetattr(STDIN_FILENO, &ms_params->saved_params) == -1)
 		return (false);
 	return (true);
