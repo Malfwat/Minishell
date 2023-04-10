@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 21:40:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 23:47:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,20 +85,41 @@ bool	my_dup(t_block *block)
 	{
 		if (dup2(block->io_tab[0], 0) == -1 || close(block->io_tab[0]) == -1) 
 			return (false);
-		printf("(dup to %d)open:%d\n", 0, block->io_tab[0]);
+		dprintf(2, "[%d]dup:%d\n", getpid(), block->io_tab[0]);
+		dprintf(2, "[%d]clsose:%d\n", getpid(), block->io_tab[0]);
 	}
 	if (block->io_tab[1] != INIT_FD_VALUE)
 	{
-		if (dup2(block->io_tab[1], 1) == -1 || close(block->io_tab[1]) == -1)
+		int d, c;
+
+		d = dup2(block->io_tab[1], 1);
+		c = close(block->io_tab[1]);
+		if (d == -1 || c == -1)
+		{
+			dprintf(2, "[%d]dup:%d\n", getpid(), block->io_tab[1]);
+			dprintf(2, "is errno ? %d\nc = %i, d = %i \n", errno, c, d);
+			dprintf(2, "[%d]cldose:%d\n", getpid(), block->io_tab[1]);
 			return (false);
-		printf("(dup to %d)open:%d\n", 1, block->io_tab[1]);
+		}
 	}
 	if (block->pipe_next)
 	{
 		close(block->pipe_next->io_tab[0]);
-		printf("close:%d\n", block->pipe_next->io_tab[0]);
+		dprintf(2, "[%d]cflose:%d\n", getpid(), block->pipe_next->io_tab[0]);
 	}
 	return (true);
+}
+
+void	close_sub_fds(t_block *head)
+{
+	while (head)
+	{
+		if (head->io_tab[1] != INIT_FD_VALUE)
+			close(head->io_tab[1]);
+		if (head->io_tab[0] != INIT_FD_VALUE)
+			close(head->io_tab[0]);
+		head = head->next;
+	}
 }
 
 void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
@@ -110,33 +131,58 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	argv = build_argv(block->cmd.name, block->cmd.args);
 	envp = build_envp(ms_params->envp);
 	if (errno)
-		return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec"));
+		return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec 0"));
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
+		dprintf(2, "is errno before my_dup ? %d\n", errno);
 		if (errno || !my_dup(block))
-			return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec"));
+		{
+			dprintf(2, "is errno after my_dup ? %d\n", errno);
+			dprintf(2, "[%i] io_tab[%i][%i]", getpid(), block->io_tab[0], block->io_tab[1]);
+			return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec 1"));
+		}
 		execve(argv[0], argv, envp);
 		ft_strsfree(envp);
 		free(argv);
 		// if (!isatty(0))
 			// close(0);
 		if (block->io_tab[0] >= 0)
-			close(block->io_tab[0]);
+		{
+			if (close(block->io_tab[0]) != -1)
+				dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[0]);
+		}
 		if (block->io_tab[1] >= 0)
-			close(block->io_tab[1]);
+		{
+			if (close(block->io_tab[1]) != -1)
+				dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
+		}
 		if (block->pipe_next)
-			close(block->pipe_next->io_tab[0]);
+		{
+			if (close(block->pipe_next->io_tab[0]) != -1)
+				dprintf(2, "[%d]close:%d\n", getpid(), block->pipe_next->io_tab[0]);
+		}
 		handle_execve_failure(*ms_params, block->cmd.name);
 	}
 	if (block->io_tab[0] >= 0)
-		close(block->io_tab[0]);
+	{
+		if (close(block->io_tab[0]) != -1)
+			dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[0]);
+		else
+			dprintf(2, "??? 2\n");
+	}
 	if (block->io_tab[1] >= 0)
-		close(block->io_tab[1]);
+	{
+		if (close(block->io_tab[1]) != -1)
+			dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
+		else
+			dprintf(2, "%s ??? 1 %i\n", block->cmd.name, block->io_tab[1]);
+	}
+	dprintf(2, "After exec %i, %i, cmd = %s\n", block->io_tab[0], block->io_tab[1], block->cmd.name);
 	ft_strsfree(envp);
 	free(argv);
 	if (block->cmd.pid == -1)
-		exit_ms(*ms_params, 2, "exec");
+		exit_ms(*ms_params, 2, "exec 2");
 	store_pid(block->cmd.pid, &ms_params->children);
 	// waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 }
@@ -183,6 +229,7 @@ bool	create_pipe(t_block *block)
 	next_block = find_next_block(block, true);
 	if (pipe(tube) == -1)
 		return (false);
+	dprintf(2, "[%i] %d pipe %d\n", getpid(), tube[0], tube[1]);
 	if (next_block->io_tab[0] == INIT_FD_VALUE || next_block->io_is_overwritable[0])
 	{
 		// check if fd is lost
@@ -193,10 +240,10 @@ bool	create_pipe(t_block *block)
 	}
 	else
 		close(tube[0]);
-	if (block->io_tab[1] == INIT_FD_VALUE || !next_block->io_is_overwritable[1])
+	if (block->io_tab[1] == INIT_FD_VALUE || !block->io_is_overwritable[1])
 	{
-		if (next_block->io_tab[1] != INIT_FD_VALUE)
-			close(next_block->io_tab[1]);
+		if (block->io_tab[1] != INIT_FD_VALUE)
+			close(block->io_tab[1]);
 		block->io_tab[1] = tube[1];
 		block->io_is_overwritable[1] = true;
 	}
@@ -241,7 +288,7 @@ bool	store_pid(pid_t pid, t_pids **nursery)
 void	free_children(t_pids *children)
 {
 	t_pids	*tmp;
-	
+
 	while (children)
 	{
 		tmp = children->next;
@@ -271,20 +318,33 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 	sub_pid = fork();
 	if (!sub_pid)
 	{
+		
 		free_children(ms_params->children);
 		ms_params->children = NULL;
 		my_dup(block);
 		execute_cmds(block->sub, ms_params); // on passe au contenu du subshell immediatement
 		exit_ms(*ms_params, wait_children(ms_params->children), NULL);
 	}
-	if (block->io_tab[0] != INIT_FD_VALUE && close(block->io_tab[0]) == -1)
+	close_sub_fds(block->sub);
+	if (block->io_tab[0] != INIT_FD_VALUE)
 	{
-		if (block->io_tab[1] != INIT_FD_VALUE)
-			close(block->io_tab[1]);
-		exit_ms(*ms_params, 2, "subshell");
+		if (close(block->io_tab[0]) == -1)
+		{
+			if (block->io_tab[1] != INIT_FD_VALUE)
+			{
+				close(block->io_tab[1]);
+				dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
+			}
+			exit_ms(*ms_params, 2, "subshell");
+		}
+		dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
 	}
-	if (block->io_tab[1] != INIT_FD_VALUE && close(block->io_tab[1]) == -1)
-		exit_ms(*ms_params, 2, "subshell");
+	if (block->io_tab[1] != INIT_FD_VALUE)
+	{
+		if (close(block->io_tab[1]) == -1)
+			exit_ms(*ms_params, 2, "subshell");
+		dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
+	}
 	return (sub_pid);
 }
 
@@ -319,7 +379,10 @@ int	execute_cmds(t_block *block, t_minishell *ms_params)
 		*	et qu'il faudra eviter de double-close un meme fd
 		*/
 		if (block->pipe_next)
+		{
 			create_pipe(block);
+			dprintf(2, "pid create_pipe %i\n", getpid());
+		}
 		sub_pid = create_subshell(block, ms_params);
 		store_pid(sub_pid, &ms_params->children);
 		// waitpid(sub_pid, &status, 0);
@@ -329,15 +392,15 @@ int	execute_cmds(t_block *block, t_minishell *ms_params)
 		if (block->operator == PIPE_OPERATOR)
 			create_pipe(block);
 		execute_t_block_cmd(block, ms_params);
+	}
 		// imaginons : fufhu && echo 2 || echo 3
 		// la premiere commande echoue, le prochain block executable sera le echo 3
 		// c'est ce block que find_next... est cense renvoye
-		next_block_to_execute = find_next_executable_block(block);
-		if (!next_block_to_execute)
-			return (0); // aucun block executable
-		else
-			execute_cmds(next_block_to_execute, ms_params);
-	}
+	next_block_to_execute = find_next_executable_block(block);
+	if (!next_block_to_execute)
+		return (0); // aucun block executable
+	else
+		execute_cmds(next_block_to_execute, ms_params);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 21:02:01 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/10 23:34:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <ms_define.h>
 // #include <env_function.h>
+#include <stdio.h>
 #include <struct_ms.h>
 
 int	heredoc(char *limiter)
@@ -65,7 +66,10 @@ void	output_manager(t_redirect *ptr, t_fd *fd)
 	if (ptr->fd != -1)
 	{
 		if (*fd != INIT_FD_VALUE)
+		{
+			dprintf(2, "on close %d\n", *fd);
 			close(*fd);
+		}
 		*fd = ptr->fd;
 	}
 	ptr->errno_value = errno;
