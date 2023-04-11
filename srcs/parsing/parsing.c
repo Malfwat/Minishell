@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 20:07:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:26:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
 		{
+			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
 			if ((*curr_block)->operator == PIPE_OPERATOR)
 			{
 				curr_block = &(*curr_block)->pipe_next;
@@ -123,7 +124,6 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 				add_block_back(curr_block, last_sibling);
 				curr_block = &(*curr_block)->next;
 			}
-			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
 		}
 		next_param = get_next_param(cmd_line, &i, &type);
 	}

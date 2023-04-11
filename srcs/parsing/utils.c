@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 21:11:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 16:09:46 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:21:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	pass_ws_and_delim(char *str, int type)
 	int	i;
 
 	i = pass_whitespaces(str);
-	if (type < 2)
+	if (type <= 2)
 		return (i + 2);
 	return (i + 1);
 }
