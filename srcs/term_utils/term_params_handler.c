@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:37:26 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/10 20:59:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:05:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ bool	restore_terminal_params(struct termios saved_params, t_fd stdin_fileno)
 		return (false);
 	return (true);
 }
-#include <stdio.h>
 
 bool	save_terminal_params(t_minishell *ms_params)
 {
