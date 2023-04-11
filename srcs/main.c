@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 23:47:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:30:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <ncurses.h>
+#include <term.h>
 
 void	ms_perror(char *program, char *subname, char *error)
 {
@@ -285,22 +287,27 @@ bool	store_pid(pid_t pid, t_pids **nursery)
 	return (true);
 }
 
-void	free_children(t_pids *children)
+void	free_children(t_pids **children)
 {
 	t_pids	*tmp;
+	t_pids	*ptr;
 
-	while (children)
+	ptr = *children;
+	while (ptr)
 	{
-		tmp = children->next;
-		free(children);
-		children = tmp;
+		tmp = ptr->next;
+		free(ptr);
+		ptr = tmp;
 	}
+	*children = NULL;
 }
 
 int	wait_children(t_pids *children)
 {
 	int	status;
+	t_pids	*tmp;
 
+	tmp = children;
 	while (children)
 	{
 		waitpid(children->pid, &status, 0);
@@ -319,7 +326,7 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 	if (!sub_pid)
 	{
 		
-		free_children(ms_params->children);
+		free_children(&ms_params->children);
 		ms_params->children = NULL;
 		my_dup(block);
 		execute_cmds(block->sub, ms_params); // on passe au contenu du subshell immediatement
@@ -404,18 +411,71 @@ int	execute_cmds(t_block *block, t_minishell *ms_params)
 	return (0);
 }
 
+int	get_cursor_position(void)
+{
+	struct termios	term;
+	struct termios	restore;
+	char			*sc_cursor_pos;
+	char			buf[100];
+	int				i;
+	int				ret;
+	char			*digit_index[1];
+
+	ft_bzero(buf, 10);
+	sc_cursor_pos = tgetstr("u7", NULL);
+	if (!sc_cursor_pos)
+		return (-1);
+	tcgetattr(0, &term);
+	tcgetattr(0, &restore);
+	term.c_lflag &= ~(ICANON|ECHO);
+	tcsetattr(0, TCSANOW, &term);
+	write(1, sc_cursor_pos, ft_strlen(sc_cursor_pos));
+	ret = 1;
+	i = 0;
+	while (ret > 0 && i < 9)
+	{
+		ret = read(STDIN_FILENO, &buf[i], 1);
+		if (ret <= 0 || buf[i] == 'R')
+			break ;
+		i++;
+	}
+	digit_index[0] = ft_strchr(buf, ';');
+	tcsetattr(0, TCSANOW, &restore);
+	if (!digit_index[0])
+		return (-1);
+	return (ft_atoi(digit_index[0] + 1));
+}
+
+void	ensure_prompt_position(void)
+{
+	int	x;
+
+	x = get_cursor_position();
+	if (x == -1)
+		return ;
+	else if (x == 1)
+		return ;
+	else
+		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	// char		*res;
+	char		*tmp;
+	char		*ms_prompt;
+	char		**path;
 	int			type;
 	t_block		*head;
 	t_minishell	ms_params;
 
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (perror("minishell"), 1);
+	tgetent(0, getenv("TERM"));
 	ft_memset(&ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(&ms_params);
-	// t_prompt	prompt_params;
+	toggle_control_character(VQUIT, _POSIX_VDISABLE);
+	t_prompt	prompt_params;
 
 	// set_sig_handler();
 	// if (!refresh_prompt_param(&prompt_params))
@@ -424,30 +484,45 @@ int	main(int ac, char **av, char **env)
 	type = -1;
 	ms_params.envp = get_env_var(env);
 	(void)ac;
-	// int fd = get_my_history();
-	// if (fd == -1)
-		// return (2);
-	// readline(build_prompt(prompt_params));
-	// my_add_history(rl_line_buffer, fd);
-	char *str =  ft_strdup(av[1]);
-	head = new_block();
-	char **path = ft_split(getenv("PATH"), ':');
-	if (!path)
-		return (perror(""), 0);
-	parse_cmds(&head, str, path);
+	(void)av;
+	int fd = get_my_history();
+	if (fd == -1)
+		return (2);
+	path = ft_split(getenv("PATH"), ':');
+	while (1)
+	{
+		if (!refresh_prompt_param(&prompt_params))
+			return (exit_ms(ms_params, 0, "prompt"), 0);
+		ensure_prompt_position();
+		ms_prompt = build_prompt(prompt_params);
+		tmp = readline(ms_prompt);
+		sleep(5);
+		free(ms_prompt);
+		if (!tmp)
+			continue;
+		my_add_history(rl_line_buffer, fd);
+		head = new_block();
+		if (!path)
+			return (perror(""), 0);
+		parse_cmds(&head, tmp, path);
+		if (errno)
+			return (exit_ms(ms_params, 2, "parsing"), 0);
+		io_manager(head);
+		if (errno)
+			ms_perror("minishell", "io_manager", strerror(errno));
+		ms_params.head = head;
+		execute_cmds(head, &ms_params);
+		wait_children(ms_params.children);
+		free_children(&ms_params.children);
+		flood_free(head);
+	}
 	ft_strsfree(path);
-	if (errno)
-		return (exit_ms(ms_params, 2, "parsing"), 0);
-	io_manager(head);
-	if (errno)
-		ms_perror("minishell", "io_manager", strerror(errno));
-	ms_params.head = head;
-	execute_cmds(head, &ms_params);
+	free(rl_prompt);
+	free(rl_line_buffer);
 	//execute_t_block_cmd(head, &type, ms_params, head->io_tab);
 		// execute_cmds(head, );
 	// free(rl_prompt);
 	// close(fd);
 	// ft_putnbr_fd(isatty(ms_params.stdin_fileno), 36);
-	wait_children(ms_params.children);
 	return (exit_ms(ms_params, 0, NULL), 0);
 }
