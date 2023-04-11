@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 14:13:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/03/29 14:39:40 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/11 21:27:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int	main(void)
 {
-	readline("This is my prompt: ")
-	printf("On a un prompt: %s et une ligne obtenue %s \n", rl_prompt, rl_line_buffer);
+	char *ptr = readline("This is my prompt: ");
+	printf("ptr: %p rl_li.. %p\n", ptr, rl_line_buffer);
+	printf("ptr: '%s' rl_li.. '%s'\n", ptr, rl_line_buffer);
 	free(rl_line_buffer);
 	free(rl_prompt);
 	return (0);

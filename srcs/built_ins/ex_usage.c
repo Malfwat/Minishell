@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:17:25 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:06:54 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **envp)
 	pwd();
 	cd(env_lst, av[1]);
 	pwd();
-	echo(0, 3, "tst", "ok", "non");
+	ms_echo(0, 3, "tst", "ok", "non");
 	free_env_lst(&env_lst);
 	return (0);
 }

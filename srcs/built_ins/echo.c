@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:20:41 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/04 15:45:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:06:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <libft.h>
 #include <unistd.h>
 
-void	echo(bool nl, int nb, ...)
+void	ms_echo(bool nl, int nb, ...)
 {
 	va_list	ap;
 

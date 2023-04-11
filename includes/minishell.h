@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 20:01:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:12:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 void		pwd(void);
 int			cd(t_env_var	*head, char *str);
-void		echo(bool nl, int nb, ...);
+void		ms_echo(bool nl, int nb, ...);
 
 // manage_io_params.c
 
@@ -67,7 +67,7 @@ void		ms_perror(char *program, char *subname, char *error);
 
 // exec 
 
-void		free_children(t_pids *children);
+void		free_children(t_pids **children);
 bool		store_pid(pid_t pid, t_pids **nursery);
 void		infanticides(t_pids *preys);
 int			wait_children(t_pids *children);
