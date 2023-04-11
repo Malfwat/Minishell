@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/10 17:22:16 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/11 21:09:08 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,7 +122,7 @@ $(BUILD):
 	mkdir $(BUILD) $(DIRS)
 		
 $(NAME):	$(BUILD) $(OBJ)
-	$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lreadline -o $(NAME)
+	$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
 	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 

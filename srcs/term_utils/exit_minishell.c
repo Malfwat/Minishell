@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 16:51:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:12:25 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 void	exit_ms(t_minishell ms_params, int exitv, char *context)
 {
 	flood_free(ms_params.head);
-	free_children(ms_params.children);
+	free_children(&ms_params.children);
 	restore_terminal_params(ms_params.saved_params, ms_params.stdin_fileno);
 	free_ms_params(ms_params);
 	close(ms_params.stdin_fileno);

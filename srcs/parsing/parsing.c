@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/11 16:26:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:21:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 
 	i = 0;
 	type = -1;
-	if (!*curr_block)
+	if (!*curr_block || !cmd_line)
 		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
 	while (next_param && is_valid_param(&next_param, type, *curr_block, path))

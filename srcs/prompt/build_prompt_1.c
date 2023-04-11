@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 20:08:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 21:53:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,10 @@ char	*build_prompt(t_prompt params)
 	return (prompt);
 }
 
+
 bool	refresh_prompt_param(t_prompt *lst)
 {
 	lst->last_exit_code = 0;
-	lst->session_user = get_cwd_path_since_home();
-	if (!lst->session_user)
-		return (false);
 	lst->session_user = getenv("USER");
 	lst->git_branch_name = fetch_git_cwd_branch_name();
 	if (errno)

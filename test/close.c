@@ -6,21 +6,35 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 23:17:37 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 23:23:00 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/11 22:05:10 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 
 int	main(void)
 {
-	int fd = open("adam", O_RDONLY);
-	int	tube[2];
+	int	pid;
+	int	status;
 
-	pipe(tube);
-	close(tube[1]);
-	dup2(tube[0], 0);
-	perror("");
+	pid = fork();
+	if (!pid)
+	{
+		execve("fefe", (char *[]){"fefe", NULL}, NULL);
+			perror("");
+		exit(2);
+	}
+	else
+	{
+		sleep(2);
+		waitpid(pid, &status, 0);
+		waitpid(pid, &status, 0);
+		if (errno)
+			perror("");
+	}
+	return (0);
 }
