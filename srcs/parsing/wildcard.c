@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 04:59:55 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/12 14:39:46 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,24 @@ t_arg	*wildcard(char *dir, char *pattern)
 	struct dirent	*dir_entry;
 	t_arg			*lst;
 
+	printf("dir: %s\npattern: %s\n", dir, pattern);
+
 	dirp = opendir(dir);
 	if (!dirp)
 		return (perror("dirp"), NULL);
-	errno = 0;
 	dir_entry = readdir(dirp);
+	lst = NULL;
 	while (dir_entry)
 	{
 		if (compare_wildcard(pattern, dir_entry->d_name))
-		{
-			printf("%s\n", dir_entry->d_name);
-			ft_addargs(&lst, dir_entry->d_name);
-		}
+			ft_addargs(&lst, ft_strdup(dir_entry->d_name));
 		dir_entry = readdir(dirp);
 	}
 	if (errno)
 		perror("readdir");
 	if (closedir(dirp) == -1)
 		perror("closedir");
-	return (NULL);
+	return (lst);
 }
 
 void	split_path_pattern(char *str, char **path, char **pattern)
@@ -100,14 +99,12 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 
 bool	manage_wildcard(t_arg **head, char *str)
 {
-	char	*cwd;
 	char	*path;
 	char	*pattern;
 
-	path = NULL;
-	cwd = getcwd(path, 0);
-	if (!cwd)
-		return (perror("minishell: getcwd:"), false);
+	path = getcwd(NULL, 0);
+	if (!path)
+		return (false);
 	pattern = NULL;
 	split_path_pattern(str, &path, &pattern);
 	*head = wildcard(path, pattern);

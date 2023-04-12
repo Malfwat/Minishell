@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/11 22:30:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 14:30:06 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	char	**envp;
 
 	errno = 0;
-	argv = build_argv(block->cmd.name, block->cmd.args);
+	argv = build_argv(block->cmd.name, &block->cmd.args);
 	envp = build_envp(ms_params->envp);
 	if (errno)
 		return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec 0"));
@@ -203,9 +203,7 @@ t_block *find_next_block(t_block *block, bool ignore_sub)
 t_block	*find_next_executable_block(t_block *block)
 {
 	int		exit_value;
-	int		current_operator;
 
-	current_operator = block->operator;
 	exit_value = block->cmd.exit_value;
 	while (block)
 	{
@@ -305,9 +303,7 @@ void	free_children(t_pids **children)
 int	wait_children(t_pids *children)
 {
 	int	status;
-	t_pids	*tmp;
 
-	tmp = children;
 	while (children)
 	{
 		waitpid(children->pid, &status, 0);
@@ -465,7 +461,7 @@ int	main(int ac, char **av, char **env)
 	char		*tmp;
 	char		*ms_prompt;
 	char		**path;
-	int			type;
+	// int			type;
 	t_block		*head;
 	t_minishell	ms_params;
 
@@ -481,7 +477,7 @@ int	main(int ac, char **av, char **env)
 	// if (!refresh_prompt_param(&prompt_params))
 		// return (1);
 	// res = NULL;
-	type = -1;
+	// type = -1;
 	ms_params.envp = get_env_var(env);
 	(void)ac;
 	(void)av;
@@ -496,7 +492,6 @@ int	main(int ac, char **av, char **env)
 		ensure_prompt_position();
 		ms_prompt = build_prompt(prompt_params);
 		tmp = readline(ms_prompt);
-		sleep(5);
 		free(ms_prompt);
 		if (!tmp)
 			continue;

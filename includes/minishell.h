@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/11 22:12:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 14:29:49 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void		ft_add_redirect(t_redirect **head, char *arg, int mode);
 t_arg		*new_cmd_arg(char *arg);
 t_arg		*last_arg(t_arg *head);
 void		ft_addargs(t_arg **head, char *arg);
-char		**build_argv(char *cmd, t_arg *head);
+char		**build_argv(char *cmd, t_arg **head);
+
 
 // free_struct_0.c
 
