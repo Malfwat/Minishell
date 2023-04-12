@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/12 13:31:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/13 00:09:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,16 @@ typedef struct s_env_var
 	struct s_env_var	*next;
 }	t_env_var;
 
+typedef struct s_split_arg
+{
+	bool					interpret;
+	char					*str;
+	struct s_split_arg		*next;
+}	t_split_arg;
+
 typedef struct s_arg
 {
-	char			*name;
+	t_split_arg		*s_arg;
 	struct s_arg	*prev;
 	struct s_arg	*next;
 }	t_arg;
@@ -77,13 +84,13 @@ typedef struct s_block
 
 typedef struct s_prompt
 {
-	char	*git_branch_name;
-	char	*session_user;
-	char	*cwd;
-	int		width_without_mid_delim;
-	int		last_exit_code;
-	int		term_width;
-	char	*time;
+	char		*git_branch_name;
+	char const	*session_user;
+	char		*cwd;
+	int			width_without_mid_delim;
+	int			last_exit_code;
+	int			term_width;
+	char		*time;
 }	t_prompt;
 
 typedef struct s_pids
@@ -92,12 +99,20 @@ typedef struct s_pids
 	struct s_pids	*next;
 }	t_pids;
 
+typedef struct s_exec_vars
+{
+	char	**argv;
+	char	**envp;
+	char	**path;
+}	t_exec_vars;
+
 typedef struct s_minishell
 {
-	t_prompt		prompt;
+	t_prompt		prompt_params;
 	t_env_var		*envp;
 	t_pids			*children;
 	t_block			*head;
+	t_fd			history_fd;
 	t_fd			stdin_fileno;
 	struct termios	saved_params;
 }	t_minishell;
