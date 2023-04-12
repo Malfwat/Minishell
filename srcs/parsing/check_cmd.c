@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 07:53:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:30:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:59:07 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 	}
 	while (path && path[i])
 	{
-		errno = 0;
 		if (!check_access_and_set_path(path[i++], *cmd, dest))
 			return (false);
 		if (*dest)
@@ -50,6 +49,7 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 			*cmd = NULL;
 			return (true);
 		}
+		errno = 0;
 	}
 	*dest = *cmd;
 	return (true);

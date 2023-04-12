@@ -10,6 +10,7 @@ RM = rm -f
 
 SRCS =	get_next_line/get_next_line.c \
 	get_next_line/get_next_line_utils.c \
+	get_next_line/get_next_line_free_buff.c \
 	ft_memset.c \
 	ft_bzero.c \
 	ft_memcpy.c \
