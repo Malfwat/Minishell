@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 15:31:19 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:52:07 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 #include <get_next_line.h>
 #include <readline/history.h>
 #include <fcntl.h>
+#include <ms_define.h>
 
 int	get_my_history(void)
 {
 	char	*str;
-	int		fd;
+	t_fd	fd;
 	char	*tmp;
 
 	tmp = getenv("HOME");
@@ -41,7 +42,7 @@ int	get_my_history(void)
 	return (fd);
 }
 
-void	my_add_history(char *str, int fd)
+void	my_add_history(char *str, t_fd fd)
 {
 	if (!*str)
 		return ;

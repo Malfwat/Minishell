@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/11 21:53:43 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:07:16 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 #include <libft.h>
 #include <ms_define.h>
 
-void	build_prompt_exit_status(char **prompt, t_prompt params)
+void	build_prompt_exit_status(char **prompt, t_prompt *params)
 {
 	char	*tmp;
 	char	*ascii_status;
 
-	ascii_status = ft_itoa(params.last_exit_code);
+	ascii_status = ft_itoa(params->last_exit_code);
 	if (!ascii_status)
 		return ;
 	tmp = *prompt;
-	if (params.last_exit_code == 0)
+	if (params->last_exit_code == 0)
 		*prompt = ft_strsjoin(7, tmp, LGREY_BG, GREEN, "✔ ", LLGREY, "", ENDC);
 	else
 		*prompt = ft_strsjoin(8, tmp, RED, LGREY_BG, ascii_status, " ✘ ",
@@ -32,14 +32,14 @@ void	build_prompt_exit_status(char **prompt, t_prompt params)
 	free(tmp);
 }
 
-bool	build_prompt_mid_delim(char **prompt, t_prompt params)
+bool	build_prompt_mid_delim(char **prompt, t_prompt *params)
 {
 	char	*tmp;
 	char	*delim;
 	int		len;
 
-	len = params.term_width - params.width_without_mid_delim - 37;
-	if (!params.git_branch_name)
+	len = params->term_width - params->width_without_mid_delim - 37;
+	if (!params->git_branch_name)
 		len += 23;
 	delim = NULL;
 	if (len > 0)
@@ -67,7 +67,7 @@ void	build_prompt_end_delim(char **prompt)
 	free(tmp);
 }
 
-char	*build_prompt(t_prompt params)
+char	*build_prompt(t_prompt *params)
 {
 	char	*prompt;
 
@@ -77,7 +77,7 @@ char	*build_prompt(t_prompt params)
 	{
 		build_prompt_start_delim(&prompt);
 		build_prompt_cwd(&prompt, params);
-		if (params.git_branch_name)
+		if (params->git_branch_name)
 			build_prompt_git(&prompt, params);
 		build_prompt_mid_delim(&prompt, params);
 		build_prompt_exit_status(&prompt, params);
@@ -87,9 +87,8 @@ char	*build_prompt(t_prompt params)
 	}
 	if (errno)
 		return (free(prompt), NULL);
-	return (prompt);
+	return (free_prompt_params(params), prompt);
 }
-
 
 bool	refresh_prompt_param(t_prompt *lst)
 {

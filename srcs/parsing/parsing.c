@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/11 22:21:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 00:13:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,12 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	return (false);
 }
 
-bool	is_valid_param(char **param, int type, t_block *block, char **path)
+bool	is_valid_param(char **param, int type, t_block *block)
 {
 	// errno = 0;
 	if (type == -1)
 		return (false);
-	else if (!block->cmd.name && type == CMD_ARG && !block->sub)
-	{
-		if (!get_cmd_path(path, param, &block->cmd.name))
-			return (perror("minishell"), false);
-		errno = 0;
-	}
-	else if (block->cmd.name && type == CMD_ARG && !block->sub)
+	else if (type == CMD_ARG && !block->sub)
 		ft_addargs(&block->cmd.args, *param);
 	else if (type == INPUT_OUTPUT)
 		ft_add_io(block, *param);
@@ -91,7 +85,7 @@ void	ft_error(int err, char *comment)
 	}
 }
 
-bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
+bool	parse_cmds(t_block **curr_block, char *cmd_line)
 {
 	int		i;
 	int		type;
@@ -102,13 +96,13 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line, char **path)
 	if (!*curr_block || !cmd_line)
 		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
-	while (next_param && is_valid_param(&next_param, type, *curr_block, path))
+	while (next_param && is_valid_param(&next_param, type, *curr_block))
 	{
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
 		{
 			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
-			ft_strlen(next_param) - 2), path))
+			ft_strlen(next_param) - 2)))
 				return (free(cmd_line), free(next_param), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))

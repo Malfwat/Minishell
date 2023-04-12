@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 16:52:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 00:12:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	free_t_args(t_arg *ptr)
 	while (ptr)
 	{
 		tmp = ptr->next;
-		free(ptr->name);
+		//free(ptr->name);
 		free(ptr);
 		ptr = tmp;
 	}

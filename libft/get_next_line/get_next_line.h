@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 07:45:37 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/21 14:47:59 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:48:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # define GET_NEXT_LINE_H
-# define BUFFER_SIZE 4092
+# define BUFFER_SIZE 1
 
 typedef struct s_gnl
 {
@@ -38,5 +38,7 @@ short	gnl_precheck(char **line, t_gnl **buflist, int fd);
 short	gnl_readfile(char **line, t_gnl *buf_fd, int fd);
 char	*gnl_expand(char **dest, char *src, char *to_add);
 int		get_next_line(int fd, char **line);
+
+void	gnl_force_finish(int nb, ...);
 
 #endif
