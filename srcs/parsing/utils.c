@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 21:11:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/11 16:21:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:46:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ int	copy_chars_inside_quotes(char *src, char c, char **dest)
 	int	i;
 
 	i = 0;
-	if (src[i] == c)
-	{
-		*((*dest)++) = c;
-		*((*dest)++) = c;
-		return (1);
-	}
+	// if (src[i] == c)
+	// {
+	// 	*((*dest)++) = c;
+	// 	*((*dest)++) = c;
+	// 	return (1);
+	// }
 	while (src && src[i] != c)
 		*((*dest)++) = src[i++];
 	if (src[i])

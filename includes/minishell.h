@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/12 14:29:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/12 17:01:17 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void		ft_add_redirect(t_redirect **head, char *arg, int mode);
 t_arg		*new_cmd_arg(char *arg);
 t_arg		*last_arg(t_arg *head);
 void		ft_addargs(t_arg **head, char *arg);
-char		**build_argv(char *cmd, t_arg **head);
+char		**build_argv(char **cmd, t_arg **head);
 
 
 // free_struct_0.c
@@ -58,6 +58,7 @@ void		free_t_args(t_arg *ptr);
 // free_struct_1.c
 void		free_ms_params(t_minishell ms_params);
 void		free_env_lst(t_env_var *envp_lst);
+void		free_prompt_params(t_prompt *lst);
 
 // term_utils
 bool		toggle_control_character(int control_character, int mode);
