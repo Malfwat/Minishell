@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 23:17:37 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/11 22:05:10 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/12 20:44:44 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,10 @@ int	main(void)
 	pid = fork();
 	if (!pid)
 	{
-		execve("fefe", (char *[]){"fefe", NULL}, NULL);
+		execve("(echo test)", (char *[]){"fefe", NULL}, NULL);
 			perror("");
 		exit(2);
 	}
-	else
-	{
-		sleep(2);
-		waitpid(pid, &status, 0);
-		waitpid(pid, &status, 0);
-		if (errno)
-			perror("");
-	}
+	waitpid(pid, &status, 0);
 	return (0);
 }
