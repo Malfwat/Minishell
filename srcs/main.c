@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/12 14:30:06 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/12 15:13:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	block->cmd.pid = fork();
 	if (!block->cmd.pid)
 	{
-		dprintf(2, "is errno before my_dup ? %d\n", errno);
 		if (errno || !my_dup(block))
 		{
 			dprintf(2, "is errno after my_dup ? %d\n", errno);
@@ -180,7 +179,6 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		else
 			dprintf(2, "%s ??? 1 %i\n", block->cmd.name, block->io_tab[1]);
 	}
-	dprintf(2, "After exec %i, %i, cmd = %s\n", block->io_tab[0], block->io_tab[1], block->cmd.name);
 	ft_strsfree(envp);
 	free(argv);
 	if (block->cmd.pid == -1)
