@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/12 15:13:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/12 19:19:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	close_block_fds(t_block *block)
 	}
 	if (block->io_tab[1] > 2)
 	{
-		block->io_tab[1] = -2;
 		close(block->io_tab[1]);
+		block->io_tab[1] = -2;
 	}
 }
 
@@ -124,67 +124,74 @@ void	close_sub_fds(t_block *head)
 	}
 }
 
+char	**build_path(t_minishell ms_params)
+{
+	char	**path;
+	
+	path = ft_split(find_env_var(ms_params.envp, "PATH")->var_value, ':');
+	if (errno)
+		exit_ms(ms_params, 2, "exec_build");
+	return (path);
+}
+
+void	free_exec_vars(t_exec_vars exec_vars)
+{
+	free(exec_vars.argv);
+	ft_strsfree(exec_vars.envp);
+	ft_strsfree(exec_vars.path);
+}
+
+
+t_exec_vars init_exec_vars(t_minishell ms_params, t_block *block)
+{
+	t_exec_vars exec_vars;
+	char 		*tmp;
+	
+	exec_vars.path = build_path(ms_params);
+	get_cmd_path(exec_vars.path, &block->cmd.name, &tmp);
+	block->cmd.name = tmp;
+	exec_vars.argv = build_argv(&tmp, &block->cmd.args);
+	exec_vars.envp = build_envp(ms_params.envp);
+	if (errno)
+	{
+		free_exec_vars(exec_vars);
+		return (exit_ms(ms_params, 2, "exec_build"), exec_vars);
+	}
+	return (exec_vars);
+}
+
+void	child_worker(t_block *block, t_minishell *ms_params, t_exec_vars exec_vars)
+{
+	if (!my_dup(block))
+		return (free_exec_vars(exec_vars), exit_ms(*ms_params, 2, "exec dup"));
+	execve(exec_vars.argv[0], exec_vars.argv, exec_vars.envp);
+	free_exec_vars(exec_vars);
+	if (block->io_tab[0] >= 0)
+		close(block->io_tab[0]);
+	if (block->io_tab[1] >= 0)
+		close(block->io_tab[1]);
+	if (block->pipe_next)
+		close(block->pipe_next->io_tab[0]);
+	handle_execve_failure(*ms_params, block->cmd.name);
+}
+
 void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 {
-	char	**argv;
-	char	**envp;
+	t_exec_vars	exec_vars;
 
 	errno = 0;
-	argv = build_argv(block->cmd.name, &block->cmd.args);
-	envp = build_envp(ms_params->envp);
-	if (errno)
-		return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec 0"));
+	exec_vars = init_exec_vars(*ms_params, block);
 	block->cmd.pid = fork();
-	if (!block->cmd.pid)
-	{
-		if (errno || !my_dup(block))
-		{
-			dprintf(2, "is errno after my_dup ? %d\n", errno);
-			dprintf(2, "[%i] io_tab[%i][%i]", getpid(), block->io_tab[0], block->io_tab[1]);
-			return (free(argv), ft_strsfree(envp), exit_ms(*ms_params, 2, "exec 1"));
-		}
-		execve(argv[0], argv, envp);
-		ft_strsfree(envp);
-		free(argv);
-		// if (!isatty(0))
-			// close(0);
-		if (block->io_tab[0] >= 0)
-		{
-			if (close(block->io_tab[0]) != -1)
-				dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[0]);
-		}
-		if (block->io_tab[1] >= 0)
-		{
-			if (close(block->io_tab[1]) != -1)
-				dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
-		}
-		if (block->pipe_next)
-		{
-			if (close(block->pipe_next->io_tab[0]) != -1)
-				dprintf(2, "[%d]close:%d\n", getpid(), block->pipe_next->io_tab[0]);
-		}
-		handle_execve_failure(*ms_params, block->cmd.name);
-	}
+	if (block->cmd.pid == 0)
+		child_worker(block, ms_params, exec_vars);
 	if (block->io_tab[0] >= 0)
-	{
-		if (close(block->io_tab[0]) != -1)
-			dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[0]);
-		else
-			dprintf(2, "??? 2\n");
-	}
+		close(block->io_tab[0]);
 	if (block->io_tab[1] >= 0)
-	{
-		if (close(block->io_tab[1]) != -1)
-			dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
-		else
-			dprintf(2, "%s ??? 1 %i\n", block->cmd.name, block->io_tab[1]);
-	}
-	ft_strsfree(envp);
-	free(argv);
-	if (block->cmd.pid == -1)
-		exit_ms(*ms_params, 2, "exec 2");
+		close(block->io_tab[1]);
+	free_exec_vars(exec_vars);
+	if (block->cmd.pid == -1 || errno)
+		exit_ms(*ms_params, 2, "exec fork");
 	store_pid(block->cmd.pid, &ms_params->children);
-	// waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
 }
 
 t_block *find_next_block(t_block *block, bool ignore_sub)
@@ -417,6 +424,7 @@ int	get_cursor_position(void)
 
 	ft_bzero(buf, 10);
 	sc_cursor_pos = tgetstr("u7", NULL);
+	
 	if (!sc_cursor_pos)
 		return (-1);
 	tcgetattr(0, &term);
@@ -458,7 +466,6 @@ int	main(int ac, char **av, char **env)
 	// char		*res;
 	char		*tmp;
 	char		*ms_prompt;
-	char		**path;
 	// int			type;
 	t_block		*head;
 	t_minishell	ms_params;
@@ -469,35 +476,32 @@ int	main(int ac, char **av, char **env)
 	ft_memset(&ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(&ms_params);
 	toggle_control_character(VQUIT, _POSIX_VDISABLE);
-	t_prompt	prompt_params;
 
 	// set_sig_handler();
-	// if (!refresh_prompt_param(&prompt_params))
+	// if (!refresh_prompt_param(&ms_prompt.prompt_params))
 		// return (1);
 	// res = NULL;
 	// type = -1;
+	
 	ms_params.envp = get_env_var(env);
 	(void)ac;
 	(void)av;
-	int fd = get_my_history();
-	if (fd == -1)
+	ms_params.history_fd = get_my_history();
+	if (ms_params.history_fd == -1)
 		return (2);
-	path = ft_split(getenv("PATH"), ':');
 	while (1)
 	{
-		if (!refresh_prompt_param(&prompt_params))
+		if (!refresh_prompt_param(&ms_params.prompt_params))
 			return (exit_ms(ms_params, 0, "prompt"), 0);
 		ensure_prompt_position();
-		ms_prompt = build_prompt(prompt_params);
+		ms_prompt = build_prompt(&ms_params.prompt_params);
 		tmp = readline(ms_prompt);
 		free(ms_prompt);
 		if (!tmp)
 			continue;
-		my_add_history(rl_line_buffer, fd);
+		my_add_history(rl_line_buffer, ms_params.history_fd);
 		head = new_block();
-		if (!path)
-			return (perror(""), 0);
-		parse_cmds(&head, tmp, path);
+		parse_cmds(&head, tmp);
 		if (errno)
 			return (exit_ms(ms_params, 2, "parsing"), 0);
 		io_manager(head);
@@ -509,13 +513,5 @@ int	main(int ac, char **av, char **env)
 		free_children(&ms_params.children);
 		flood_free(head);
 	}
-	ft_strsfree(path);
-	free(rl_prompt);
-	free(rl_line_buffer);
-	//execute_t_block_cmd(head, &type, ms_params, head->io_tab);
-		// execute_cmds(head, );
-	// free(rl_prompt);
-	// close(fd);
-	// ft_putnbr_fd(isatty(ms_params.stdin_fileno), 36);
-	return (exit_ms(ms_params, 0, NULL), 0);
+	return (0);
 }
