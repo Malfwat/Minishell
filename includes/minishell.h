@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/12 17:01:17 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:17:00 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void		ms_echo(bool nl, int nb, ...);
 
 // manage_io_params.c
 
-void		ft_add_io(t_block *block, char *io);
+void		ft_add_io(t_block *block, t_split_arg *io);
 t_redirect	*new_redirect(char *arg, int mode);
 t_redirect	*last_redirect(t_redirect *head);
 void		ft_add_redirect(t_redirect **head, char *arg, int mode);
@@ -44,7 +44,7 @@ void		ft_add_redirect(t_redirect **head, char *arg, int mode);
 
 t_arg		*new_cmd_arg(char *arg);
 t_arg		*last_arg(t_arg *head);
-void		ft_addargs(t_arg **head, char *arg);
+void		ft_addargs(t_arg **head, t_split_arg *arg);
 char		**build_argv(char **cmd, t_arg **head);
 
 

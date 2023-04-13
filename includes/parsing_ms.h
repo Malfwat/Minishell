@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_ms.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/12 17:52:40 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:48:24 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ bool	check_parenthesis_param(char *str, int *i, char **new_line, int *type);
 
 // parsing.c
 
-char	*get_next_param(char *str, int *i, int *type);
-bool	is_delimiter(char *str, int *storage);
-bool	is_valid_param(char **param, int type, t_block *block);
-bool	parse_cmds(t_block **curr_block, char *cmd_line);
+t_split_arg	*get_next_param(char *str, int *i, int *type);
+bool	    is_delimiter(char *str, int *storage);
+bool	    is_valid_param(t_split_arg *param, int type, t_block *block);
+bool	    parse_cmds(t_block **curr_block, char *cmd_line);
 
 // check_cmd.c
 
@@ -46,7 +46,7 @@ int		pass_whitespaces(char *str);
 
 // word.c
 
-bool	check_word_param(char *str, int *i, char **new_line, int *type);
+bool	check_word_param(char *str, int *i, int *type, t_split_arg **arg);
 int		ft_substr_word_param(char *src, char *dest);
 
 // input_output.c
