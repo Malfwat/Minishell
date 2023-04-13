@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/12 14:39:46 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/13 14:28:50 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ bool	compare_wildcard(char *pattern, char *str)
 	return (ft_strsfree(tab), true);
 }
 
+t_split_arg	*ls_split_arg_new(char *data, bool interpret);
+
+
 t_arg	*wildcard(char *dir, char *pattern)
 {
 	DIR				*dirp;
@@ -61,7 +64,7 @@ t_arg	*wildcard(char *dir, char *pattern)
 	while (dir_entry)
 	{
 		if (compare_wildcard(pattern, dir_entry->d_name))
-			ft_addargs(&lst, ft_strdup(dir_entry->d_name));
+			ft_addargs(&lst, ls_split_arg_new(ft_strdup(dir_entry->d_name), 0));
 		dir_entry = readdir(dirp);
 	}
 	if (errno)
