@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 00:21:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 00:30:01 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ls_split_arg_addback(t_split_arg **head, t_split_arg *new)
 	tmp->next = new;
 }
 
-t_split_arg	*ls_split_arg_new(char *data, bool interpret)
+t_split_arg	*ls_split_arg_new(char *data, char scope)
 {
 	t_split_arg	*new;
 
@@ -59,7 +59,7 @@ t_split_arg	*ls_split_arg_new(char *data, bool interpret)
 	if (!new)
 		return (NULL);
 	new->str = data;
-	new->interpret = interpret;
+	new->scope = scope;
 	return (new);
 }
 
@@ -121,12 +121,12 @@ bool	check_word_param(char *str, int *i, char **new_line, int *type)
 		quotes = 0;
 		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
 		{
-			i++;
+			(*i)++;
 			quotes = str[*i];
 		}
-		i += slice_next_part(&str[*i], &arg, quotes, scope);
+		*i += slice_next_part(&str[*i], &arg, quotes, scope);
 		if (quotes)
-			i++;
+			(*i)++;
 	}
 	if (arg && errno)
 	{
