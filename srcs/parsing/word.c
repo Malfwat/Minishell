@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 00:21:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:15:35 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	ls_split_arg_addback(t_split_arg **head, t_split_arg *new)
 	t_split_arg	*tmp;
 
 	if (!*head)
+	{
 		*head = new;
+		return ;
+	}
 	tmp = *head;
 	while (tmp->next)
 		tmp = tmp->next;
@@ -79,7 +82,7 @@ bool	is_delim(char *str)
 	return (false);
 }
 
-int	slice_next_part(char *src, t_split_arg **last_arg, char quotes, char scope)
+int	slice_next_part(char *src, t_split_arg **last_arg, char quotes)
 {
 	int			i;
 	char		*sliced;
@@ -101,34 +104,31 @@ int	slice_next_part(char *src, t_split_arg **last_arg, char quotes, char scope)
 		return (0);
 	else
 		sliced = ft_substr(src, 0, i);
-	new = ls_split_arg_new(sliced, scope);
+	new = ls_split_arg_new(sliced, (quotes != '\''));
 	ls_split_arg_addback(last_arg, new);
 	return (i);
 }
 
-bool	check_word_param(char *str, int *i, char **new_line, int *type)
+bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 {
-	t_split_arg	*arg;
 	char		quotes;
-	char		scope;
+	// char		scope;
 
-	scope = *(ft_strchrnul("'\"", str[*i]));
-	arg = NULL;
-	(void)new_line;
+	// scope = *(ft_strchrnul("'\"", str[*i]));
 	pass_whitespaces(&str[*i]);
-	while (str[*i] && !ft_strchr("><", str[*i]))
+	while (str[*i] && !ft_strchr("><", str[*i]) && !is_delim(&str[*i]))
 	{
 		quotes = 0;
 		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
 		{
-			i++;
 			quotes = str[*i];
+			(*i)++;
 		}
-		i += slice_next_part(&str[*i], &arg, quotes, scope);
+		(*i) += slice_next_part(&str[*i], arg, quotes);
 		if (quotes)
-			i++;
+			(*i)++;
 	}
-	if (arg && errno)
+	if (arg && !errno)
 	{
 		*type = CMD_ARG;
 		return (true);

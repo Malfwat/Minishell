@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 00:12:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:25:44 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool		manage_wildcard(t_arg **head, char *str);
 
 
 
-t_arg	*new_cmd_arg(char *arg)
+t_arg	*new_cmd_arg(t_split_arg *arg)
 {
 	t_arg	*new;
 
@@ -27,7 +27,7 @@ t_arg	*new_cmd_arg(char *arg)
 	new = malloc(sizeof(t_arg));
 	if (!new)
 		return (NULL);
-	// new->name = arg;
+	new->s_arg = arg;
 	new->prev = NULL;
 	new->next = NULL;
 	return (new);
@@ -40,7 +40,7 @@ t_arg	*last_arg(t_arg *head)
 	return (head);
 }
 
-void	ft_addargs(t_arg **head, char *arg)
+void	ft_addargs(t_arg **head, t_split_arg *arg)
 {
 	t_arg	*new;
 
@@ -56,7 +56,7 @@ void	ft_addargs(t_arg **head, char *arg)
 	}
 }
 
-void	ft_addarg_front(t_arg **head, char *arg)
+void	ft_addarg_front(t_arg **head, t_split_arg *arg)
 {
 	t_arg	*new;
 
@@ -115,7 +115,7 @@ void	update_t_args(t_arg **args)
 	}
 }
 
-char	**build_argv(char **cmd, t_arg **head)
+char	**build_argv(t_split_arg *cmd, t_arg **head)
 {
 	char	**tab;
 	int		len;
@@ -123,7 +123,7 @@ char	**build_argv(char **cmd, t_arg **head)
 
 	len = 0;
 	tmp = NULL;
-	ft_addarg_front(head, ft_strdup(*cmd));
+	ft_addarg_front(head, cmd);
 	if (errno)
 		return (NULL);
 	update_t_args(head);
