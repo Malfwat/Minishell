@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 17:28:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 19:02:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ bool	check_and_store_delimiter(char *str, int *storage)
 
 bool	is_valid_param(void *param, int type, t_block *block)
 {
-	// errno = 0;
-	if (type == -1)
+	if (type < 0)
 		return (false);
 	else if (type == CMD_ARG && !block->sub)
 		ft_addargs(&block->cmd.args, param);
@@ -57,7 +56,7 @@ bool	is_valid_param(void *param, int type, t_block *block)
 	return (true);
 }
 
-t_split_arg	*get_next_param(char *str, int *i, int *type)
+void	*get_next_param(char *str, int *i, int *type)
 {
 	void	*res;
 
@@ -65,12 +64,11 @@ t_split_arg	*get_next_param(char *str, int *i, int *type)
 	*i += pass_whitespaces(&str[*i]);
 	if (!str[*i])
 		return (NULL);
-	if (check_parenthesis_param(str, i, &res, type) \
-		|| check_io_param(str, i, &res, type) \
-		|| check_word_param(str, i, type, &res))
+	if ((!errno && check_parenthesis_param(str, i, (char **)&res, type)) \
+		|| (!errno && check_io_param(str, i, type,  (t_split_arg **)&res)) \
+		|| (!errno && check_word_param(str, i, type, (t_split_arg **)&res)))
 		return (res);
-	*type = -1;
-	return (NULL);
+	return (res);
 }
 
 char	*ft_join_splitted_arg(t_split_arg *arg)
@@ -85,23 +83,24 @@ char	*ft_join_splitted_arg(t_split_arg *arg)
 		res = ft_strjoin(res, arg->str);
 		free(tmp);
 		arg = arg->next;
-	}	
+	}
+	return (res);
 }
 
 void	ft_error(int err, void *comment, int type)
 {
-	char	*io_or_cmd_arg_case;
-
 	if (type == CMD_ARG || type == INPUT_OUTPUT)
-		io_or_cmd_arg_case = ft_join_splitted_arg()
+		comment = ft_join_splitted_arg((t_split_arg *)comment);
 	ft_putstr_fd("minishell: ", 2);
 	if (err == CMD_SYNTAX_ERR)
 	{
 		ft_putstr_fd("syntax error near unexpected token ", 2);
 		ft_putchar_fd('`', 2);
-		ft_putstr_fd(comment, 2);
+		ft_putstr_fd((char *)comment, 2);
 		ft_putstr_fd("`\n", 2);
 	}
+	if (type == CMD_ARG || type == INPUT_OUTPUT)
+		free(comment);
 }
 
 void	free_split_arg(t_split_arg *lst)
@@ -119,7 +118,7 @@ void	free_split_arg(t_split_arg *lst)
 
 void	free_next_param(void *ptr, int type)
 {
-	if (type == PARENTHESIS)
+	if (type == PARENTHESIS || type == INCOMPLETE_PARENTHESIS)
 		free(ptr);
 	else
 		free_split_arg(ptr);
@@ -143,7 +142,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		{
 			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
 			ft_strlen(next_param) - 2)))
-				return (free(cmd_line), free(next_param), false);
+				return (free(cmd_line), free_next_param(next_param, type), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
 		{
@@ -162,11 +161,11 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		next_param = get_next_param(cmd_line, &i, &type);
 	}
 	if (errno)
-		return(free(cmd_line), free(next_param), false);
+		return(free(cmd_line), free_next_param(next_param, type), false);
 	if (next_param)
 	{
 		ft_error(CMD_SYNTAX_ERR, next_param, type);
-		free(next_param);
+		free_next_param(next_param, type);
 		return (false);
 	}
 	free(cmd_line);

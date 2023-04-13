@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 16:50:58 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 18:49:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	slice_next_part(char *src, t_split_arg **last_arg, char quotes)
 	else
 		sliced = ft_substr(src, 0, i);
 	new = ls_split_arg_new(sliced, quotes);
+	if (!new)
+		return (0);
 	ls_split_arg_addback(last_arg, new);
 	return (i);
 }
@@ -112,10 +114,9 @@ int	slice_next_part(char *src, t_split_arg **last_arg, char quotes)
 bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 {
 	char		quotes;
-	// char		scope;
 
-	// scope = *(ft_strchrnul("'\"", str[*i]));
-	pass_whitespaces(&str[*i]);
+	*type = INCOMPLETE_CMD_ARG;
+	*i += pass_whitespaces(&str[*i]);
 	while (str[*i] && !ft_strchr("><", str[*i]) && !is_delim(&str[*i]))
 	{
 		quotes = 0;
@@ -125,9 +126,12 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 			(*i)++;
 		}
 		(*i) += slice_next_part(&str[*i], arg, quotes);
+		if (errno)
+			return (false);
 		if (quotes)
 			(*i)++;
-			i++;
+		if (str[*i])
+			(*i)++;
 	}
 	if (arg && errno)
 	{
@@ -137,39 +141,41 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 	return (false);
 }
 
-// bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
-// {
-// 	char		quotes;
-// 	char		redirect[2];
-// 	// char		scope;
+bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
+{
+	char		quotes;
+	char		redirect[2];
 
-// 	// scope = *(ft_strchrnul("'\"", str[*i]));
-// 	pass_whitespaces(&str[*i]);
-// 	if (ft_strchr("><", str[*i]))
-// 	{
-// 		redirect[0] = str[*i];
-// 		if (str[*i] == str[*i + 1])
-// 		ls_split_arg_new(char *data, bool interpret);
+	*type = INCOMPLETE_INPUT_OUTPUT;
+	*i += pass_whitespaces(&str[*i]);
+	if (str[*i] && ft_strchr("><", str[*i]))
+	{
+		redirect[0] = str[*i];
+		if (str[*i] == str[*i + 1])
+			redirect[1] = str[(*i)++];
+		*arg = ls_split_arg_new(redirect, 0);
+		if (!(*arg))
+			return (true);
+		(*i)++;
 
-// 		(*i)++;
 		
-// 		while (str[*i] && !ft_strchr("><", str[*i]) && !is_delim(&str[*i]))
-// 		{
-// 			quotes = 0;
-// 			if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
-// 			{
-// 				quotes = str[*i];
-// 				(*i)++;
-// 			}
-// 			(*i) += slice_next_part(&str[*i], arg, quotes);
-// 			if (quotes)
-// 				(*i)++;
-// 		}
-// 		if (arg && !errno)
-// 		{
-// 			*type = INPUT_OUTPUT;
-// 			return (true);
-// 		}
-// 	}
-// 	return (false);
-// }
+		while (str[*i] && !ft_strchr("><", str[*i]) && !is_delim(&str[*i]))
+		{
+			quotes = 0;
+			if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
+			{
+				quotes = str[*i];
+				(*i)++;
+			}
+			(*i) += slice_next_part(&str[*i], arg, quotes);
+			if (quotes)
+				(*i)++;
+		}
+		if (arg && !errno)
+		{
+			*type = INPUT_OUTPUT;
+			return (true);
+		}
+	}
+	return (false);
+}
