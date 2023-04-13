@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_output.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:11:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 20:00:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:16:43 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,27 @@ int	ft_substr_io_param(char *src, char *dest)
 	return (i);
 }
 
-bool	check_io_param(char *str, int *i, char **new_line, int *type)
-{
-	int		j;
-	int		size;
+// bool	check_io_param(char *str, int *i, char **new_line, int *type)
+// {
+// 	int		j;
+// 	int		size;
 
-	size = 1;
-	j = 0;
-	if (ft_strchr("><", str[*i + j++]))
-	{
-		if (str[*i + j] == str[*i])
-		{
-			j++;
-			size++;
-		}
-		j += pass_whitespaces(&str[*i + j]);
-		if (!count_param_length(&str[*i + j], SINGLE_DELIM, &size))
-			return (false);
-		*new_line = malloc((size + 1) * sizeof(char));
-		*i += ft_substr_io_param(&str[*i], *new_line);
-		*type = INPUT_OUTPUT;
-		return (true);
-	}
-	return (false);
-}
+// 	size = 1;
+// 	j = 0;
+// 	if (ft_strchr("><", str[*i + j++]))
+// 	{
+// 		if (str[*i + j] == str[*i])
+// 		{
+// 			j++;
+// 			size++;
+// 		}
+// 		j += pass_whitespaces(&str[*i + j]);
+// 		if (!count_param_length(&str[*i + j], SINGLE_DELIM, &size))
+// 			return (false);
+// 		*new_line = malloc((size + 1) * sizeof(char));
+// 		*i += ft_substr_io_param(&str[*i], *new_line);
+// 		*type = INPUT_OUTPUT;
+// 		return (true);
+// 	}
+// 	return (false);
+// }
