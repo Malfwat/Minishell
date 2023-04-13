@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 23:34:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:31:09 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ bool	io_manager(t_block *block)
 		}
 		if (block->sub)
 			io_manager(block->sub);
-		block = find_next_block(block, true);
+		// block = find_next_block(block, true);
 	}
 	if (errno)
 		return (NULL);
