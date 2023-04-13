@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 15:09:40 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 18:52:27 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ enum e_operator
 
 enum e_type
 {
+	INCOMPLETE_INPUT_OUTPUT = -3,
+	INCOMPLETE_CMD_ARG,
+	INCOMPLETE_PARENTHESIS,
 	INPUT_OUTPUT,
 	PARENTHESIS,
 	CMD_ARG
