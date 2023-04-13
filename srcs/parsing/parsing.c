@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 14:48:57 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:28:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	return (false);
 }
 
-bool	is_valid_param(t_split_arg *param, int type, t_block *block)
+bool	is_valid_param(void *param, int type, t_block *block)
 {
 	// errno = 0;
 	if (type == -1)
@@ -47,8 +47,7 @@ bool	is_valid_param(t_split_arg *param, int type, t_block *block)
 		ft_add_io(block, param);
 	else if (type == PARENTHESIS && !block->cmd.name && !block->sub)
 	{
-		block->subshell_command = param->str;
-		free(param);
+		block->subshell_command = (char *)param;
 		add_block_back(&block, last_sub);
 	}
 	else
@@ -60,8 +59,7 @@ bool	is_valid_param(t_split_arg *param, int type, t_block *block)
 
 t_split_arg	*get_next_param(char *str, int *i, int *type)
 {
-	char	*res;
-	t_split_arg	*arg = NULL;
+	void	*res;
 
 	res = NULL;
 	*i += pass_whitespaces(&str[*i]);
@@ -69,14 +67,33 @@ t_split_arg	*get_next_param(char *str, int *i, int *type)
 		return (NULL);
 	if (check_parenthesis_param(str, i, &res, type) \
 		|| check_io_param(str, i, &res, type) \
-		|| check_word_param(str, i, type, &arg))
-		return (arg);
+		|| check_word_param(str, i, type, &res))
+		return (res);
 	*type = -1;
 	return (NULL);
 }
 
-void	ft_error(int err, char *comment)
+char	*ft_join_splitted_arg(t_split_arg *arg)
 {
+	char	*res;
+	char	*tmp;
+
+	res = NULL;
+	while (arg)
+	{
+		tmp = res;
+		res = ft_strjoin(res, arg->str);
+		free(tmp);
+		arg = arg->next;
+	}	
+}
+
+void	ft_error(int err, void *comment, int type)
+{
+	char	*io_or_cmd_arg_case;
+
+	if (type == CMD_ARG || type == INPUT_OUTPUT)
+		io_or_cmd_arg_case = ft_join_splitted_arg()
 	ft_putstr_fd("minishell: ", 2);
 	if (err == CMD_SYNTAX_ERR)
 	{
@@ -87,11 +104,32 @@ void	ft_error(int err, char *comment)
 	}
 }
 
+void	free_split_arg(t_split_arg *lst)
+{
+	t_split_arg	*tmp;
+
+	while (lst)
+	{
+		tmp = lst->next;
+		free(lst->str);
+		free(lst);
+		lst = tmp;
+	}
+}
+
+void	free_next_param(void *ptr, int type)
+{
+	if (type == PARENTHESIS)
+		free(ptr);
+	else
+		free_split_arg(ptr);
+}
+
 bool	parse_cmds(t_block **curr_block, char *cmd_line)
 {
 	int		i;
 	int		type;
-	t_split_arg	*next_param;
+	void	*next_param;
 
 	i = 0;
 	type = -1;
@@ -103,7 +141,8 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
 		{
-			if (!parse_cmds(&((*curr_block)->sub), next_param->str))
+			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
+			ft_strlen(next_param) - 2)))
 				return (free(cmd_line), free(next_param), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
@@ -126,7 +165,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		return(free(cmd_line), free(next_param), false);
 	if (next_param)
 	{
-		ft_error(CMD_SYNTAX_ERR, next_param->str/* provisoire doit etre remplace par un join */);
+		ft_error(CMD_SYNTAX_ERR, next_param, type);
 		free(next_param);
 		return (false);
 	}
