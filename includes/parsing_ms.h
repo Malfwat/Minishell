@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 19:11:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 20:18:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg);
 int		heredoc(char *limiter);
 bool	heredoc_manager(t_redirect *ptr, t_block *block);
 void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block);
-bool	io_manager(t_block *block);
+bool	init_exec_io(t_block *block);
 void	output_manager(t_redirect *ptr, int *fd);
 
 #endif /* PARSING_H */
