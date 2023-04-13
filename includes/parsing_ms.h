@@ -6,7 +6,7 @@
 /*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 14:48:24 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:03:49 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		ft_substr_word_param(char *src, char *dest);
 // input_output.c
 
 int		ft_substr_io_param(char *src, char *dest);
-bool	check_io_param(char *str, int *i, char **new_line, int *type);
+bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg);
 
 // io_functions.c
 
