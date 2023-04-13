@@ -6,7 +6,7 @@
 /*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 14:48:57 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 17:04:40 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_split_arg	*get_next_param(char *str, int *i, int *type)
 	if (!str[*i])
 		return (NULL);
 	if (check_parenthesis_param(str, i, &res, type) \
-		|| check_io_param(str, i, &res, type) \
+		|| check_io_param(str, i, type, &arg) \
 		|| check_word_param(str, i, type, &arg))
 		return (arg);
 	*type = -1;
