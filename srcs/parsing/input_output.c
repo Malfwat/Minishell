@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_output.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:11:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 17:04:22 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 20:18:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@
 // 		redirect[0] = str[*i];
 // 		if (str[*i] == str[*i + 1])
 // 			redirect[1] = str[*i++];
-// 		*arg = ls_split_arg_new(redirect, str[i]);
+// 		*arg = ls_split_args_new(redirect, str[i]);
 // 		if (!(*arg))
 // 			return (true);
 // 		(*i)++;

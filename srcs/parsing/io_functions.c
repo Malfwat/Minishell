@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 19:15:58 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 19:59:38 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ bool	hd_manager(t_block *block)
 	ptr = block->heredoc;
 	while (ptr)
 	{
+		if (!ptr->heredoc)
+			return (true);
 		ptr->fd = heredoc(ptr->heredoc);
 		if (ptr->fd == -1)
 			return (false);
@@ -101,7 +103,7 @@ bool	hd_manager(t_block *block)
 	return (true);
 }
 
-bool	io_manager(t_block *block)
+bool	init_exec_io(t_block *block)
 {
 	t_redirect	*tmp;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 12:41:41 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 22:05:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,10 @@ t_exec_vars init_exec_vars(t_minishell ms_params, t_block *block)
 	t_exec_vars exec_vars;
 	char 		*tmp;
 	
+	rebuild_args(block->cmd.args);
 	exec_vars.path = build_path(ms_params);
 	get_cmd_path(exec_vars.path, &block->cmd.name, &tmp);
-	block->cmd.name = tmp;
+	// block->cmd.name = tmp;
 	exec_vars.argv = build_argv(&tmp, &block->cmd.args);
 	exec_vars.envp = build_envp(ms_params.envp);
 	if (errno)
@@ -147,6 +148,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 
 	errno = 0;
 	exec_vars = init_exec_vars(*ms_params, block);
+	init_exec_io(block);
 	block->cmd.pid = fork();
 	if (block->cmd.pid == 0)
 		child_worker(block, ms_params, exec_vars);
@@ -470,7 +472,7 @@ int	main(int ac, char **av, char **env)
 		parse_cmds(&head, tmp);
 		if (errno)
 			return (exit_ms(ms_params, 2, "parsing"), 0);
-		io_manager(head);
+		hd_manager(head);
 		if (errno)
 			ms_perror("minishell", "io_manager", strerror(errno));
 		ms_params.head = head;

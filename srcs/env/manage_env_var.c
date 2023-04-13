@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/07 22:43:25 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:17:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ char	*get_env_var_value(char *str)
 	return (ft_substr(str, i + 1, ft_strlen(&str[i + 1])));
 }
 
-char	**build_envp(t_env_var	*lst)
+char	**build_envp(t_env_var	*envp)
 {
 	char		**tab;
 	int			len;
 	t_env_var	*tmp;
 
-	tmp = lst;
+	tmp = envp;
 	len = 0;
-	while (lst)
+	while (envp)
 	{
-		lst = lst->next;
+		envp = envp->next;
 		len++;
 	}
 	tab = ft_calloc((len + 1), sizeof(char *));
@@ -61,15 +61,15 @@ char	**build_envp(t_env_var	*lst)
 	return (tab);
 }
 
-t_env_var	*find_env_var(t_env_var	*lst, char *str)
+t_env_var	*find_env_var(t_env_var	*envp, char *str)
 {
-	while (lst)
+	while (envp)
 	{
-		if (!ft_strcmp(str, lst->var_name))
-			return (lst);
-		lst = lst->next;
+		if (!ft_strcmp(str, envp->var_name))
+			return (envp);
+		envp = envp->next;
 	}
-	return (lst);
+	return (envp);
 }
 
 void	update_env_var(t_env_var **head)

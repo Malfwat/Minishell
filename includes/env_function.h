@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 19:56:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:18:10 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void		env(t_env_var *lst);
 
 // manage_env_var.c
 
-t_env_var	*find_env_var(t_env_var *lst, char *str);
-char		**build_envp(t_env_var	*lst);
+t_env_var	*find_env_var(t_env_var *envp, char *str);
+char		**build_envp(t_env_var	*envp);
 char		*get_env_var_value(char *str);
 char		*get_env_var_name(char *str);
 void		update_env_var(t_env_var **head);
