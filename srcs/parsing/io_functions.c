@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 18:31:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 19:15:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,13 @@ void	output_manager(t_redirect *ptr, t_fd *fd)
 	ptr->errno_value = errno;
 }
 
-bool	heredoc_manager(t_redirect *ptr, t_block *block)
+bool	hd_manager(t_block *block)
 {
+	t_redirect *ptr;
+	
+	if (!block)
+		return (true);
+	ptr = block->heredoc;
 	while (ptr)
 	{
 		ptr->fd = heredoc(ptr->heredoc);
@@ -90,18 +95,16 @@ bool	heredoc_manager(t_redirect *ptr, t_block *block)
 		}
 		ptr = ptr->next;
 	}
+	if (hd_manager(block->pipe_next) == false \
+		|| hd_manager(block->next) == false || hd_manager(block->sub) == false)
+		return (false);
 	return (true);
 }
-
-t_block *find_next_block(t_block *block, bool ignore_sub);
-
 
 bool	io_manager(t_block *block)
 {
 	t_redirect	*tmp;
 
-	if (!heredoc_manager(block->heredoc, block))
-		return (false);
 	while (block)
 	{
 		tmp = block->io_redirect;
@@ -113,10 +116,6 @@ bool	io_manager(t_block *block)
 				output_manager(tmp, &block->io_tab[1]);
 			tmp = tmp->next;
 		}
-		if (block->operator == PIPE_OPERATOR)
-			io_manager(block->pipe_next);
-			io_manager(block->sub);
-		block = find_next_block(block, true);
 	}
 	if (errno)
 		return (NULL);
