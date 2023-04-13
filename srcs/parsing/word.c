@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 00:30:01 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:37:22 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ bool	is_delim(char *str)
 	return (false);
 }
 
-int	slice_next_part(char *src, t_split_arg **last_arg, char quotes, char scope)
+int	slice_next_part(char *src, t_split_arg **last_arg, char quotes)
 {
 	int			i;
 	char		*sliced;
@@ -101,7 +101,7 @@ int	slice_next_part(char *src, t_split_arg **last_arg, char quotes, char scope)
 		return (0);
 	else
 		sliced = ft_substr(src, 0, i);
-	new = ls_split_arg_new(sliced, scope);
+	new = ls_split_arg_new(sliced, quotes);
 	ls_split_arg_addback(last_arg, new);
 	return (i);
 }
@@ -110,9 +110,7 @@ bool	check_word_param(char *str, int *i, char **new_line, int *type)
 {
 	t_split_arg	*arg;
 	char		quotes;
-	char		scope;
 
-	scope = *(ft_strchrnul("'\"", str[*i]));
 	arg = NULL;
 	(void)new_line;
 	pass_whitespaces(&str[*i]);
@@ -121,10 +119,10 @@ bool	check_word_param(char *str, int *i, char **new_line, int *type)
 		quotes = 0;
 		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
 		{
-			(*i)++;
 			quotes = str[*i];
+			(*i)++;
 		}
-		*i += slice_next_part(&str[*i], &arg, quotes, scope);
+		*i += slice_next_part(&str[*i], &arg, quotes);
 		if (quotes)
 			(*i)++;
 	}
