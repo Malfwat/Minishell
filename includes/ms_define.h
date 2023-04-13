@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/12 16:53:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 15:09:40 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_DEFINE_H
 # define MS_DEFINE_H
+
+# define INIT_FD_VALUE -2
+
+# define SUCCESS 0
 
 // charset of single delimiter to check
 
@@ -26,15 +30,6 @@
 
 # define HEREDOC 0
 # define FILE_INPUT 1
-
-
-
-
-# define INIT_FD_VALUE -2
-
-
-
-# define SUCCESS 0
 
 // all defines related to the prompt (control sequence, decorative chars)
 
@@ -52,7 +47,6 @@
 # define ENDC "\033[0m"
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
-
 
 enum e_operator
 {
