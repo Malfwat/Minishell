@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 19:02:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 22:06:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <ms_define.h>
 #include <parsing_ms.h>
 #include <minishell.h>
+#include <env_function.h>
 #include <libft.h>
 #include <errno.h>
 #include <stdio.h>
@@ -71,8 +72,89 @@ void	*get_next_param(char *str, int *i, int *type)
 	return (res);
 }
 
-char	*ft_join_splitted_arg(t_split_arg *arg)
+char	*strjoin_wc_args(t_wc_args *wc_args)
 {
+	char	*str;
+	char	*tmp;
+
+	str = NULL;
+	while (wc_args)
+	{
+		tmp = str;
+		str = ft_strjoin(str, wc_args->name);
+		free(tmp);
+		wc_args = wc_args->next;
+	}
+	return (str);
+}
+
+char	*interpret_wildcards(char *str)
+{
+	t_wc_args	*wc_args;
+
+	manage_wildcard(&wc_args, str);
+	if (errno)
+		return (NULL);
+	else if (!wc_args)
+		return (str);
+	else
+	{
+		free(str);
+		str = strjoin_wc_args(wc_args);
+		if (errno)
+			free(str);
+	}
+	free_wc_args(&wc_args);
+	return (str);
+}
+
+char	*interpret_meta_chars(t_split_arg *arg, t_env_var *envp)
+{
+	char		*res;
+
+	res = interpret_dollars(arg, envp);
+	if (errno)
+		return (NULL);
+	if (!arg->scope)
+		res = interpret_wildcards(res);
+	if (errno)
+		return (NULL);
+	return (res);
+}
+
+char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
+{
+	char		*tmp;
+	char		*res;
+	t_env_var	*env_var;
+	char		**tab;
+	int			i;
+
+	tab = ft_split(arg->str, '$');
+	if (!tab)
+		return (NULL);
+	i = -1;
+	res = NULL;
+	while (tab[++i])
+	{
+		tmp = res;
+		if ((i == 0 && arg->str != '$') || (arg->scope != '"'))
+			res = ft_strjoin(res, tab[i]);
+		else
+		{
+			env_var = find_env_var(envp, tab[i]);
+			if (!env_var)
+				res = ft_strjoin(res, "");
+			res = ft_strjoin(res, env_var->var_value);
+		}
+		free(tmp);
+	}
+	return (res);
+}
+
+char	*ft_join_splitted_arg(t_args **head, t_split_arg *arg, t_env_var *envp, bool interpret)
+{
+	char	arg_interpreted;
 	char	*res;
 	char	*tmp;
 
@@ -80,7 +162,11 @@ char	*ft_join_splitted_arg(t_split_arg *arg)
 	while (arg)
 	{
 		tmp = res;
-		res = ft_strjoin(res, arg->str);
+		arg_interpreted = NULL;
+		if (interpret)
+			res = ft_strjoin(res, interpret_meta_chars(arg, envp));
+		else
+			res = ft_strjoin(res, arg_interpreted);
 		free(tmp);
 		arg = arg->next;
 	}
@@ -90,7 +176,7 @@ char	*ft_join_splitted_arg(t_split_arg *arg)
 void	ft_error(int err, void *comment, int type)
 {
 	if (type == CMD_ARG || type == INPUT_OUTPUT)
-		comment = ft_join_splitted_arg((t_split_arg *)comment);
+		comment = ft_join_splitted_arg((t_split_arg *)comment, NULL, false);
 	ft_putstr_fd("minishell: ", 2);
 	if (err == CMD_SYNTAX_ERR)
 	{
@@ -103,7 +189,7 @@ void	ft_error(int err, void *comment, int type)
 		free(comment);
 }
 
-void	free_split_arg(t_split_arg *lst)
+void	free_split_args(t_split_arg *lst)
 {
 	t_split_arg	*tmp;
 
@@ -121,7 +207,7 @@ void	free_next_param(void *ptr, int type)
 	if (type == PARENTHESIS || type == INCOMPLETE_PARENTHESIS)
 		free(ptr);
 	else
-		free_split_arg(ptr);
+		free_split_args(ptr);
 }
 
 bool	parse_cmds(t_block **curr_block, char *cmd_line)

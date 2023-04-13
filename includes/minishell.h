@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 14:17:00 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:21:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ void		ft_add_io(t_block *block, t_split_arg *io);
 t_redirect	*new_redirect(char *arg, int mode);
 t_redirect	*last_redirect(t_redirect *head);
 void		ft_add_redirect(t_redirect **head, char *arg, int mode);
+bool		hd_manager(t_block *block);
 
 // manage_cmd_args.c
 
-t_arg		*new_cmd_arg(char *arg);
-t_arg		*last_arg(t_arg *head);
-void		ft_addargs(t_arg **head, t_split_arg *arg);
-char		**build_argv(char **cmd, t_arg **head);
+t_args		*new_cmd_arg(char *arg);
+t_args		*last_args(t_args *head);
+void		ft_addargs(t_args **head, t_split_arg *arg);
+char		**build_argv(char **cmd, t_args **head);
 
 
 // free_struct_0.c
@@ -53,7 +54,7 @@ char		**build_argv(char **cmd, t_arg **head);
 void		flood_free(t_block *lst);
 void		free_redirect(t_redirect *ptr);
 void		free_cmd(t_cmd lst);
-void		free_t_args(t_arg *ptr);
+void		free_t_args(t_args *ptr);
 
 // free_struct_1.c
 void		free_ms_params(t_minishell ms_params);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 14:25:44 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 22:11:07 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 #include <stdlib.h>
 #include <errno.h>
 
-bool		manage_wildcard(t_arg **head, char *str);
+bool		manage_wildcard(t_args **head, char *str);
 
 
 
-t_arg	*new_cmd_arg(t_split_arg *arg)
+t_args	*new_cmd_arg(t_split_arg *arg)
 {
-	t_arg	*new;
+	t_args	*new;
 
 	(void)arg;
-	new = malloc(sizeof(t_arg));
+	new = malloc(sizeof(t_args));
 	if (!new)
 		return (NULL);
 	new->s_arg = arg;
@@ -33,16 +33,16 @@ t_arg	*new_cmd_arg(t_split_arg *arg)
 	return (new);
 }
 
-t_arg	*last_arg(t_arg *head)
+t_args	*last_args(t_args *head)
 {
 	while (head && head->next)
 		head = head->next;
 	return (head);
 }
 
-void	ft_addargs(t_arg **head, t_split_arg *arg)
+void	ft_addargs(t_args **head, t_split_arg *arg)
 {
-	t_arg	*new;
+	t_args	*new;
 
 	new = new_cmd_arg(arg);
 	if (!new)
@@ -51,14 +51,14 @@ void	ft_addargs(t_arg **head, t_split_arg *arg)
 		*head = new;
 	else
 	{
-		new->prev = last_arg(*head);
+		new->prev = last_args(*head);
 		new->prev->next = new;
 	}
 }
 
-void	ft_addarg_front(t_arg **head, t_split_arg *arg)
+void	ft_addarg_front(t_args **head, t_split_arg *arg)
 {
-	t_arg	*new;
+	t_args	*new;
 
 	new = new_cmd_arg(arg);
 	if (!new)
@@ -73,11 +73,11 @@ void	ft_addarg_front(t_arg **head, t_split_arg *arg)
 	}
 }
 
-void	update_t_args(t_arg **args)
+void	wc_update_t_args(t_args **args)
 {
-	t_arg	*lst;
-	t_arg	*tmp;
-	t_arg	*wildcard;
+	t_args	*lst;
+	t_args	*tmp;
+	t_args	*wildcard;
 
 	lst = *args;
 	while (lst)
@@ -98,9 +98,9 @@ void	update_t_args(t_arg **args)
 				}
 				if (lst->next)
 				{
-					lst->next->prev = last_arg(wildcard);
+					lst->next->prev = last_args(wildcard);
 				}
-				last_arg(wildcard)->next = lst->next;
+				last_args(wildcard)->next = lst->next;
 				tmp = lst->next;
 				free(0/*lst->name*/);
 				free(lst);
@@ -115,18 +115,47 @@ void	update_t_args(t_arg **args)
 	}
 }
 
-char	**build_argv(t_split_arg *cmd, t_arg **head)
+t_args	*check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
+{
+	char		quotes;
+	
+	*i += pass_whitespaces(&str[*i]);
+	while (str[*i] && !is_delim(&str[*i]))
+	{
+		quotes = 0;
+		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
+		{
+			quotes = str[*i];
+			(*i)++;
+		}
+		(*i) += slice_next_part(&str[*i], arg, quotes);
+		if (errno)
+			return (false);
+		// if (quotes)
+		// 	(*i)++;
+		if (str[*i] && !is_delim(&str[*i]))
+			(*i)++;
+	}
+	if (*arg && !errno)
+	{
+		*type = CMD_ARG;
+		return (true);
+	}
+	return (false);
+}
+
+char	**build_argv(t_split_arg *cmd, t_args **head)
 {
 	char	**tab;
 	int		len;
-	t_arg	*tmp;
+	t_args	*tmp;
 
 	len = 0;
 	tmp = NULL;
 	ft_addarg_front(head, cmd);
 	if (errno)
 		return (NULL);
-	update_t_args(head);
+	wc_update_t_args(head);
 	tmp = *head;
 	while (tmp)
 	{

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 16:48:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:42:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,18 @@ typedef struct s_env_var
 {
 	char				*var_name;
 	char				*var_value;
+	char				scope;
 	bool				temp;
 	struct s_env_var	*prev;
 	struct s_env_var	*next;
 }	t_env_var;
+
+typedef struct s_wc_args
+{
+	char				*name;
+	struct s_wc_args	*prev;
+	struct s_wc_args	*next;
+}	t_wc_args;
 
 typedef struct s_split_arg
 {
@@ -36,17 +44,17 @@ typedef struct s_split_arg
 	struct s_split_arg		*next;
 }	t_split_arg;
 
-typedef struct s_arg
+typedef struct s_args
 {
-	t_split_arg		*s_arg;
-	struct s_arg	*prev;
-	struct s_arg	*next;
-}	t_arg;
+	t_split_arg		*s_args;
+	struct s_args	*prev;
+	struct s_args	*next;
+}	t_args;
 
 typedef struct s_cmd
 {
 	char			*name;
-	t_arg			*args;
+	t_args			*args;
 	char			*error_str;
 	int				exit_value;
 	pid_t			pid;

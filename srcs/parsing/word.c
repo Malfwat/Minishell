@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 18:49:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 20:18:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_substr_word_param(char *src, char *dest)
 
 #include <stdio.h>
 
-void	ls_split_arg_addback(t_split_arg **head, t_split_arg *new)
+void	ls_split_args_addback(t_split_arg **head, t_split_arg *new)
 {
 	t_split_arg	*tmp;
 
@@ -52,7 +52,7 @@ void	ls_split_arg_addback(t_split_arg **head, t_split_arg *new)
 	tmp->next = new;
 }
 
-t_split_arg	*ls_split_arg_new(char *data, char scope)
+t_split_arg	*ls_split_args_new(char *data, char scope)
 {
 	t_split_arg	*new;
 
@@ -82,7 +82,7 @@ bool	is_delim(char *str)
 	return (false);
 }
 
-int	slice_next_part(char *src, t_split_arg **last_arg, char quotes)
+int	slice_next_part(char *src, t_split_arg **last_args, char quotes)
 {
 	int			i;
 	char		*sliced;
@@ -104,10 +104,10 @@ int	slice_next_part(char *src, t_split_arg **last_arg, char quotes)
 		return (0);
 	else
 		sliced = ft_substr(src, 0, i);
-	new = ls_split_arg_new(sliced, quotes);
+	new = ls_split_args_new(sliced, quotes);
 	if (!new)
 		return (0);
-	ls_split_arg_addback(last_arg, new);
+	ls_split_args_addback(last_args, new);
 	return (i);
 }
 
@@ -117,7 +117,7 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 
 	*type = INCOMPLETE_CMD_ARG;
 	*i += pass_whitespaces(&str[*i]);
-	while (str[*i] && !ft_strchr("><", str[*i]) && !is_delim(&str[*i]))
+	while (str[*i] && !is_delim(&str[*i]))
 	{
 		quotes = 0;
 		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
@@ -128,12 +128,12 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 		(*i) += slice_next_part(&str[*i], arg, quotes);
 		if (errno)
 			return (false);
-		if (quotes)
-			(*i)++;
-		if (str[*i])
+		// if (quotes)
+		// 	(*i)++;
+		if (str[*i] && !is_delim(&str[*i]))
 			(*i)++;
 	}
-	if (arg && errno)
+	if (*arg && !errno)
 	{
 		*type = CMD_ARG;
 		return (true);
@@ -153,7 +153,7 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 		redirect[0] = str[*i];
 		if (str[*i] == str[*i + 1])
 			redirect[1] = str[(*i)++];
-		*arg = ls_split_arg_new(redirect, 0);
+		*arg = ls_split_args_new(redirect, 0);
 		if (!(*arg))
 			return (true);
 		(*i)++;
@@ -171,7 +171,7 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 			if (quotes)
 				(*i)++;
 		}
-		if (arg && !errno)
+		if (*arg && !errno)
 		{
 			*type = INPUT_OUTPUT;
 			return (true);
