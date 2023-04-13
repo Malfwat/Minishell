@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 00:12:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:21:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	free_t_args(t_arg *ptr)
+void	free_t_args(t_args *ptr)
 {
-	t_arg	*tmp;
+	t_args	*tmp;
 
 	while (ptr)
 	{
