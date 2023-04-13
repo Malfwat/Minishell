@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 00:13:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:48:57 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,19 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	return (false);
 }
 
-bool	is_valid_param(char **param, int type, t_block *block)
+bool	is_valid_param(t_split_arg *param, int type, t_block *block)
 {
 	// errno = 0;
 	if (type == -1)
 		return (false);
 	else if (type == CMD_ARG && !block->sub)
-		ft_addargs(&block->cmd.args, *param);
+		ft_addargs(&block->cmd.args, param);
 	else if (type == INPUT_OUTPUT)
-		ft_add_io(block, *param);
+		ft_add_io(block, param);
 	else if (type == PARENTHESIS && !block->cmd.name && !block->sub)
 	{
-		block->subshell_command = *param;
+		block->subshell_command = param->str;
+		free(param);
 		add_block_back(&block, last_sub);
 	}
 	else
@@ -57,9 +58,10 @@ bool	is_valid_param(char **param, int type, t_block *block)
 	return (true);
 }
 
-char	*get_next_param(char *str, int *i, int *type)
+t_split_arg	*get_next_param(char *str, int *i, int *type)
 {
 	char	*res;
+	t_split_arg	*arg = NULL;
 
 	res = NULL;
 	*i += pass_whitespaces(&str[*i]);
@@ -67,8 +69,8 @@ char	*get_next_param(char *str, int *i, int *type)
 		return (NULL);
 	if (check_parenthesis_param(str, i, &res, type) \
 		|| check_io_param(str, i, &res, type) \
-		|| check_word_param(str, i, &res, type))
-		return (res);
+		|| check_word_param(str, i, type, &arg))
+		return (arg);
 	*type = -1;
 	return (NULL);
 }
@@ -89,20 +91,19 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 {
 	int		i;
 	int		type;
-	char	*next_param;
+	t_split_arg	*next_param;
 
 	i = 0;
 	type = -1;
 	if (!*curr_block || !cmd_line)
 		return (false);
 	next_param = get_next_param(cmd_line, &i, &type);
-	while (next_param && is_valid_param(&next_param, type, *curr_block))
+	while (next_param && is_valid_param(next_param, type, *curr_block))
 	{
 		i += pass_whitespaces(&cmd_line[i]);
 		if (type == PARENTHESIS)
 		{
-			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
-			ft_strlen(next_param) - 2)))
+			if (!parse_cmds(&((*curr_block)->sub), next_param->str))
 				return (free(cmd_line), free(next_param), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
@@ -125,7 +126,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		return(free(cmd_line), free(next_param), false);
 	if (next_param)
 	{
-		ft_error(CMD_SYNTAX_ERR, next_param);
+		ft_error(CMD_SYNTAX_ERR, next_param->str/* provisoire doit etre remplace par un join */);
 		free(next_param);
 		return (false);
 	}
