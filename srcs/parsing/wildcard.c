@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 14:28:50 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/13 21:11:03 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <struct_ms.h>
 #include <stdio.h>
 #include <errno.h>
 #include <libft.h>
@@ -45,14 +46,46 @@ bool	compare_wildcard(char *pattern, char *str)
 	return (ft_strsfree(tab), true);
 }
 
-t_split_arg	*ls_split_arg_new(char *data, bool interpret);
+void	ft_add_wc_args(t_wc_args **head, char *str)
+{
+	t_wc_args	*new;
+	t_wc_args	*tmp;
 
+	if (!str)
+		return ;
+	new = ft_calloc(1, sizeof(*new));
+	if (!new)
+		return ;
+	if (!(*head))
+	{
+		*head = new;
+		return ;
+	}
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+	new->prev = tmp;
+}
 
-t_arg	*wildcard(char *dir, char *pattern)
+void	free_wc_args(t_wc_args **lst)
+{
+	t_wc_args	*tmp;
+	
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free((*lst)->name);
+		free(*lst);
+		lst = tmp;
+	}
+}
+
+t_wc_args	*wildcard(char *dir, char *pattern)
 {
 	DIR				*dirp;
 	struct dirent	*dir_entry;
-	t_arg			*lst;
+	t_wc_args		*lst;
 
 	printf("dir: %s\npattern: %s\n", dir, pattern);
 
@@ -61,10 +94,10 @@ t_arg	*wildcard(char *dir, char *pattern)
 		return (perror("dirp"), NULL);
 	dir_entry = readdir(dirp);
 	lst = NULL;
-	while (dir_entry)
+	while (dir_entry && !errno)
 	{
 		if (compare_wildcard(pattern, dir_entry->d_name))
-			ft_addargs(&lst, ls_split_arg_new(ft_strdup(dir_entry->d_name), 0));
+			ft_add_wc_args(&lst, ft_strdup(dir_entry->d_name));
 		dir_entry = readdir(dirp);
 	}
 	if (errno)
@@ -100,7 +133,7 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 	*pattern = ft_substr(str, i, len - i + 1);
 }
 
-bool	manage_wildcard(t_arg **head, char *str)
+bool	manage_wildcard(t_wc_args **head, char *str)
 {
 	char	*path;
 	char	*pattern;
