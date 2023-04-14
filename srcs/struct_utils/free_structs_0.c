@@ -6,13 +6,14 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 21:21:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 19:59:36 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <minishell.h>
 
 void	free_t_args(t_args *ptr)
 {
@@ -21,7 +22,7 @@ void	free_t_args(t_args *ptr)
 	while (ptr)
 	{
 		tmp = ptr->next;
-		//free(ptr->name);
+		// free(ptr->final_arg);
 		free(ptr);
 		ptr = tmp;
 	}
@@ -29,7 +30,6 @@ void	free_t_args(t_args *ptr)
 
 void	free_cmd(t_cmd cmd)
 {
-	free(cmd.name);
 	free(cmd.error_str);
 	free(cmd.output);
 	free(cmd.input);
@@ -43,8 +43,9 @@ void	free_redirect(t_redirect *ptr)
 	while (ptr)
 	{
 		tmp = ptr->next;
-		free(ptr->file_name);
-		free(ptr->heredoc);
+		free_t_split_arg(&ptr->file_name);
+		free_t_split_arg(&ptr->heredoc_limiter);
+		free(ptr->joined_name);
 		free(ptr);
 		ptr = tmp;
 	}

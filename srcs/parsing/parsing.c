@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 22:06:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 21:51:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,29 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	return (false);
 }
 
+bool	is_parenthesis_empty(char *str)
+{
+	int	i;
+
+	i = 1;
+	i += pass_whitespaces(&str[i]);
+	if (str[i] == ')' && !str[i + 1])
+		return (true);
+	return (false);
+}
+
 bool	is_valid_param(void *param, int type, t_block *block)
 {
 	if (type < 0)
 		return (false);
 	else if (type == CMD_ARG && !block->sub)
-		ft_addargs(&block->cmd.args, param);
+		ft_ls_t_args_addback(&block->cmd.args, param);
 	else if (type == INPUT_OUTPUT)
 		ft_add_io(block, param);
-	else if (type == PARENTHESIS && !block->cmd.name && !block->sub)
+	else if (type == PARENTHESIS && !block->cmd.args && !block->sub)
 	{
+		if (is_parenthesis_empty((char *)param))
+			return (false);
 		block->subshell_command = (char *)param;
 		add_block_back(&block, last_sub);
 	}
@@ -72,55 +85,51 @@ void	*get_next_param(char *str, int *i, int *type)
 	return (res);
 }
 
-char	*strjoin_wc_args(t_wc_args *wc_args)
-{
-	char	*str;
-	char	*tmp;
+// char	*strjoin_wc_args(t_wc_args *wc_args)
+// {
+// 	char	*str;
+// 	char	*tmp;
 
-	str = NULL;
-	while (wc_args)
-	{
-		tmp = str;
-		str = ft_strjoin(str, wc_args->name);
-		free(tmp);
-		wc_args = wc_args->next;
-	}
-	return (str);
-}
+// 	str = NULL;
+// 	while (wc_args)
+// 	{
+// 		tmp = str;
+// 		str = ft_strjoin(str, wc_args->name);
+// 		free(tmp);
+// 		wc_args = wc_args->next;
+// 	}
+// 	return (str);
+// }
 
-char	*interpret_wildcards(char *str)
-{
-	t_wc_args	*wc_args;
+// char	*interpret_wildcards(char *str)
+// {
+// 	t_wc_args	*wc_args;
 
-	manage_wildcard(&wc_args, str);
-	if (errno)
-		return (NULL);
-	else if (!wc_args)
-		return (str);
-	else
-	{
-		free(str);
-		str = strjoin_wc_args(wc_args);
-		if (errno)
-			free(str);
-	}
-	free_wc_args(&wc_args);
-	return (str);
-}
+// 	manage_wildcard(&wc_args, str);
+// 	if (errno)
+// 		return (NULL);
+// 	else if (!wc_args)
+// 		return (str);
+// 	else
+// 	{
+// 		free(str);
+// 		str = strjoin_wc_args(wc_args);
+// 		if (errno)
+// 			free(str);
+// 	}
+// 	free_wc_args(&wc_args);
+// 	return (str);
+// }
 
-char	*interpret_meta_chars(t_split_arg *arg, t_env_var *envp)
-{
-	char		*res;
+// char	*interpret_meta_chars(t_split_arg *arg, t_env_var *envp)
+// {
+// 	char		*res;
 
-	res = interpret_dollars(arg, envp);
-	if (errno)
-		return (NULL);
-	if (!arg->scope)
-		res = interpret_wildcards(res);
-	if (errno)
-		return (NULL);
-	return (res);
-}
+// 	res = interpret_dollars(arg, envp);
+// 	if (errno)
+// 		return (NULL);
+// 	return (res);
+// }
 
 char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 {
@@ -135,26 +144,39 @@ char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 		return (NULL);
 	i = -1;
 	res = NULL;
-	while (tab[++i])
+	while (tab[++i] && !errno)
 	{
 		tmp = res;
-		if ((i == 0 && arg->str != '$') || (arg->scope != '"'))
+		if ((i == 0 && arg->str[0] != '$') || (arg->scope == '\''))
 			res = ft_strjoin(res, tab[i]);
 		else
 		{
 			env_var = find_env_var(envp, tab[i]);
 			if (!env_var)
 				res = ft_strjoin(res, "");
-			res = ft_strjoin(res, env_var->var_value);
+			else
+				res = ft_strjoin(res, env_var->var_value);
 		}
 		free(tmp);
 	}
 	return (res);
 }
 
-char	*ft_join_splitted_arg(t_args **head, t_split_arg *arg, t_env_var *envp, bool interpret)
+void	free_t_split_arg(t_split_arg **arg)
 {
-	char	arg_interpreted;
+	t_split_arg	*ptr;
+
+	while (*arg)
+	{
+		ptr = (*arg)->next;
+		free(*arg);
+		*arg = ptr;
+	}
+	*arg = NULL;
+}
+
+char	*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret)
+{
 	char	*res;
 	char	*tmp;
 
@@ -162,29 +184,42 @@ char	*ft_join_splitted_arg(t_args **head, t_split_arg *arg, t_env_var *envp, boo
 	while (arg)
 	{
 		tmp = res;
-		arg_interpreted = NULL;
 		if (interpret)
-			res = ft_strjoin(res, interpret_meta_chars(arg, envp));
+			res = ft_strjoin(res, interpret_dollars(arg, envp));
 		else
-			res = ft_strjoin(res, arg_interpreted);
+			res = ft_strjoin(res, arg->str);
 		free(tmp);
+		if (errno)
+			return (free(res), NULL);
 		arg = arg->next;
 	}
 	return (res);
 }
 
-void	ft_error(int err, void *comment, int type)
+void	print_syntax_error(char c)
 {
-	if (type == CMD_ARG || type == INPUT_OUTPUT)
-		comment = ft_join_splitted_arg((t_split_arg *)comment, NULL, false);
 	ft_putstr_fd("minishell: ", 2);
-	if (err == CMD_SYNTAX_ERR)
+	ft_putstr_fd("syntax error near unexpected token ", 2);
+	ft_putchar_fd('`', 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("`\n", 2);
+}
+
+void	syntax_error(int err, void *comment, int type, char *cmd_line)
+{
+	if (!comment)
 	{
-		ft_putstr_fd("syntax error near unexpected token ", 2);
-		ft_putchar_fd('`', 2);
-		ft_putstr_fd((char *)comment, 2);
-		ft_putstr_fd("`\n", 2);
+		print_syntax_error(*cmd_line);
+		return ;
 	}
+	if (type == CMD_ARG || type == INPUT_OUTPUT)
+	{
+		comment = join_splitted_arg((t_split_arg *)comment, NULL, false);
+		if (!comment)
+			return ;
+	}
+	if (err == CMD_SYNTAX_ERR)
+		print_syntax_error(*(char *)comment);
 	if (type == CMD_ARG || type == INPUT_OUTPUT)
 		free(comment);
 }
@@ -208,6 +243,28 @@ void	free_next_param(void *ptr, int type)
 		free(ptr);
 	else
 		free_split_args(ptr);
+}
+
+
+bool	check_parse_error(void *next_param, char *cmd_line, int type)
+{
+	char	*tmp;
+
+	if (errno)
+		return(free(cmd_line), free_next_param(next_param, type), false);
+	if (next_param || type < 0)
+	{
+		tmp = ft_strtrim(cmd_line, " \t");
+		if (ft_strlen(tmp) == 0)
+			return (free(tmp), free(cmd_line), false);
+		syntax_error(CMD_SYNTAX_ERR, next_param, type, tmp);
+		free(tmp);
+		free(cmd_line);
+		free_next_param(next_param, type);
+		return (false);
+	}
+	free(cmd_line);
+	return (true);
 }
 
 bool	parse_cmds(t_block **curr_block, char *cmd_line)
@@ -246,14 +303,5 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		}
 		next_param = get_next_param(cmd_line, &i, &type);
 	}
-	if (errno)
-		return(free(cmd_line), free_next_param(next_param, type), false);
-	if (next_param)
-	{
-		ft_error(CMD_SYNTAX_ERR, next_param, type);
-		free_next_param(next_param, type);
-		return (false);
-	}
-	free(cmd_line);
-	return (true);
+	return (check_parse_error(next_param, cmd_line, type));
 }

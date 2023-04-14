@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 21:11:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 20:23:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ bool	compare_wildcard(char *pattern, char *str)
 	return (ft_strsfree(tab), true);
 }
 
-void	ft_add_wc_args(t_wc_args **head, char *str)
+void	ft_add_wc_args(t_args **head, char *str)
 {
-	t_wc_args	*new;
-	t_wc_args	*tmp;
+	t_args	*new;
+	t_args	*tmp;
 
 	if (!str)
 		return ;
@@ -68,24 +68,24 @@ void	ft_add_wc_args(t_wc_args **head, char *str)
 	new->prev = tmp;
 }
 
-void	free_wc_args(t_wc_args **lst)
-{
-	t_wc_args	*tmp;
+// void	free_wc_args(t_args **lst)
+// {
+// 	t_args	*tmp;
 	
-	while (*lst)
-	{
-		tmp = (*lst)->next;
-		free((*lst)->name);
-		free(*lst);
-		lst = tmp;
-	}
-}
+// 	while (*lst)
+// 	{
+// 		tmp = (*lst)->next;
+// 		free((*lst)->name);
+// 		free(*lst);
+// 		lst = tmp;
+// 	}
+// }
 
-t_wc_args	*wildcard(char *dir, char *pattern)
+t_args	*wildcard(char *dir, char *pattern)
 {
 	DIR				*dirp;
 	struct dirent	*dir_entry;
-	t_wc_args		*lst;
+	t_args		*lst;
 
 	printf("dir: %s\npattern: %s\n", dir, pattern);
 
@@ -133,7 +133,7 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 	*pattern = ft_substr(str, i, len - i + 1);
 }
 
-bool	manage_wildcard(t_wc_args **head, char *str)
+bool	manage_wildcard(t_args **head, char *str)
 {
 	char	*path;
 	char	*pattern;
