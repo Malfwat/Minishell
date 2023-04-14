@@ -6,37 +6,37 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/10 19:59:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 20:12:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <struct_ms.h>
 #include <errno.h>
+#include <minishell.h>
 #include <parsing_ms.h>
 #include <ms_define.h>
 
-t_redirect	*new_redirect(char *arg, int mode)
+t_redirect	*new_redirect(t_split_arg *arg, int mode)
 {
 	t_redirect	*new;
 
 	new = ft_calloc(1, sizeof(t_redirect));
 	if (!new)
-		return (free(arg), NULL);
-	if (!ft_strncmp(arg, "<<", 2))
-		new->heredoc = ft_strdup(arg + 2);
-	else if (arg[0] == '<')
-		new->file_name = ft_strdup(arg + 1);
-	else if (!ft_strncmp(arg, ">>", 2))
+		return (free_t_split_arg(&arg), NULL);
+	if (!ft_strncmp(arg->str, "<<", 2))
+		new->heredoc_limiter = arg;
+	else if (arg->str[0] == '<')
+		new->file_name = arg;
+	else if (!ft_strncmp(arg->str, ">>", 2))
 	{
 		new->append = true;
-		new->file_name = ft_strdup(arg + 2);
+		new->file_name = arg;
 	}
 	else
-		new->file_name = ft_strdup(arg + 1);
+		new->file_name = arg;
 	new->mode = mode;
 	new->fd = INIT_FD_VALUE;
-	free(arg);
 	if (errno)
 		return (NULL);
 	return (new);
@@ -49,7 +49,7 @@ t_redirect	*last_redirect(t_redirect *head)
 	return (head);
 }
 
-void	ft_add_redirect(t_redirect **head, char *arg, int mode)
+void	ft_add_redirect(t_redirect **head, t_split_arg *arg, int mode)
 {
 	t_redirect	*new;
 
@@ -62,14 +62,14 @@ void	ft_add_redirect(t_redirect **head, char *arg, int mode)
 		last_redirect(*head)->next = new;
 }
 
-void	ft_add_io(t_block *block, char *io)
+void	ft_add_io(t_block *block, t_split_arg *io)
 {
-	if (!ft_strncmp(io, "<<", 2))
+	if (!ft_strncmp(io->str, "<<", 2))
 	{
 		block->input_source = HEREDOC;
 		ft_add_redirect(&block->heredoc, io, INPUT_MODE);
 	}
-	else if (io[0] == '<')
+	else if (io->str[0] == '<')
 	{
 		block->input_source = FILE_INPUT;
 		ft_add_redirect(&block->io_redirect, io, INPUT_MODE);

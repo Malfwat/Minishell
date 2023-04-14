@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo test "$1" "$2"
+echo $1

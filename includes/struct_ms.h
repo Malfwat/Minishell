@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 21:42:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 19:57:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stdbool.h>
 # include <unistd.h>
+# include <sys/types.h>
 # include <termios.h>
 
 typedef int t_fd;
@@ -30,12 +31,12 @@ typedef struct s_env_var
 	struct s_env_var	*next;
 }	t_env_var;
 
-typedef struct s_wc_args
-{
-	char				*name;
-	struct s_wc_args	*prev;
-	struct s_wc_args	*next;
-}	t_wc_args;
+// typedef struct s_wc_args
+// {
+// 	char				*name;
+// 	struct s_wc_args	*prev;
+// 	struct s_wc_args	*next;
+// }	t_wc_args;
 
 typedef struct s_split_arg
 {
@@ -46,6 +47,7 @@ typedef struct s_split_arg
 
 typedef struct s_args
 {
+	char			*final_arg;
 	t_split_arg		*s_args;
 	struct s_args	*prev;
 	struct s_args	*next;
@@ -53,7 +55,6 @@ typedef struct s_args
 
 typedef struct s_cmd
 {
-	char			*name;
 	t_args			*args;
 	char			*error_str;
 	int				exit_value;
@@ -65,8 +66,9 @@ typedef struct s_cmd
 typedef struct s_redirect
 {
 	bool				mode;
-	char				*file_name;
-	char				*heredoc;
+	char				*joined_name;
+	t_split_arg			*file_name;
+	t_split_arg			*heredoc_limiter;
 	t_fd				fd;
 	int					errno_value;
 	bool				append;

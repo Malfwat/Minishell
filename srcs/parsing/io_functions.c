@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/13 19:59:38 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 20:18:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <ms_define.h>
-// #include <env_function.h>
+#include <minishell.h>
 #include <stdio.h>
 #include <struct_ms.h>
 
@@ -41,10 +41,13 @@ int	heredoc(char *limiter)
 	return (test[0]);
 }
 
-void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block)
+void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
 {
-	if (ptr->file_name)
-		ptr->fd = open(ptr->file_name, O_RDONLY);
+	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
+	if (errno)
+		return ;
+	if (ptr->joined_name)
+		ptr->fd = open(ptr->joined_name, O_RDONLY);
 	if (ptr->fd != -1)
 	{
 		if (block->input_source == FILE_INPUT)
@@ -57,17 +60,19 @@ void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block)
 	ptr->errno_value = errno;
 }
 
-void	output_manager(t_redirect *ptr, t_fd *fd)
+void	output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp)
 {
+	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
+	if (errno)
+		return ;
 	if (ptr->append)
-		ptr->fd = open(ptr->file_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
+		ptr->fd = open(ptr->joined_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
 	else
-		ptr->fd = open(ptr->file_name, O_WRONLY | O_TRUNC | O_CREAT, 00644);
+		ptr->fd = open(ptr->joined_name, O_WRONLY | O_TRUNC | O_CREAT, 00644);
 	if (ptr->fd != -1)
 	{
 		if (*fd != INIT_FD_VALUE)
 		{
-			dprintf(2, "on close %d\n", *fd);
 			close(*fd);
 		}
 		*fd = ptr->fd;
@@ -84,9 +89,12 @@ bool	hd_manager(t_block *block)
 	ptr = block->heredoc;
 	while (ptr)
 	{
-		if (!ptr->heredoc)
+		if (!ptr->heredoc_limiter)
 			return (true);
-		ptr->fd = heredoc(ptr->heredoc);
+		ptr->joined_name = join_splitted_arg(ptr->file_name->next, NULL, false);
+		if (errno)
+			return (false);
+		ptr->fd = heredoc(ptr->joined_name);
 		if (ptr->fd == -1)
 			return (false);
 		if (block->input_source == HEREDOC)
@@ -103,23 +111,53 @@ bool	hd_manager(t_block *block)
 	return (true);
 }
 
-bool	init_exec_io(t_block *block)
+
+// char	*io_interpret_dollars(t_split_arg *arg, t_env_var *envp)
+// {
+// 	char		*tmp;
+// 	char		*res;
+// 	t_env_var	*env_var;
+// 	char		**tab;
+// 	int			i;
+
+// 	tab = ft_split(arg->str, '$');
+// 	if (!tab)
+// 		return (NULL);
+// 	i = -1;
+// 	res = NULL;
+// 	while (tab[++i] && !errno)
+// 	{
+// 		tmp = res;
+// 		if ((i == 0 && arg->str != '$') || (arg->scope != '"'))
+// 			res = ft_strjoin(res, tab[i]);
+// 		else
+// 		{
+// 			env_var = find_env_var(envp, tab[i]);
+// 			if (!env_var)
+// 				res = ft_strjoin(res, "");
+// 			res = ft_strjoin(res, env_var->var_value);
+// 		}
+// 		free(tmp);
+// 	}
+// 	return (res);
+// }
+
+
+bool	init_exec_io(t_block *block, t_env_var *envp)
 {
 	t_redirect	*tmp;
 
-	while (block)
+	tmp = block->io_redirect;
+	
+	while (tmp && !errno)
 	{
-		tmp = block->io_redirect;
-		while (tmp && !errno)
-		{
-			if (tmp->mode == INPUT_MODE)
-				input_manager(tmp, &block->io_tab[0], block);
-			else if (tmp->mode == OUTPUT_MODE)
-				output_manager(tmp, &block->io_tab[1]);
-			tmp = tmp->next;
-		}
+		if (tmp->mode == INPUT_MODE)
+			input_manager(tmp, &block->io_tab[0], block, envp);
+		else if (tmp->mode == OUTPUT_MODE)
+			output_manager(tmp, &block->io_tab[1], envp);
+		tmp = tmp->next;
 	}
 	if (errno)
-		return (NULL);
+		return (false);
 	return (true);
 }
