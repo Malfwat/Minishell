@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 22:05:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 21:07:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,21 +108,62 @@ void	free_exec_vars(t_exec_vars exec_vars)
 }
 
 
+void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
+{
+	if (*head == current)
+	{
+		*head = new_lst;
+	}
+	else
+	{
+		current->prev->next = new_lst;
+		new_lst->prev = current->prev;
+	}
+	if (current->next)
+	{
+		current->next->prev = last_args(new_lst);
+	}
+	last_args(new_lst)->next = current->next;
+}
+
+bool	rebuild_args(t_args **head, t_env_var *envp)
+{
+	t_args	*ptr;
+	// t_args	*new_lst;
+	// char	*joined_split_args;
+
+	ptr = *head;
+	while (ptr)
+	{
+		ptr->final_arg = join_splitted_arg(ptr->s_args, envp, true);
+		if (errno)
+			return (false);
+		// new_lst = produce_t_args_from_str(joined_split_args);
+		// if (errno)
+			// return (free(joined_split_args), false);
+		// free(joined_split_args);
+		// insert_t_args(head, ptr, new_lst);
+		ptr = ptr->next;
+	}
+	return (true);
+}
+
 t_exec_vars init_exec_vars(t_minishell ms_params, t_block *block)
 {
 	t_exec_vars exec_vars;
 	char 		*tmp;
 	
-	rebuild_args(block->cmd.args);
+	if (!rebuild_args(&block->cmd.args, ms_params.envp))
+		exit_ms(ms_params, 2, "exec_build");
 	exec_vars.path = build_path(ms_params);
-	get_cmd_path(exec_vars.path, &block->cmd.name, &tmp);
-	// block->cmd.name = tmp;
-	exec_vars.argv = build_argv(&tmp, &block->cmd.args);
+	get_cmd_path(exec_vars.path, &block->cmd.args->final_arg, &tmp);
+	block->cmd.args->final_arg = tmp;
+	exec_vars.argv = build_argv(&block->cmd.args);
 	exec_vars.envp = build_envp(ms_params.envp);
 	if (errno)
 	{
 		free_exec_vars(exec_vars);
-		return (exit_ms(ms_params, 2, "exec_build"), exec_vars);
+		exit_ms(ms_params, 2, "exec_build");
 	}
 	return (exec_vars);
 }
@@ -139,7 +180,7 @@ void	child_worker(t_block *block, t_minishell *ms_params, t_exec_vars exec_vars)
 		close(block->io_tab[1]);
 	if (block->pipe_next)
 		close(block->pipe_next->io_tab[0]);
-	handle_execve_failure(*ms_params, block->cmd.name);
+	handle_execve_failure(*ms_params, block->cmd.args->final_arg);
 }
 
 void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
@@ -148,7 +189,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 
 	errno = 0;
 	exec_vars = init_exec_vars(*ms_params, block);
-	init_exec_io(block);
+	init_exec_io(block, ms_params->envp);
 	block->cmd.pid = fork();
 	if (block->cmd.pid == 0)
 		child_worker(block, ms_params, exec_vars);
@@ -469,7 +510,8 @@ int	main(int ac, char **av, char **env)
 			continue;
 		my_add_history(rl_line_buffer, ms_params.history_fd);
 		head = new_block();
-		parse_cmds(&head, tmp);
+		if (parse_cmds(&head, tmp) == false)
+			continue ;
 		if (errno)
 			return (exit_ms(ms_params, 2, "parsing"), 0);
 		hd_manager(head);
