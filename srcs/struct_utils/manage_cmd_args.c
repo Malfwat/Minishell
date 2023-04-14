@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 22:11:07 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/14 22:06:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,10 @@ t_args	*new_cmd_arg(t_split_arg *arg)
 {
 	t_args	*new;
 
-	(void)arg;
-	new = malloc(sizeof(t_args));
+	new = ft_calloc(1, sizeof(t_args));
 	if (!new)
 		return (NULL);
-	new->s_arg = arg;
-	new->prev = NULL;
-	new->next = NULL;
+	new->s_args = arg;
 	return (new);
 }
 
@@ -40,7 +37,7 @@ t_args	*last_args(t_args *head)
 	return (head);
 }
 
-void	ft_addargs(t_args **head, t_split_arg *arg)
+void	ft_ls_t_args_addback(t_args **head, t_split_arg *arg)
 {
 	t_args	*new;
 
@@ -82,9 +79,9 @@ void	wc_update_t_args(t_args **args)
 	lst = *args;
 	while (lst)
 	{
-		if (ft_strchr(0/*lst->name*/, '*'))
+		if (ft_strchr(lst->final_arg, '*'))
 		{
-			manage_wildcard(&wildcard, 0/*lst->name*/);
+			manage_wildcard(&wildcard, lst->final_arg);
 			if (wildcard)
 			{
 				if (!lst->prev)
@@ -102,49 +99,19 @@ void	wc_update_t_args(t_args **args)
 				}
 				last_args(wildcard)->next = lst->next;
 				tmp = lst->next;
-				free(0/*lst->name*/);
+				free(lst->final_arg);
 				free(lst);
 				lst = tmp;
 			}
 			else
 				lst = lst->next;
-			// continue ;
 		}
 		else
 			lst = lst->next;
 	}
 }
 
-t_args	*check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
-{
-	char		quotes;
-	
-	*i += pass_whitespaces(&str[*i]);
-	while (str[*i] && !is_delim(&str[*i]))
-	{
-		quotes = 0;
-		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
-		{
-			quotes = str[*i];
-			(*i)++;
-		}
-		(*i) += slice_next_part(&str[*i], arg, quotes);
-		if (errno)
-			return (false);
-		// if (quotes)
-		// 	(*i)++;
-		if (str[*i] && !is_delim(&str[*i]))
-			(*i)++;
-	}
-	if (*arg && !errno)
-	{
-		*type = CMD_ARG;
-		return (true);
-	}
-	return (false);
-}
-
-char	**build_argv(t_split_arg *cmd, t_args **head)
+char	**build_argv(t_args **head)
 {
 	char	**tab;
 	int		len;
@@ -152,7 +119,7 @@ char	**build_argv(t_split_arg *cmd, t_args **head)
 
 	len = 0;
 	tmp = NULL;
-	ft_addarg_front(head, cmd);
+	// ft_addarg_front(head, cmd);
 	if (errno)
 		return (NULL);
 	wc_update_t_args(head);
@@ -162,16 +129,15 @@ char	**build_argv(t_split_arg *cmd, t_args **head)
 		tmp = tmp->next;
 		len++;
 	}
-	tab = malloc(sizeof(char *) * (len + 1));
+	tab = ft_calloc(len + 1, sizeof(char *));
 	if (!tab)
 		return (0);
 	len = 0;
 	tmp = *head;
 	while (tmp)
 	{
-		tab[len++] = 0; //tmp->name; // a voir si tu preferes utiliser strdup
+		tab[len++] = tmp->final_arg;
 		tmp = tmp->next;
 	}
-	tab[len] = NULL;
 	return (tab);
 }
