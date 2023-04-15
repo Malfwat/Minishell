@@ -92,7 +92,6 @@ char	*build_prompt(t_prompt *params)
 
 bool	refresh_prompt_param(t_prompt *lst)
 {
-	lst->last_exit_code = 0;
 	lst->session_user = getenv("USER");
 	lst->git_branch_name = fetch_git_cwd_branch_name();
 	if (errno)
