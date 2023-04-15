@@ -28,6 +28,7 @@ void	build_prompt_exit_status(char **prompt, t_prompt *params)
 	char	*tmp;
 	char	*ascii_status;
 
+	printf("code:%d (before:%d)\n", extract_exit_code(params->last_exit_code), params->last_exit_code);
 	ascii_status = ft_itoa(extract_exit_code(params->last_exit_code));
 	if (!ascii_status)
 		return ;
