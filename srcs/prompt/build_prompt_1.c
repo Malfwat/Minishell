@@ -17,9 +17,10 @@
 int	extract_exit_code(int status)
 {
 	if (WIFEXITED(status))
-		return WEXITSTATUS(status);
+		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
-		return WTERMSIG(status);
+		return (WTERMSIG(status));
+	return (0);
 }
 
 void	build_prompt_exit_status(char **prompt, t_prompt *params)
