@@ -61,13 +61,11 @@ void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 	free(ascii_status);
 }
 
-void	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params, int len)
+void	build_prompt_mid_delim(t_prompt_blocks **pargs, int len)
 {
 	char	*str;
-	char	*delim;
-	int		len;
 
-	if (len == 0)
+	if (len < 5())
 		len = 5; // minimum width of mid delim
 	// len = params->term_width - params->width_without_mid_delim - offset;
 	str = build_mid_delim(len);
@@ -158,7 +156,7 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 	int				current_delim_mlen;
 
 	len = pargs_len(pargs);
-	current_delim_mlen = current_mid_delim_len()
+	current_delim_mlen = current_mid_delim_len(pargs);
 	if (len > params->term_width)
 		new_delim_mlen = current_delim_mlen - (len - params->term_width) / 3;
 	else if (len < params->term_width)
@@ -180,7 +178,7 @@ char	*build_prompt(t_prompt *params)
 	build_prompt_cwd(&pargs, params);
 	if (params->git_branch_name)
 		build_prompt_git(&pargs, params);
-	build_prompt_mid_delim(&pargs, params, 10);
+	build_prompt_mid_delim(&pargs, 10);
 	build_prompt_exit_status(&pargs, params);
 	build_prompt_time(&pargs, params);
 	build_prompt_end_delim(&pargs);
