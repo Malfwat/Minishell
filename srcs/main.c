@@ -478,34 +478,36 @@ void	ensure_prompt_position(void)
 		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
 }
 
-int	main(int ac, char **av, char **env)
+int	init_minishell(t_minishell *ms_params, char **envp)
 {
-	// char		*res;
-	char		*tmp;
-	char		*ms_prompt;
-	// int			type;
-	t_block		*head;
-	t_minishell	ms_params;
-
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (perror("minishell"), 1);
 	tgetent(0, getenv("TERM"));
 	ft_memset(&ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(&ms_params);
 	toggle_control_character(VQUIT, _POSIX_VDISABLE);
-
 	// set_sig_handler();
 	// if (!refresh_prompt_param(&ms_prompt.prompt_params))
 		// return (1);
 	// res = NULL;
 	// type = -1;
-	
-	ms_params.envp = get_env_var(env);
-	(void)ac;
-	(void)av;
 	ms_params.history_fd = get_my_history();
 	if (ms_params.history_fd == -1)
 		return (2);
+	ms_params.envp = get_env_var(envp);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	char		*tmp;
+	char		*ms_prompt;
+	t_block		*head;
+	t_minishell	ms_params;
+
+	init_minishell(&ms_params, envp);
+	
+	(void)ac;
+	(void)av;
 	while (1)
 	{
 		if (!refresh_prompt_param(&ms_params.prompt_params))
