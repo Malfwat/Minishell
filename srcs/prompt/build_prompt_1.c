@@ -157,6 +157,7 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 
 	len = pargs_len(pargs);
 	current_delim_mlen = current_mid_delim_len(pargs);
+	printf("total_len=%d, current_delim_len=%d term_len=%d\n", len, current_delim_mlen, param->term_width);
 	if (len > params->term_width)
 		new_delim_mlen = current_delim_mlen - (len - params->term_width) / 3;
 	else if (len < params->term_width)
