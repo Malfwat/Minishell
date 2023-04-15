@@ -24,6 +24,26 @@ int	extract_exit_code(int status)
 	return (0);
 }
 
+char	*build_mid_delim(int len)
+{
+	char	*delim;
+	char	*str;
+	delim = NULL;
+	if (len < 5)
+		len = 5;
+	if (len > 0)
+	{
+		delim = ft_calloc(len + 1, sizeof(char) * 3);
+		if (!delim)
+			return (NULL);
+		ft_memset_uni(delim, "─", len);
+	}
+	str = ft_strsjoin(7, LGREY, "▓▒░", LLGREY, delim,
+			LGREY, "░▒▓", ENDC);
+	free(delim);
+	return (str);
+}
+
 void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 {
 	char	*str;
@@ -37,31 +57,21 @@ void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 	else
 		str = ft_strsjoin(7, RED, LGREY_BG, ascii_status, " ✘ ", LLGREY,
 				"", ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(8, str));
+	ls_p_args_addback(pargs, ls_new_p_args(8, str, 0));
 	free(ascii_status);
 }
 
-void	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params)
+void	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params, int len)
 {
 	char	*str;
 	char	*delim;
 	int		len;
 
-	len = params->term_width - params->width_without_mid_delim - 37;
-	if (!params->git_branch_name)
-		len += 23;
-	delim = NULL;
-	if (len > 0)
-	{
-		delim = ft_calloc(len + 1, sizeof(char) * 3);
-		if (!delim)
-			return ;
-		ft_memset_uni(delim, "─", len);
-	}
-	str = ft_strsjoin(7, LGREY, "▓▒░", LLGREY, delim,
-			LGREY, "░▒▓", ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(7, str));
-	free(delim);
+	if (len == 0)
+		len = 5; // minimum width of mid delim
+	// len = params->term_width - params->width_without_mid_delim - offset;
+	str = build_mid_delim(len);
+	ls_p_args_addback(pargs, ls_new_p_args(7, str, len));
 }
 
 void	build_prompt_end_delim(t_prompt_blocks **pargs)
@@ -70,7 +80,7 @@ void	build_prompt_end_delim(t_prompt_blocks **pargs)
 
 	str = ft_strsjoin(8, ENDC, LGREY, "▓▒░", ENDC, LLGREY, "\n╰─",
 			BOLD, ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(6, str));
+	ls_p_args_addback(pargs, ls_new_p_args(6, str, 0));
 }
 
 void	ls_free_pargs(t_prompt_blocks *pargs)
@@ -104,6 +114,60 @@ char	*strjoin_pargs(t_prompt_blocks *pargs)
 	return (str);
 }
 
+int		pargs_len(t_prompt_blocks *pargs)
+{
+	int	i;
+
+	i = 0;
+	while (pargs)
+	{
+		i += ft_strlen(pargs->str);
+		pargs = pargs->next;
+	}
+	return (i);
+}
+
+void	ls_edit_p_args_if(t_prompt_blocks *pargs, int type, char *str)
+{
+	while (pargs)
+	{
+		if (pargs->type == type)
+		{
+			free(pargs->str);
+			pargs->str = str;
+		}
+		pargs = pargs->next;
+	}
+}
+
+int		current_mid_delim_len(t_prompt_blocks *pargs)
+{
+	while (pargs)
+	{
+		if (pargs->type == 7)
+			return (pargs->delim_len);
+		pargs = pargs->next;
+	}
+	return (0);
+}
+
+void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
+{
+	int				len;
+	int				new_delim_mlen;
+	int				current_delim_mlen;
+
+	len = pargs_len(pargs);
+	current_delim_mlen = current_mid_delim_len()
+	if (len > params->term_width)
+		new_delim_mlen = current_delim_mlen - (len - params->term_width) / 3;
+	else if (len < params->term_width)
+		new_delim_mlen = current_delim_mlen + (params->term_width - len) / 3;
+	else
+		return ;
+	ls_edit_p_args_if(pargs, 7, build_mid_delim(new_delim_mlen));
+}
+
 char	*build_prompt(t_prompt *params)
 {
 	t_prompt_blocks	*pargs;
@@ -116,12 +180,13 @@ char	*build_prompt(t_prompt *params)
 	build_prompt_cwd(&pargs, params);
 	if (params->git_branch_name)
 		build_prompt_git(&pargs, params);
-	build_prompt_mid_delim(&pargs, params);
+	build_prompt_mid_delim(&pargs, params, 10);
 	build_prompt_exit_status(&pargs, params);
 	build_prompt_time(&pargs, params);
 	build_prompt_end_delim(&pargs);
 	build_prompt_user(&pargs, params);
-	prompt = strjoin_pargs(pargs);
+	check_prompt_width(pargs);
+	prompt = strjoin_pargs(pargs, params);
 	ls_free_pargs(pargs);
 	free_prompt_params(params);
 	if (errno)
@@ -142,11 +207,6 @@ bool	refresh_prompt_param(t_prompt *lst, int last_exit_code)
 	lst->cwd = get_cwd_path_since_home();
 	if (!lst->cwd)
 		return (false);
-	lst->width_without_mid_delim = ft_intlen(extract_exit_code(last_exit_code));
-	lst->width_without_mid_delim += ft_strlen(lst->session_user);
-	if (lst->git_branch_name)
-		lst->width_without_mid_delim += ft_strlen(lst->git_branch_name);
-	lst->width_without_mid_delim += ft_strlen(lst->time);
 	lst->term_width = fetch_term_width();
 	if (lst->term_width == -1)
 		return (false);

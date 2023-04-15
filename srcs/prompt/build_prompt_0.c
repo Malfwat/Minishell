@@ -29,7 +29,7 @@ void	ls_p_args_addback(t_prompt_blocks **head, t_prompt_blocks *new)
 	tmp->next = new;
 }
 
-t_prompt_blocks	*ls_new_p_args(char type, char *str)
+t_prompt_blocks	*ls_new_p_args(char type, char *str, int delim_len)
 {
 	t_prompt_blocks	*new;
 
@@ -38,6 +38,7 @@ t_prompt_blocks	*ls_new_p_args(char type, char *str)
 		return (free(str), NULL);
 	new->type = type;
 	new->str = str;
+	new->delim_len = delim_len;
 	return (new);
 }
 
@@ -46,7 +47,7 @@ void	build_prompt_time(t_prompt_blocks **pargs, t_prompt *params)
 	char	*str;
 
 	str = ft_strsjoin(6, LGREY_BG, " ", LBLUE, params->time, LLGREY, ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(1, str));
+	ls_p_args_addback(pargs, ls_new_p_args(1, str, 0));
 }
 
 void	build_prompt_git(t_prompt_blocks **pargs, t_prompt *params)
@@ -56,7 +57,7 @@ void	build_prompt_git(t_prompt_blocks **pargs, t_prompt *params)
 	str = ft_strsjoin(10, LGREY_BG, LLGREY, \
 			"  ", ENDC, LGREY_BG, "\u2387  ", LGREEN, \
 			params->git_branch_name, LLGREY, ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(2, str));
+	ls_p_args_addback(pargs, ls_new_p_args(2, str, 0));
 }
 
 void	build_prompt_cwd(t_prompt_blocks **pargs, t_prompt *params)
@@ -64,7 +65,7 @@ void	build_prompt_cwd(t_prompt_blocks **pargs, t_prompt *params)
 	char	*str;
 
 	str = ft_strsjoin(6, BOLD, LGREY_BG, " ", LCYAN, params->cwd, ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(3, str));
+	ls_p_args_addback(pargs, ls_new_p_args(3, str, 0));
 }
 
 void	build_prompt_start_delim(t_prompt_blocks **pargs)
@@ -72,7 +73,7 @@ void	build_prompt_start_delim(t_prompt_blocks **pargs)
 	char	*str;
 
 	str = ft_strsjoin(5, LLGREY, "╭─", LGREY, "░▒▓", ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(4, str));
+	ls_p_args_addback(pargs, ls_new_p_args(4, str, 0));
 }
 
 void	build_prompt_user(t_prompt_blocks **pargs, t_prompt *params)
@@ -81,5 +82,5 @@ void	build_prompt_user(t_prompt_blocks **pargs, t_prompt *params)
 
 	str = ft_strsjoin(7, ITALIC, LGREY, " ", \
 	params->session_user, DGREEN, " $ ", ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(5, str));
+	ls_p_args_addback(pargs, ls_new_p_args(5, str, 0));
 }
