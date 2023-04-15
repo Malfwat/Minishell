@@ -56,6 +56,7 @@ typedef struct s_args
 typedef struct s_prompt_blocks
 {
 	int						type;
+	int						delim_len;
 	char					*str;
 	struct s_prompt_blocks	*next;
 }	t_prompt_blocks;
