@@ -41,17 +41,17 @@ char	*get_cwd_path_since_home(void);
 
 // build_prompt_0.c
 
-void	build_prompt_user(char **prompt, t_prompt *params);
-void	build_prompt_start_delim(char **prompt);
-void	build_prompt_cwd(char **prompt, t_prompt *params);
-void	build_prompt_git(char **prompt, t_prompt *params);
-void	build_prompt_time(char **prompt, t_prompt *params);
+void	build_prompt_user(t_prompt_blocks **pargs, t_prompt *params);
+void	build_prompt_start_delim(t_prompt_blocks **pargs);
+void	build_prompt_cwd(t_prompt_blocks **pargs, t_prompt *params);
+void	build_prompt_git(t_prompt_blocks **pargs, t_prompt *params);
+void	build_prompt_time(t_prompt_blocks **pargs, t_prompt *params);
 
 // build_prompt_1.c
 
-void	build_prompt_exit_status(char **prompt, t_prompt *params);
-bool	build_prompt_mid_delim(char **prompt, t_prompt *params);
-void	build_prompt_end_delim(char **prompt);
+void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params);
+bool	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params);
+void	build_prompt_end_delim(t_prompt_blocks **pargs);
 char	*build_prompt(t_prompt *params);
 bool	refresh_prompt_param(t_prompt *lst, int last_exit_code);
 

@@ -24,27 +24,26 @@ int	extract_exit_code(int status)
 	return (0);
 }
 
-void	build_prompt_exit_status(char **prompt, t_prompt *params)
+void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 {
-	char	*tmp;
+	char	*str;
 	char	*ascii_status;
 
 	ascii_status = ft_itoa(extract_exit_code(params->last_exit_code));
 	if (!ascii_status)
 		return ;
-	tmp = *prompt;
 	if (!params->last_exit_code)
-		*prompt = ft_strsjoin(7, tmp, LGREY_BG, GREEN, "✔ ", LLGREY, "", ENDC);
+		str = ft_strsjoin(6, LGREY_BG, GREEN, "✔ ", LLGREY, "", ENDC);
 	else
-		*prompt = ft_strsjoin(8, tmp, RED, LGREY_BG, ascii_status, " ✘ ",
-				LLGREY, "", ENDC);
+		str = ft_strsjoin(7, RED, LGREY_BG, ascii_status, " ✘ ", LLGREY,
+				"", ENDC);
+	ls_p_args_addback(pargs, ls_new_p_args(8, str));
 	free(ascii_status);
-	free(tmp);
 }
 
-bool	build_prompt_mid_delim(char **prompt, t_prompt *params)
+void	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params)
 {
-	char	*tmp;
+	char	*str;
 	char	*delim;
 	int		len;
 
@@ -56,48 +55,76 @@ bool	build_prompt_mid_delim(char **prompt, t_prompt *params)
 	{
 		delim = ft_calloc(len + 1, sizeof(char) * 3);
 		if (!delim)
-			return (false);
+			return ;
 		ft_memset_uni(delim, "─", len);
 	}
-	tmp = *prompt;
-	*prompt = ft_strsjoin(8, tmp, LGREY, "▓▒░", LLGREY, delim,
+	str = ft_strsjoin(7, LGREY, "▓▒░", LLGREY, delim,
 			LGREY, "░▒▓", ENDC);
-	free(tmp);
+	ls_p_args_addback(pargs, ls_new_p_args(7, str));
 	free(delim);
-	return (true);
 }
 
-void	build_prompt_end_delim(char **prompt)
+void	build_prompt_end_delim(t_prompt_blocks **pargs)
 {
+	char	*str;
+
+	str = ft_strsjoin(8, ENDC, LGREY, "▓▒░", ENDC, LLGREY, "\n╰─",
+			BOLD, ENDC);
+	ls_p_args_addback(pargs, ls_new_p_args(6, str));
+}
+
+void	ls_free_pargs(t_prompt_blocks *pargs)
+{
+	t_prompt_blocks	*tmp;
+
+	while (pargs)
+	{
+		tmp = pargs->next;
+		free(pargs->str);
+		free(pargs);
+		pargs = tmp;
+	}
+}
+
+char	*strjoin_pargs(t_prompt_blocks *pargs)
+{
+	char	*str;
 	char	*tmp;
 
-	tmp = *prompt;
-	*prompt = ft_strsjoin(9, tmp, ENDC, LGREY, "▓▒░", ENDC, LLGREY, "\n╰─",
-			BOLD, ENDC);
-	free(tmp);
+	str = NULL;
+	while (pargs)
+	{
+		tmp = str;
+		str = ft_strjoin(str, pargs->str);
+		free(tmp);
+		if (errno)
+			return (NULL);
+	}
+	return (str);
 }
 
 char	*build_prompt(t_prompt *params)
 {
-	char	*prompt;
+	t_prompt_blocks	**pargs;
 
 	errno = 0;
-	prompt = ft_calloc(1, 1);
-	if (prompt)
-	{
-		build_prompt_start_delim(&prompt);
-		build_prompt_cwd(&prompt, params);
-		if (params->git_branch_name)
-			build_prompt_git(&prompt, params);
-		build_prompt_mid_delim(&prompt, params);
-		build_prompt_exit_status(&prompt, params);
-		build_prompt_time(&prompt, params);
-		build_prompt_end_delim(&prompt);
-		build_prompt_user(&prompt, params);
-	}
+	pargs = NULL;
+
+	build_prompt_start_delim(&pargs);
+	build_prompt_cwd(&pargs, params);
+	if (params->git_branch_name)
+		build_prompt_git(&pargs, params);
+	build_prompt_mid_delim(&pargs, params);
+	build_prompt_exit_status(&pargs, params);
+	build_prompt_time(&pargs, params);
+	build_prompt_end_delim(&pargs);
+	build_prompt_user(&pargs, params);
+	prompt = strjoin_pargs(*pargs);
+	ls_free_pargs(*pargs);
+	free_prompt_params(params)
 	if (errno)
 		return (free(prompt), NULL);
-	return (free_prompt_params(params), prompt);
+	return (prompt);
 }
 
 bool	refresh_prompt_param(t_prompt *lst, int last_exit_code)

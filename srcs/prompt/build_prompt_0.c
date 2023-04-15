@@ -14,52 +14,72 @@
 #include <libft.h>
 #include <ms_define.h>
 
-void	build_prompt_time(char **prompt, t_prompt *params)
+void	ls_p_args_addback(t_prompt_blocks **head, t_prompt_blocks *new)
 {
-	char	*tmp;
+	t_prompt_blocks	*tmp;
 
-	tmp = *prompt;
-	*prompt = ft_strsjoin(7, tmp, LGREY_BG, " ", LBLUE, params->time, \
-	LLGREY, ENDC);
-	free(tmp);
+	if (!*head)
+	{
+		*head = new;
+		return ;
+	}
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }
 
-void	build_prompt_git(char **prompt, t_prompt *params)
+t_prompt_blocks	*ls_new_p_args(char type, char *str)
 {
-	char	*tmp;
+	t_prompt_blocks	*new;
 
-	tmp = *prompt;
-	*prompt = ft_strsjoin(11, tmp, LGREY_BG, LLGREY, \
+	new = ft_calloc(1, sizeof(t_prompt_blocks));
+	if (!new)
+		return (free(str), NULL);
+	new->type = type;
+	new->str = str;
+	return (new);
+}
+
+void	build_prompt_time(t_prompt_blocks **pargs, t_prompt *params)
+{
+	char	*str;
+
+	str = ft_strsjoin(6, LGREY_BG, " ", LBLUE, params->time, LLGREY, ENDC);
+	ls_p_args_addback(pargs, ls_new_p_args(1, str));
+}
+
+void	build_prompt_git(t_prompt_blocks **pargs, t_prompt *params)
+{
+	char	*str;
+
+	str = ft_strsjoin(10, LGREY_BG, LLGREY, \
 			"  ", ENDC, LGREY_BG, "\u2387  ", LGREEN, \
 			params->git_branch_name, LLGREY, ENDC);
-	free(tmp);
+	ls_p_args_addback(pargs, ls_new_p_args(2, str));
 }
 
-void	build_prompt_cwd(char **prompt, t_prompt *params)
+void	build_prompt_cwd(t_prompt_blocks **pargs, t_prompt *params)
 {
-	char	*tmp;
+	char	*str;
 
-	tmp = *prompt;
-	*prompt = ft_strsjoin(7, tmp, BOLD, LGREY_BG, " ", LCYAN, \
-	params->cwd, ENDC);
-	free(tmp);
+	str = ft_strsjoin(6, BOLD, LGREY_BG, " ", LCYAN, params->cwd, ENDC);
+	ls_p_args_addback(pargs, ls_new_p_args(3, str));
 }
 
-void	build_prompt_start_delim(char **prompt)
+void	build_prompt_start_delim(t_prompt_blocks **pargs)
 {
-	char	*tmp;
+	char	*str;
 
-	tmp = *prompt;
-	*prompt = ft_strsjoin(6, tmp, LLGREY, "╭─", LGREY, "░▒▓", ENDC);
-	free(tmp);
+	str = ft_strsjoin(5, LLGREY, "╭─", LGREY, "░▒▓", ENDC);
+	ls_p_args_addback(pargs, ls_new_p_args(4, str));
 }
 
-void	build_prompt_user(char **prompt, t_prompt *params)
+void	build_prompt_user(t_prompt_blocks **pargs, t_prompt *params)
 {
-	char	*tmp;
+	char	*str;
 
-	tmp = *prompt;
-	*prompt = ft_strsjoin(8, tmp, ITALIC, LGREY, " ", \
+	str = ft_strsjoin(7, ITALIC, LGREY, " ", \
 	params->session_user, DGREEN, " $ ", ENDC);
-	free(tmp);
+	ls_p_args_addback(pargs, ls_new_p_args(5, str));
 }

@@ -53,6 +53,13 @@ typedef struct s_args
 	struct s_args	*next;
 }	t_args;
 
+typedef struct s_prompt_blocks
+{
+	int						type;
+	char					*str;
+	struct s_prompt_blocks	*next;
+}	t_prompt_blocks;
+
 typedef struct s_cmd
 {
 	t_args			*args;
