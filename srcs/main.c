@@ -205,6 +205,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		{
 		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
+		ms_params->prompt_params.last_exit_code = block->cmd.exit_value;
 		}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);
@@ -321,7 +322,7 @@ void	free_children(t_pids **children)
 	*children = NULL;
 }
 
-int	wait_children(t_pids *children)
+int	wait_children(t_pids *children, t_minishell *ms_params)
 {
 	int	status;
 
@@ -331,6 +332,7 @@ int	wait_children(t_pids *children)
 			return (-1);
 		children = children->next;
 	}
+	ms_params->prompt_params.last_exit_code = status;
 	return (status);
 }
 
@@ -348,7 +350,7 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 		ms_params->children = NULL;
 		my_dup(block);
 		execute_commands(block->sub, ms_params); // on passe au contenu du subshell immediatement
-		exit_ms(*ms_params, wait_children(ms_params->children), NULL);
+		exit_ms(*ms_params, wait_children(ms_params->children, ms_params), NULL);
 	}
 	close_sub_fds(block->sub);
 	if (block->io_tab[0] != INIT_FD_VALUE)
@@ -554,7 +556,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 
 		execute_commands(ms_params.head, &ms_params);
-		if (wait_children(ms_params.children) == -1)
+		if (wait_children(ms_params.children, &ms_params) == -1)
 			exit_ms(ms_params, 2, "waitpid");
 		free_children(&ms_params.children);
 		flood_free(ms_params.head);
