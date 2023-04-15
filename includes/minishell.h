@@ -74,7 +74,7 @@ void		ms_perror(char *program, char *subname, char *error);
 void		free_children(t_pids **children);
 bool		store_pid(pid_t pid, t_pids **nursery);
 void		infanticides(t_pids *preys);
-int			wait_children(t_pids *children);
+int			wait_children(t_pids *children, t_minishell *ms_params);
 int			execute_commands(t_block *block, t_minishell *ms_params);
 
 
