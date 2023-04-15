@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/14 21:07:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 18:33:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,11 +202,11 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		exit_ms(*ms_params, 2, "exec fork");
 	if (block->operator == AND_OPERATOR|| block->operator == OR_OPERATOR
 		|| block->operator == SEMI_COLON)
-		{
+	{
 		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
 		ms_params->last_exit_code = block->cmd.exit_value;
-		}
+	}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);
 }

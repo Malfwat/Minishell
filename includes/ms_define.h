@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 18:52:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 18:41:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,18 @@
 # define ENDC "\033[0m"
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
+
+enum e_prompt_args_type
+{
+	P_GIT,
+	P_TIME,
+	P_CWD,
+	P_USER,
+	P_START_DELIM,
+	P_MID_DELIM,
+	P_EXIT_STATUS,
+	P_END_DELIM
+};
 
 enum e_operator
 {
