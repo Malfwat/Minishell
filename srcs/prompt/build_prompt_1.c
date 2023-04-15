@@ -124,9 +124,8 @@ int		pargs_len(t_prompt_blocks *pargs)
 		while (pargs->str[++i])
 		{
 			if (ft_isprint(pargs->str[i]))
-				i++;
+				total++;
 		}
-		total += i;
 		pargs = pargs->next;
 	}
 	return (total);
