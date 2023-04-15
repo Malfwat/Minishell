@@ -500,7 +500,7 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 	return (true);
 }
 
-void	init_prompt(t_minishell *ms_params, chat **user_input)
+void	init_prompt(t_minishell *ms_params, char **user_input)
 {
 	char		*ms_prompt;
 
