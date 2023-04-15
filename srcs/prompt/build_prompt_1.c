@@ -14,16 +14,24 @@
 #include <libft.h>
 #include <ms_define.h>
 
+int	extract_exit_code(int status)
+{
+	if (WIFEXITED(status))
+		return WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		return WTERMSIG(status);
+}
+
 void	build_prompt_exit_status(char **prompt, t_prompt *params)
 {
 	char	*tmp;
 	char	*ascii_status;
 
-	ascii_status = ft_itoa(params->last_exit_code);
+	ascii_status = ft_itoa(extract_exit_code(params->last_exit_code));
 	if (!ascii_status)
 		return ;
 	tmp = *prompt;
-	if (params->last_exit_code == 0)
+	if (WIFEXITED(params->last_exit_code))
 		*prompt = ft_strsjoin(7, tmp, LGREY_BG, GREEN, "✔ ", LLGREY, "", ENDC);
 	else
 		*prompt = ft_strsjoin(8, tmp, RED, LGREY_BG, ascii_status, " ✘ ",
@@ -103,7 +111,7 @@ bool	refresh_prompt_param(t_prompt *lst, int last_exit_code)
 	lst->cwd = get_cwd_path_since_home();
 	if (!lst->cwd)
 		return (false);
-	lst->width_without_mid_delim = ft_intlen(last_exit_code);
+	lst->width_without_mid_delim = ft_intlen(extract_exit_code(last_exit_code));
 	lst->width_without_mid_delim += ft_strlen(lst->session_user);
 	if (lst->git_branch_name)
 		lst->width_without_mid_delim += ft_strlen(lst->git_branch_name);
