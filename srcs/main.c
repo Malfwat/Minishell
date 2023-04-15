@@ -546,7 +546,7 @@ int	main(int ac, char **av, char **envp)
 		if (!user_input)
 			continue;
 
-		my_add_history(rl_line_buffer, ms_params.history_fd);
+		ms_add_history(rl_line_buffer, ms_params.history_fd);
 
 		if (!parse_user_input(&ms_params, user_input))
 			continue ;
