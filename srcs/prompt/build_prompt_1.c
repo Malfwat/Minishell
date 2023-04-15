@@ -34,7 +34,7 @@ void	build_prompt_exit_status(char **prompt, t_prompt *params)
 	if (!ascii_status)
 		return ;
 	tmp = *prompt;
-	if (WIFEXITED(params->last_exit_code))
+	if (!params->last_exit_code)
 		*prompt = ft_strsjoin(7, tmp, LGREY_BG, GREEN, "✔ ", LLGREY, "", ENDC);
 	else
 		*prompt = ft_strsjoin(8, tmp, RED, LGREY_BG, ascii_status, " ✘ ",
