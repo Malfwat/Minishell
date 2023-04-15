@@ -121,10 +121,13 @@ int		pargs_len(t_prompt_blocks *pargs)
 	while (pargs)
 	{
 		i = -1;
-		while (pargs->str[++i])
+		if (pargs->type != 6 && pargs->type != 5)
 		{
-			if (ft_isprint(pargs->str[i]))
-				total++;
+			while (pargs->str[++i])
+			{
+				if (ft_isprint(pargs->str[i]))
+					total++;
+			}
 		}
 		pargs = pargs->next;
 	}
