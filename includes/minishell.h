@@ -75,7 +75,7 @@ void		free_children(t_pids **children);
 bool		store_pid(pid_t pid, t_pids **nursery);
 void		infanticides(t_pids *preys);
 int			wait_children(t_pids *children);
-int			execute_cmds(t_block *block, t_minishell *ms_params);
+int			execute_commands(t_block *block, t_minishell *ms_params);
 
 
 char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
