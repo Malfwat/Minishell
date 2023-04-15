@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/12 17:07:16 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 18:50:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 	else
 		str = ft_strsjoin(7, RED, LGREY_BG, ascii_status, " ✘ ", LLGREY,
 				"", ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(8, str, 0));
+	ls_p_args_addback(pargs, ls_new_p_args(P_EXIT_STATUS, str, 0));
 	free(ascii_status);
 }
 
@@ -69,7 +69,7 @@ void	build_prompt_mid_delim(t_prompt_blocks **pargs, int len)
 		len = 5; // minimum width of mid delim
 	// len = params->term_width - params->width_without_mid_delim - offset;
 	str = build_mid_delim(len);
-	ls_p_args_addback(pargs, ls_new_p_args(7, str, len));
+	ls_p_args_addback(pargs, ls_new_p_args(P_MID_DELIM, str, len));
 }
 
 void	build_prompt_end_delim(t_prompt_blocks **pargs)
@@ -78,7 +78,7 @@ void	build_prompt_end_delim(t_prompt_blocks **pargs)
 
 	str = ft_strsjoin(8, ENDC, LGREY, "▓▒░", ENDC, LLGREY, "\n╰─",
 			BOLD, ENDC);
-	ls_p_args_addback(pargs, ls_new_p_args(6, str, 0));
+	ls_p_args_addback(pargs, ls_new_p_args(P_END_DELIM, str, 0));
 }
 
 void	ls_free_pargs(t_prompt_blocks *pargs)
@@ -116,17 +116,23 @@ int		pargs_len(t_prompt_blocks *pargs)
 {
 	int	total;
 	int	i;
+	bool	control_sequence;
 
+	control_sequence = true;
 	total = 0;
 	while (pargs)
 	{
 		i = -1;
-		if (pargs->type != 6 && pargs->type != 5)
+		if (pargs->type != P_USER && pargs->type != P_END_DELIM)
 		{
 			while (pargs->str[++i])
 			{
-				if (ft_isprint(pargs->str[i]))
-					total++;
+				if (pargs->str[i] == '\033')
+					control_sequence = true;
+				else if (control_sequence && pargs->str[i] == 'm')
+					control_sequence = false;
+				else if (!control_sequence && ft_isprint(pargs->str[i]))
+					total++; 
 			}
 		}
 		pargs = pargs->next;
@@ -134,7 +140,7 @@ int		pargs_len(t_prompt_blocks *pargs)
 	return (total);
 }
 
-void	ls_edit_p_args_if(t_prompt_blocks *pargs, int type, char *str)
+void	ls_edit_p_args_if(t_prompt_blocks *pargs, int type, char *str, int delim_len)
 {
 	while (pargs)
 	{
@@ -142,6 +148,7 @@ void	ls_edit_p_args_if(t_prompt_blocks *pargs, int type, char *str)
 		{
 			free(pargs->str);
 			pargs->str = str;
+			pargs->delim_len = delim_len;
 		}
 		pargs = pargs->next;
 	}
@@ -151,7 +158,7 @@ int		current_mid_delim_len(t_prompt_blocks *pargs)
 {
 	while (pargs)
 	{
-		if (pargs->type == 7)
+		if (pargs->type == P_MID_DELIM)
 			return (pargs->delim_len);
 		pargs = pargs->next;
 	}
@@ -173,7 +180,8 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 		new_delim_mlen = current_delim_mlen + (params->term_width - len) / 3;
 	else
 		return ;
-	ls_edit_p_args_if(pargs, 7, build_mid_delim(new_delim_mlen));
+	ls_edit_p_args_if(pargs, P_MID_DELIM, build_mid_delim(new_delim_mlen), new_delim_mlen);
+	printf("total_len=%d, current_delim_len=%d term_len=%d\n", pargs_len(pargs), current_mid_delim_len(pargs), params->term_width);
 }
 
 char	*build_prompt(t_prompt *params)
