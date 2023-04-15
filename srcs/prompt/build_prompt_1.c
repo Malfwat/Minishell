@@ -114,15 +114,22 @@ char	*strjoin_pargs(t_prompt_blocks *pargs)
 
 int		pargs_len(t_prompt_blocks *pargs)
 {
+	int	total;
 	int	i;
 
-	i = 0;
+	total = 0;
 	while (pargs)
 	{
-		i += ft_strlen(pargs->str);
+		i = -1;
+		while (pargs->str[++i])
+		{
+			if (ft_isprint(pargs->str[i]))
+				i++;
+		}
+		total += i;
 		pargs = pargs->next;
 	}
-	return (i);
+	return (total);
 }
 
 void	ls_edit_p_args_if(t_prompt_blocks *pargs, int type, char *str)
