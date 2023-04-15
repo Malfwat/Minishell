@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/14 22:06:19 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 20:26:03 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <errno.h>
 
 bool		manage_wildcard(t_args **head, char *str);
-
-
 
 t_args	*new_cmd_arg(t_split_arg *arg)
 {

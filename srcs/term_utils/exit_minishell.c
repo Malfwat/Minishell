@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/13 12:39:50 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:33:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ void handle_execve_failure(t_minishell ms_params, char *program_name)
 			exit_value = 126; // 126 == command found but cannot be executed
 		else if (errno)
 			exit_value = 2; // valeur fourre-tout
-		ms_perror("minishell", program_name, strerror(errno));
+		ms_perror("minishell6", program_name, strerror(errno));
 	}
 	else
 	{
-		ms_perror("minishell", program_name, "Command not found");
+		ms_perror("minishell5", program_name, "Command not found");
 		exit_value = 127; // 127 == command not found
 	}
 	errno = 0;
@@ -69,6 +69,6 @@ void	exit_ms(t_minishell ms_params, int exitv, char *context)
 	if (ms_params.history_fd)
 		close(ms_params.history_fd);
 	if (errno)
-		ms_perror("minishell", context, strerror(errno));
+		ms_perror("minishell7", context, strerror(errno));
 	exit(exitv);
 }

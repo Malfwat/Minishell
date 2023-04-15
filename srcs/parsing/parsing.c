@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/14 21:51:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 20:26:03 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,52 +84,6 @@ void	*get_next_param(char *str, int *i, int *type)
 		return (res);
 	return (res);
 }
-
-// char	*strjoin_wc_args(t_wc_args *wc_args)
-// {
-// 	char	*str;
-// 	char	*tmp;
-
-// 	str = NULL;
-// 	while (wc_args)
-// 	{
-// 		tmp = str;
-// 		str = ft_strjoin(str, wc_args->name);
-// 		free(tmp);
-// 		wc_args = wc_args->next;
-// 	}
-// 	return (str);
-// }
-
-// char	*interpret_wildcards(char *str)
-// {
-// 	t_wc_args	*wc_args;
-
-// 	manage_wildcard(&wc_args, str);
-// 	if (errno)
-// 		return (NULL);
-// 	else if (!wc_args)
-// 		return (str);
-// 	else
-// 	{
-// 		free(str);
-// 		str = strjoin_wc_args(wc_args);
-// 		if (errno)
-// 			free(str);
-// 	}
-// 	free_wc_args(&wc_args);
-// 	return (str);
-// }
-
-// char	*interpret_meta_chars(t_split_arg *arg, t_env_var *envp)
-// {
-// 	char		*res;
-
-// 	res = interpret_dollars(arg, envp);
-// 	if (errno)
-// 		return (NULL);
-// 	return (res);
-// }
 
 char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 {
@@ -244,7 +198,6 @@ void	free_next_param(void *ptr, int type)
 	else
 		free_split_args(ptr);
 }
-
 
 bool	check_parse_error(void *next_param, char *cmd_line, int type)
 {

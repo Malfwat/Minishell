@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/15 18:50:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 23:39:39 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	extract_exit_code(int status)
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
-		return (WTERMSIG(status));
+		return (WTERMSIG(status) | 0x80);
 	return (0);
 }
 
@@ -119,19 +119,26 @@ int		pargs_len(t_prompt_blocks *pargs)
 	bool	control_sequence;
 
 	control_sequence = true;
-	total = 0;
+	total = 4;
 	while (pargs)
 	{
 		i = -1;
 		if (pargs->type != P_USER && pargs->type != P_END_DELIM)
 		{
+			if (pargs->type == P_GIT && pargs->str)
+				total += 1;
 			while (pargs->str[++i])
 			{
 				if (pargs->str[i] == '\033')
 					control_sequence = true;
 				else if (control_sequence && pargs->str[i] == 'm')
 					control_sequence = false;
-				else if (!control_sequence && ft_isprint(pargs->str[i]))
+				else if (!ft_isprint(pargs->str[i]))
+				{
+					total++; 
+					i += 2;
+				}
+				else if (!control_sequence)
 					total++; 
 			}
 		}
@@ -173,15 +180,13 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 
 	len = pargs_len(pargs);
 	current_delim_mlen = current_mid_delim_len(pargs);
-	printf("total_len=%d, current_delim_len=%d term_len=%d\n", len, current_delim_mlen, params->term_width);
 	if (len > params->term_width)
-		new_delim_mlen = current_delim_mlen - (len - params->term_width) / 3;
+		new_delim_mlen = current_delim_mlen - (len - params->term_width);
 	else if (len < params->term_width)
-		new_delim_mlen = current_delim_mlen + (params->term_width - len) / 3;
+		new_delim_mlen = current_delim_mlen + (params->term_width - len);
 	else
 		return ;
 	ls_edit_p_args_if(pargs, P_MID_DELIM, build_mid_delim(new_delim_mlen), new_delim_mlen);
-	printf("total_len=%d, current_delim_len=%d term_len=%d\n", pargs_len(pargs), current_mid_delim_len(pargs), params->term_width);
 }
 
 char	*build_prompt(t_prompt *params)

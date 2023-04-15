@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/15 18:33:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 23:54:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@
 #include <ncurses.h>
 #include <term.h>
 
-
 void handle_execve_failure(t_minishell ms_params, char *program_name);
-
-
 
 void	close_block_fds(t_block *block)
 {
@@ -53,8 +50,6 @@ bool	my_dup(t_block *block)
 	{
 		if (dup2(block->io_tab[0], 0) == -1 || close(block->io_tab[0]) == -1) 
 			return (false);
-		dprintf(2, "[%d]dup:%d\n", getpid(), block->io_tab[0]);
-		dprintf(2, "[%d]clsose:%d\n", getpid(), block->io_tab[0]);
 	}
 	if (block->io_tab[1] != INIT_FD_VALUE)
 	{
@@ -64,16 +59,12 @@ bool	my_dup(t_block *block)
 		c = close(block->io_tab[1]);
 		if (d == -1 || c == -1)
 		{
-			dprintf(2, "[%d]dup:%d\n", getpid(), block->io_tab[1]);
-			dprintf(2, "is errno ? %d\nc = %i, d = %i \n", errno, c, d);
-			dprintf(2, "[%d]cldose:%d\n", getpid(), block->io_tab[1]);
 			return (false);
 		}
 	}
 	if (block->pipe_next)
 	{
 		close(block->pipe_next->io_tab[0]);
-		dprintf(2, "[%d]cflose:%d\n", getpid(), block->pipe_next->io_tab[0]);
 	}
 	return (true);
 }
@@ -106,7 +97,6 @@ void	free_exec_vars(t_exec_vars exec_vars)
 	ft_strsfree(exec_vars.envp);
 	ft_strsfree(exec_vars.path);
 }
-
 
 void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
 {
@@ -188,8 +178,9 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	t_exec_vars	exec_vars;
 
 	errno = 0;
+	if (!init_exec_io(block, ms_params))
+		return ;
 	exec_vars = init_exec_vars(*ms_params, block);
-	init_exec_io(block, ms_params->envp);
 	block->cmd.pid = fork();
 	if (block->cmd.pid == 0)
 		child_worker(block, ms_params, exec_vars);
@@ -251,7 +242,6 @@ bool	create_pipe(t_block *block)
 	next_block = find_next_block(block, true);
 	if (pipe(tube) == -1)
 		return (false);
-	dprintf(2, "[%i] %d pipe %d\n", getpid(), tube[0], tube[1]);
 	if (next_block->io_tab[0] == INIT_FD_VALUE || next_block->io_is_overwritable[0])
 	{
 		// check if fd is lost
@@ -322,16 +312,19 @@ void	free_children(t_pids **children)
 	*children = NULL;
 }
 
-int	wait_children(t_pids *children, t_minishell *ms_params)
+int	wait_children(t_minishell *ms_params)
 {
-	int	status;
+	int		status;
+	t_pids	*children;
 
+	children = ms_params->children;
 	while (children)
 	{
 		if (waitpid(children->pid, &status, 0) == -1)
 			return (-1);
 		children = children->next;
 	}
+	free_children(&ms_params->children);
 	ms_params->last_exit_code = status;
 	return (status);
 }
@@ -345,12 +338,10 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 	sub_pid = fork();
 	if (!sub_pid)
 	{
-		
 		free_children(&ms_params->children);
-		ms_params->children = NULL;
 		my_dup(block);
 		execute_commands(block->sub, ms_params); // on passe au contenu du subshell immediatement
-		exit_ms(*ms_params, wait_children(ms_params->children, ms_params), NULL);
+		exit_ms(*ms_params, extract_exit_code(wait_children(ms_params)), "subshell");
 	}
 	close_sub_fds(block->sub);
 	if (block->io_tab[0] != INIT_FD_VALUE)
@@ -360,17 +351,14 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 			if (block->io_tab[1] != INIT_FD_VALUE)
 			{
 				close(block->io_tab[1]);
-				dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
 			}
 			exit_ms(*ms_params, 2, "subshell");
 		}
-		dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
 	}
 	if (block->io_tab[1] != INIT_FD_VALUE)
 	{
 		if (close(block->io_tab[1]) == -1)
 			exit_ms(*ms_params, 2, "subshell");
-		dprintf(2, "[%d]close:%d\n", getpid(), block->io_tab[1]);
 	}
 	return (sub_pid);
 }
@@ -378,7 +366,6 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 int	execute_commands(t_block *block, t_minishell *ms_params)
 {
 	t_block	*next_block_to_execute;
-	pid_t	sub_pid;
 	// int		status
 
 	if (!block)
@@ -406,12 +393,17 @@ int	execute_commands(t_block *block, t_minishell *ms_params)
 		*	et qu'il faudra eviter de double-close un meme fd
 		*/
 		if (block->pipe_next)
-		{
 			create_pipe(block);
-			dprintf(2, "pid create_pipe %i\n", getpid());
+		block->cmd.pid = create_subshell(block, ms_params);
+		if (block->operator == AND_OPERATOR|| block->operator == OR_OPERATOR
+			|| block->operator == SEMI_COLON)
+		{
+			if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
+				exit_ms(*ms_params, 2, "waitpid");
+			ms_params->last_exit_code = block->cmd.exit_value;
 		}
-		sub_pid = create_subshell(block, ms_params);
-		store_pid(sub_pid, &ms_params->children);
+		else
+			store_pid(block->cmd.pid, &ms_params->children);
 		// waitpid(sub_pid, &status, 0);
 	}
 	else
@@ -443,7 +435,6 @@ int	get_cursor_position(void)
 
 	ft_bzero(buf, 10);
 	sc_cursor_pos = tgetstr("u7", NULL);
-	
 	if (!sc_cursor_pos)
 		return (-1);
 	tcgetattr(0, &term);
@@ -512,9 +503,10 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 		exit_ms(*ms_params, 0, "prompt");
 	ensure_prompt_position();
 	ms_prompt = build_prompt(&ms_params->prompt_params);
-	if (!ms_prompt)
+	if (!ms_prompt || errno)
 		exit_ms(*ms_params, 0, "prompt");
 	*user_input = readline(ms_prompt);
+	errno = 0;
 	free(ms_prompt);
 	ms_params->last_exit_code = 0;
 }
@@ -535,7 +527,23 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 	return (true);
 }
 
+// void clear_line() {
+// 	printf("\33[2K\r");
+// }
 
+// void redisplay_full_prompt(vp) {
+// 	clear_line();
+// 	printf("%s%s\n", rl_prompt, rl_line_buffer);
+// }
+
+void	handler_func(int num)
+{
+	(void)num;
+
+	printf("\n");
+	rl_replace_line("", 0); // Clear the previous text
+	rl_forced_update_display();
+}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -544,9 +552,9 @@ int	main(int ac, char **av, char **envp)
 
 	if (!init_minishell(&ms_params, envp))
 		return (1);
-	
 	(void)ac;
 	(void)av;
+	signal(SIGINT, &handler_func);
 	while (1)
 	{
 		init_prompt(&ms_params, &user_input);
@@ -559,7 +567,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 
 		execute_commands(ms_params.head, &ms_params);
-		if (wait_children(ms_params.children, &ms_params) == -1)
+		if (wait_children(&ms_params) == -1)
 			exit_ms(ms_params, 2, "waitpid");
 		free_children(&ms_params.children);
 		flood_free(ms_params.head);

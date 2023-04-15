@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:40:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/12 18:51:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:33:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 static void	my_exec(char **tab, int *tube)
 {
 	if (close(STDERR_FILENO) || close(tube[0]) == -1)
-		perror("minishell");
+		perror("minishell2");
 	else if (dup2(tube[1], STDOUT_FILENO) == -1)
-		perror("minishell");
+		perror("minishell3");
 	else if (execve(tab[0], tab, NULL) == -1)
-		perror("minishell");
+		perror("minishell4");
 }
 
 char	*fetch_current_time(void)

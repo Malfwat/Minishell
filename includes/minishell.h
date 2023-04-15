@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/14 20:28:53 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 22:21:00 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		ft_add_io(t_block *block, t_split_arg *io);
 t_redirect	*new_redirect(t_split_arg *arg, int mode);
 t_redirect	*last_redirect(t_redirect *head);
 void		ft_add_redirect(t_redirect **head, t_split_arg *arg, int mode);
-bool		hd_manager(t_block *block);
+int			hd_manager(t_block *block);
 
 // manage_cmd_args.c
 
@@ -74,8 +74,10 @@ void		ms_perror(char *program, char *subname, char *error);
 void		free_children(t_pids **children);
 bool		store_pid(pid_t pid, t_pids **nursery);
 void		infanticides(t_pids *preys);
-int			wait_children(t_pids *children, t_minishell *ms_params);
+int			wait_children(t_minishell *ms_params);
 int			execute_commands(t_block *block, t_minishell *ms_params);
+
+int			extract_exit_code(int status);
 
 
 char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
