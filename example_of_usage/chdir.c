@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chdir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:32:50 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/30 18:05:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/04 01:36:57 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	print_cwd(void)
+void	pwd(void)
 {
 	char	*current_dir;
 
@@ -38,14 +38,21 @@ int	main(void)
 	// on affiche le repertoire actuel (voir getcwd.c)
 	print_cwd();
 	// on se deplace dans le repertoire parent
-	if (chdir("..") == -1)
+	if (!fork())
 	{
-		perror("chdir");
-		return (1);
+		if (chdir("..") == -1)
+		{
+			perror("chdir");
+			return (1);
+		}
+		else
+		return (0);
 	}
-	else
-		print_cwd(); // on affiche le nouveau repertoire
+			print_cwd(); // on affiche le nouveau repertoire
 	printf("PATH contient : %s\n", getenv("PWD"));
-	execve(cmd[0], cmd, NULL);
+	// if (!fork())
+	// 	execve(cmd[0], cmd, NULL);
+	// if (!fork())
+	// 	execve(cmd[0], cmd, NULL);
 	return (0);
 }
