@@ -516,6 +516,7 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 		exit_ms(*ms_params, 0, "prompt");
 	*user_input = readline(ms_prompt);
 	free(ms_prompt);
+	last_exit_code = 0;
 }
 
 bool	parse_user_input(t_minishell *ms_params, char *user_input)
