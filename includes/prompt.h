@@ -55,4 +55,7 @@ void	build_prompt_end_delim(t_prompt_blocks **pargs);
 char	*build_prompt(t_prompt *params);
 bool	refresh_prompt_param(t_prompt *lst, int last_exit_code);
 
+void			ls_p_args_addback(t_prompt_blocks **head, t_prompt_blocks *new);
+t_prompt_blocks	*ls_new_p_args(char type, char *str);
+
 #endif /* PROMPT_H */
