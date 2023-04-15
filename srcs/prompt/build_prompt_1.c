@@ -65,7 +65,7 @@ void	build_prompt_mid_delim(t_prompt_blocks **pargs, int len)
 {
 	char	*str;
 
-	if (len < 5())
+	if (len < 5)
 		len = 5; // minimum width of mid delim
 	// len = params->term_width - params->width_without_mid_delim - offset;
 	str = build_mid_delim(len);
@@ -183,8 +183,8 @@ char	*build_prompt(t_prompt *params)
 	build_prompt_time(&pargs, params);
 	build_prompt_end_delim(&pargs);
 	build_prompt_user(&pargs, params);
-	check_prompt_width(pargs);
-	prompt = strjoin_pargs(pargs, params);
+	check_prompt_width(pargs, params);
+	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);
 	free_prompt_params(params);
 	if (errno)
