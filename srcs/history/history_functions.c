@@ -42,7 +42,7 @@ int	get_my_history(void)
 	return (fd);
 }
 
-void	my_add_history(char *str, t_fd fd)
+void	ms_add_history(char *str, t_fd fd)
 {
 	if (!*str)
 		return ;
