@@ -520,13 +520,14 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
-		continue ;
+		return (false);
 	if (errno)
-		return (exit_ms(*ms_params, 2, "parsing"), 0);
+		exit_ms(*ms_params, 2, "parsing");
 	hd_manager(head);
 	if (errno)
-		ms_perror("minishell", "io_manager", strerror(errno));
+		exit_ms(*ms_params, 2, "io_manager");
 	ms_params->head = head;
+	return (true);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -547,7 +548,8 @@ int	main(int ac, char **av, char **envp)
 
 		my_add_history(rl_line_buffer, ms_params.history_fd);
 
-		parse_user_input(&ms_params, user_input);
+		if (!parse_user_input(&ms_params, user_input))
+			continue ;
 
 		execute_cmds(ms_params.head, &ms_params);
 		if (wait_children(ms_params.children) == -1)
