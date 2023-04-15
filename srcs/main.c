@@ -483,18 +483,18 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (perror("minishell"), false);
 	tgetent(0, getenv("TERM"));
-	ft_memset(&ms_params, 0, sizeof(t_minishell));
-	save_terminal_params(&ms_params);
+	ft_memset(ms_params, 0, sizeof(t_minishell));
+	save_terminal_params(ms_params);
 	toggle_control_character(VQUIT, _POSIX_VDISABLE);
 	// set_sig_handler();
 	// if (!refresh_prompt_param(&ms_prompt.prompt_params))
 		// return (1);
 	// res = NULL;
 	// type = -1;
-	ms_params.history_fd = get_my_history();
-	if (ms_params.history_fd == -1)
+	ms_params->history_fd = get_my_history();
+	if (ms_params->history_fd == -1)
 		return (false);
-	ms_params.envp = get_env_var(envp);
+	ms_params->envp = get_env_var(envp);
 	if (errno)
 		return (perror("minishell"), false);
 	return (true);
