@@ -505,7 +505,7 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	char		*ms_prompt;
 
 	if (!refresh_prompt_param(&ms_params->prompt_params))
-		exit_ms(ms_params, 0, "prompt");
+		exit_ms(*ms_params, 0, "prompt");
 	ensure_prompt_position();
 	ms_prompt = build_prompt(&ms_params->prompt_params);
 	if (!ms_prompt)
