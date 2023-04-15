@@ -106,22 +106,23 @@ char	*strjoin_pargs(t_prompt_blocks *pargs)
 char	*build_prompt(t_prompt *params)
 {
 	t_prompt_blocks	**pargs;
+	char			*prompt;
 
 	errno = 0;
 	pargs = NULL;
 
-	build_prompt_start_delim(&pargs);
-	build_prompt_cwd(&pargs, params);
+	build_prompt_start_delim(pargs);
+	build_prompt_cwd(pargs, params);
 	if (params->git_branch_name)
-		build_prompt_git(&pargs, params);
-	build_prompt_mid_delim(&pargs, params);
-	build_prompt_exit_status(&pargs, params);
-	build_prompt_time(&pargs, params);
-	build_prompt_end_delim(&pargs);
-	build_prompt_user(&pargs, params);
+		build_prompt_git(pargs, params);
+	build_prompt_mid_delim(pargs, params);
+	build_prompt_exit_status(pargs, params);
+	build_prompt_time(pargs, params);
+	build_prompt_end_delim(pargs);
+	build_prompt_user(pargs, params);
 	prompt = strjoin_pargs(*pargs);
 	ls_free_pargs(*pargs);
-	free_prompt_params(params)
+	free_prompt_params(params);
 	if (errno)
 		return (free(prompt), NULL);
 	return (prompt);
