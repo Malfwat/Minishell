@@ -13,6 +13,7 @@
 #include <prompt.h>
 #include <libft.h>
 #include <ms_define.h>
+#include <stdio.h>
 
 int	extract_exit_code(int status)
 {
