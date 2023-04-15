@@ -59,6 +59,7 @@ void handle_execve_failure(t_minishell ms_params, char *program_name)
 void	exit_ms(t_minishell ms_params, int exitv, char *context)
 {
 	flood_free(ms_params.head);
+	infanticides(ms_params.children);
 	free_children(&ms_params.children);
 	restore_terminal_params(ms_params.saved_params, ms_params.stdin_fileno);
 	free_ms_params(ms_params);
