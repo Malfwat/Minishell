@@ -205,7 +205,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		{
 		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
-		ms_params->prompt_params.last_exit_code = block->cmd.exit_value;
+		ms_params->last_exit_code = block->cmd.exit_value;
 		}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);
@@ -332,7 +332,7 @@ int	wait_children(t_pids *children, t_minishell *ms_params)
 			return (-1);
 		children = children->next;
 	}
-	ms_params->prompt_params.last_exit_code = status;
+	ms_params->last_exit_code = status;
 	return (status);
 }
 
@@ -505,8 +505,10 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 void	init_prompt(t_minishell *ms_params, char **user_input)
 {
 	char		*ms_prompt;
+	int			last_exit_code;
 
-	if (!refresh_prompt_param(&ms_params->prompt_params))
+	last_exit_code = ms_params->last_exit_code;
+	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
 		exit_ms(*ms_params, 0, "prompt");
 	ensure_prompt_position();
 	ms_prompt = build_prompt(&ms_params->prompt_params);

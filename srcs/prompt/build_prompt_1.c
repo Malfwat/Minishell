@@ -90,8 +90,9 @@ char	*build_prompt(t_prompt *params)
 	return (free_prompt_params(params), prompt);
 }
 
-bool	refresh_prompt_param(t_prompt *lst)
+bool	refresh_prompt_param(t_prompt *lst, int last_exit_code)
 {
+	lst->last_exit_code = last_exit_code;
 	lst->session_user = getenv("USER");
 	lst->git_branch_name = fetch_git_cwd_branch_name();
 	if (errno)
@@ -102,7 +103,7 @@ bool	refresh_prompt_param(t_prompt *lst)
 	lst->cwd = get_cwd_path_since_home();
 	if (!lst->cwd)
 		return (false);
-	lst->width_without_mid_delim = ft_intlen(lst->last_exit_code);
+	lst->width_without_mid_delim = ft_intlen(last_exit_code);
 	lst->width_without_mid_delim += ft_strlen(lst->session_user);
 	if (lst->git_branch_name)
 		lst->width_without_mid_delim += ft_strlen(lst->git_branch_name);
