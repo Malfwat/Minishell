@@ -14,6 +14,6 @@
 # define HISTORY_H
 
 int		get_my_history(void);
-void	my_add_history(char *str, int fd);
+void	ms_add_history(char *str, int fd);
 
 #endif	/* HISTORY_H */
