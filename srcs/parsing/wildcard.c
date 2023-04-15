@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/14 20:23:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 20:24:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,7 @@ void	ft_add_wc_args(t_args **head, char *str)
 	new->prev = tmp;
 }
 
-// void	free_wc_args(t_args **lst)
-// {
-// 	t_args	*tmp;
 	
-// 	while (*lst)
-// 	{
-// 		tmp = (*lst)->next;
-// 		free((*lst)->name);
-// 		free(*lst);
-// 		lst = tmp;
-// 	}
-// }
 
 t_args	*wildcard(char *dir, char *pattern)
 {
