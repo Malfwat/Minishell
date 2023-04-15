@@ -200,6 +200,10 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	free_exec_vars(exec_vars);
 	if (block->cmd.pid == -1 || errno)
 		exit_ms(*ms_params, 2, "exec fork");
+	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
+		|| block->operator == SEMI_COLON)
+		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
+			exit_ms(*ms_params, 2, "waitpid");
 	store_pid(block->cmd.pid, &ms_params->children);
 }
 
@@ -320,7 +324,8 @@ int	wait_children(t_pids *children)
 
 	while (children)
 	{
-		waitpid(children->pid, &status, 0);
+		if (waitpid(children->pid, &status, 0) == -1)
+			return (-1);
 		children = children->next;
 	}
 	return (status);
@@ -519,7 +524,8 @@ int	main(int ac, char **av, char **env)
 			ms_perror("minishell", "io_manager", strerror(errno));
 		ms_params.head = head;
 		execute_cmds(head, &ms_params);
-		wait_children(ms_params.children);
+		if (wait_children(ms_params.children) == -1)
+			exit_ms(ms_params, 2, "waitpid");
 		free_children(&ms_params.children);
 		flood_free(head);
 	}
