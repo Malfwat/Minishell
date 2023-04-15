@@ -478,10 +478,10 @@ void	ensure_prompt_position(void)
 		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
 }
 
-int	init_minishell(t_minishell *ms_params, char **envp)
+bool	init_minishell(t_minishell *ms_params, char **envp)
 {
 	if (!isatty(0) || !isatty(1) || !isatty(2))
-		return (perror("minishell"), 1);
+		return (perror("minishell"), false);
 	tgetent(0, getenv("TERM"));
 	ft_memset(&ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(&ms_params);
@@ -493,46 +493,67 @@ int	init_minishell(t_minishell *ms_params, char **envp)
 	// type = -1;
 	ms_params.history_fd = get_my_history();
 	if (ms_params.history_fd == -1)
-		return (2);
+		return (false);
 	ms_params.envp = get_env_var(envp);
+	if (errno)
+		return (perror("minishell"), false);
+	return (true);
+}
+
+void	init_prompt(t_minishell *ms_params, chat **user_input)
+{
+	char		*ms_prompt;
+
+	if (!refresh_prompt_param(&ms_params.prompt_params))
+		exit_ms(ms_params, 0, "prompt")
+	ensure_prompt_position();
+	ms_prompt = build_prompt(&ms_params.prompt_params);
+	if (!ms_prompt)
+		exit_ms(ms_params, 0, "prompt") 
+	*user_input = readline(ms_prompt);
+	free(ms_prompt);
+}
+
+bool	parse_user_input(t_minishell *ms_params, char *user_input)
+{
+	t_block		*head;
+
+	head = new_block();
+	if (parse_cmds(&head, user_input) == false)
+		continue ;
+	if (errno)
+		return (exit_ms(*ms_params, 2, "parsing"), 0);
+	hd_manager(head);
+	if (errno)
+		ms_perror("minishell", "io_manager", strerror(errno));
+	ms_params->head = head;
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	char		*tmp;
-	char		*ms_prompt;
-	t_block		*head;
+	char		*user_input;
 	t_minishell	ms_params;
 
-	init_minishell(&ms_params, envp);
+	if (!init_minishell(&ms_params, envp))
+		return (1);
 	
 	(void)ac;
 	(void)av;
 	while (1)
 	{
-		if (!refresh_prompt_param(&ms_params.prompt_params))
-			return (exit_ms(ms_params, 0, "prompt"), 0);
-		ensure_prompt_position();
-		ms_prompt = build_prompt(&ms_params.prompt_params);
-		tmp = readline(ms_prompt);
-		free(ms_prompt);
-		if (!tmp)
+		init_prompt(&ms_params, &user_input);
+		if (!user_input)
 			continue;
+
 		my_add_history(rl_line_buffer, ms_params.history_fd);
-		head = new_block();
-		if (parse_cmds(&head, tmp) == false)
-			continue ;
-		if (errno)
-			return (exit_ms(ms_params, 2, "parsing"), 0);
-		hd_manager(head);
-		if (errno)
-			ms_perror("minishell", "io_manager", strerror(errno));
-		ms_params.head = head;
-		execute_cmds(head, &ms_params);
+
+		parse_user_input(&ms_params, user_input);
+
+		execute_cmds(ms_params.head, &ms_params);
 		if (wait_children(ms_params.children) == -1)
 			exit_ms(ms_params, 2, "waitpid");
 		free_children(&ms_params.children);
-		flood_free(head);
+		flood_free(ms_params.head);
 	}
 	return (0);
 }
