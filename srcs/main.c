@@ -347,7 +347,7 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 		free_children(&ms_params->children);
 		ms_params->children = NULL;
 		my_dup(block);
-		execute_cmds(block->sub, ms_params); // on passe au contenu du subshell immediatement
+		execute_commands(block->sub, ms_params); // on passe au contenu du subshell immediatement
 		exit_ms(*ms_params, wait_children(ms_params->children), NULL);
 	}
 	close_sub_fds(block->sub);
@@ -373,7 +373,7 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 	return (sub_pid);
 }
 
-int	execute_cmds(t_block *block, t_minishell *ms_params)
+int	execute_commands(t_block *block, t_minishell *ms_params)
 {
 	t_block	*next_block_to_execute;
 	pid_t	sub_pid;
@@ -425,7 +425,7 @@ int	execute_cmds(t_block *block, t_minishell *ms_params)
 	if (!next_block_to_execute)
 		return (0); // aucun block executable
 	else
-		execute_cmds(next_block_to_execute, ms_params);
+		execute_commands(next_block_to_execute, ms_params);
 	return (0);
 }
 
@@ -530,6 +530,8 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 	return (true);
 }
 
+
+
 int	main(int ac, char **av, char **envp)
 {
 	char		*user_input;
@@ -551,7 +553,7 @@ int	main(int ac, char **av, char **envp)
 		if (!parse_user_input(&ms_params, user_input))
 			continue ;
 
-		execute_cmds(ms_params.head, &ms_params);
+		execute_commands(ms_params.head, &ms_params);
 		if (wait_children(ms_params.children) == -1)
 			exit_ms(ms_params, 2, "waitpid");
 		free_children(&ms_params.children);
