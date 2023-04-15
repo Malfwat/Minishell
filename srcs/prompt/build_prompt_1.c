@@ -109,7 +109,7 @@ char	*build_prompt(t_prompt *params)
 	char			*prompt;
 
 	errno = 0;
-	pargs = NULL;
+	*pargs = NULL;
 
 	build_prompt_start_delim(pargs);
 	build_prompt_cwd(pargs, params);
