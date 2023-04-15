@@ -118,6 +118,7 @@ typedef struct s_exec_vars
 
 typedef struct s_minishell
 {
+	int				last_exit_code;
 	t_prompt		prompt_params;
 	t_env_var		*envp;
 	t_pids			*children;
