@@ -99,6 +99,7 @@ char	*strjoin_pargs(t_prompt_blocks *pargs)
 		free(tmp);
 		if (errno)
 			return (NULL);
+		pargs = pargs->next;
 	}
 	return (str);
 }
