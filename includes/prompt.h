@@ -50,7 +50,7 @@ void	build_prompt_time(t_prompt_blocks **pargs, t_prompt *params);
 // build_prompt_1.c
 
 void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params);
-bool	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params);
+void	build_prompt_mid_delim(t_prompt_blocks **pargs, t_prompt *params);
 void	build_prompt_end_delim(t_prompt_blocks **pargs);
 char	*build_prompt(t_prompt *params);
 bool	refresh_prompt_param(t_prompt *lst, int last_exit_code);
