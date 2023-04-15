@@ -200,10 +200,12 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	free_exec_vars(exec_vars);
 	if (block->cmd.pid == -1 || errno)
 		exit_ms(*ms_params, 2, "exec fork");
-	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
+	if (block->operator == AND_OPERATOR|| block->operator == OR_OPERATOR
 		|| block->operator == SEMI_COLON)
-		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
-			exit_ms(*ms_params, 2, "waitpid");
+	{
+		waitpid(block->cmd.pid, &block->cmd.exit_value, 0);
+		printf("code:%d\n", block->cmd.exit_value);
+	}
 	store_pid(block->cmd.pid, &ms_params->children);
 }
 
