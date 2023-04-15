@@ -53,6 +53,6 @@ void	build_prompt_exit_status(char **prompt, t_prompt *params);
 bool	build_prompt_mid_delim(char **prompt, t_prompt *params);
 void	build_prompt_end_delim(char **prompt);
 char	*build_prompt(t_prompt *params);
-bool	refresh_prompt_param(t_prompt *lst);
+bool	refresh_prompt_param(t_prompt *lst, int last_exit_code);
 
 #endif /* PROMPT_H */
