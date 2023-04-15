@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/14 20:18:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:33:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ int	heredoc(char *limiter)
 	return (test[0]);
 }
 
-void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
+int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
 {
 	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
 	if (errno)
-		return ;
+		return (-1);
 	if (ptr->joined_name)
 		ptr->fd = open(ptr->joined_name, O_RDONLY);
 	if (ptr->fd != -1)
@@ -58,13 +58,16 @@ void	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
 		}
 	}
 	ptr->errno_value = errno;
+	if (errno)
+		return (-2);
+	return (0);
 }
 
-void	output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp)
+int	output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp)
 {
 	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
 	if (errno)
-		return ;
+		return (-1);
 	if (ptr->append)
 		ptr->fd = open(ptr->joined_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
 	else
@@ -72,31 +75,32 @@ void	output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp)
 	if (ptr->fd != -1)
 	{
 		if (*fd != INIT_FD_VALUE)
-		{
 			close(*fd);
-		}
 		*fd = ptr->fd;
 	}
 	ptr->errno_value = errno;
+	if (errno)
+		return (-2);
+	return (0);
 }
 
-bool	hd_manager(t_block *block)
+int	hd_manager(t_block *block)
 {
 	t_redirect *ptr;
 	
 	if (!block)
-		return (true);
+		return (0);
 	ptr = block->heredoc;
 	while (ptr)
 	{
 		if (!ptr->heredoc_limiter)
-			return (true);
+			return (0);
 		ptr->joined_name = join_splitted_arg(ptr->file_name->next, NULL, false);
 		if (errno)
-			return (false);
+			return (-1);
 		ptr->fd = heredoc(ptr->joined_name);
 		if (ptr->fd == -1)
-			return (false);
+			return (-1);
 		if (block->input_source == HEREDOC)
 		{
 			if (block->io_tab[0] != INIT_FD_VALUE)
@@ -105,59 +109,35 @@ bool	hd_manager(t_block *block)
 		}
 		ptr = ptr->next;
 	}
-	if (hd_manager(block->pipe_next) == false \
-		|| hd_manager(block->next) == false || hd_manager(block->sub) == false)
-		return (false);
-	return (true);
+	if (hd_manager(block->pipe_next) == -1 \
+		|| hd_manager(block->next) == -1 || hd_manager(block->sub) == -1)
+		return (-1);
+	return (0);
 }
 
-
-// char	*io_interpret_dollars(t_split_arg *arg, t_env_var *envp)
-// {
-// 	char		*tmp;
-// 	char		*res;
-// 	t_env_var	*env_var;
-// 	char		**tab;
-// 	int			i;
-
-// 	tab = ft_split(arg->str, '$');
-// 	if (!tab)
-// 		return (NULL);
-// 	i = -1;
-// 	res = NULL;
-// 	while (tab[++i] && !errno)
-// 	{
-// 		tmp = res;
-// 		if ((i == 0 && arg->str != '$') || (arg->scope != '"'))
-// 			res = ft_strjoin(res, tab[i]);
-// 		else
-// 		{
-// 			env_var = find_env_var(envp, tab[i]);
-// 			if (!env_var)
-// 				res = ft_strjoin(res, "");
-// 			res = ft_strjoin(res, env_var->var_value);
-// 		}
-// 		free(tmp);
-// 	}
-// 	return (res);
-// }
-
-
-bool	init_exec_io(t_block *block, t_env_var *envp)
+bool	init_exec_io(t_block *block, t_minishell *ms_params)
 {
 	t_redirect	*tmp;
+	int			ret;
 
 	tmp = block->io_redirect;
 	
 	while (tmp && !errno)
 	{
 		if (tmp->mode == INPUT_MODE)
-			input_manager(tmp, &block->io_tab[0], block, envp);
+			ret = input_manager(tmp, &block->io_tab[0], block, ms_params->envp);
 		else if (tmp->mode == OUTPUT_MODE)
-			output_manager(tmp, &block->io_tab[1], envp);
+			ret = output_manager(tmp, &block->io_tab[1], ms_params->envp);
 		tmp = tmp->next;
 	}
-	if (errno)
+	if (ret == -1)
+		exit_ms(*ms_params, 2, "exec init");
+	else if (ret == -2)
+	{
+		block->cmd.exit_value = 1;
+		ms_params->last_exit_code = block->cmd.exit_value;
+		perror("minishell1");
 		return (false);
+	}
 	return (true);
 }
