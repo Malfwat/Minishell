@@ -502,7 +502,7 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
 		exit_ms(*ms_params, 0, "prompt");
 	ensure_prompt_position();
-	ms_prompt = build_prompt(&ms_params->prompt_params);
+	ms_prompt = build_prompt(&ms_params->prompt_params, false);
 	if (!ms_prompt || errno)
 		exit_ms(*ms_params, 0, "prompt");
 	*user_input = readline(ms_prompt);
@@ -539,11 +539,15 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 void	handler_func(int num)
 {
 	(void)num;
-
+	char	*prompt_header;
+	
+	prompt_header = build_prompt(&ms_params->prompt_params, true);
 	write(1, "\n", 1);
+	ft_putstr_fd(prompt_header, 2);
+	free(prompt_header);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	// rl_redisplay();
+	rl_redisplay();
 	// printf("\n");
 	// rl_replace_line("", 0); // Clear the previous text
 	// rl_forced_update_display();

@@ -189,7 +189,7 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 	ls_edit_p_args_if(pargs, P_MID_DELIM, build_mid_delim(new_delim_mlen), new_delim_mlen);
 }
 
-char	*build_prompt(t_prompt *params)
+char	*build_prompt(t_prompt *params, bool header_only)
 {
 	t_prompt_blocks	*pargs;
 	char			*prompt;
@@ -204,8 +204,11 @@ char	*build_prompt(t_prompt *params)
 	build_prompt_mid_delim(&pargs, 10);
 	build_prompt_exit_status(&pargs, params);
 	build_prompt_time(&pargs, params);
-	build_prompt_end_delim(&pargs);
-	build_prompt_user(&pargs, params);
+	if (!header_only)
+	{
+		build_prompt_end_delim(&pargs);
+		build_prompt_user(&pargs, params);
+	}
 	check_prompt_width(pargs, params);
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);
