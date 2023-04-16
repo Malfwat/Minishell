@@ -542,7 +542,7 @@ void	handler_func(int num)
 	// printf("\n");
 	rl_replace_line("", 0); // Clear the previous text
 	rl_on_new_line();      // move the cursor to a new line
-	ft_redisplay(); 
+	rl_redisplay(); 
 	// rl_forced_update_display();
 }
 
