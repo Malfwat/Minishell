@@ -552,7 +552,8 @@ void	handler_func(int num)
 int	main(int ac, char **av, char **envp)
 {
 	char		*user_input;
-	t_minishell	ms_params
+	t_minishell	ms_params;
+
 	if (!init_minishell(&ms_params, envp))
 		return (1);
 	(void)ac;
