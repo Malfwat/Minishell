@@ -538,7 +538,7 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 // 	printf("%s%s\n", rl_prompt, rl_line_buffer);
 // }
 
-void	handler_func(int num, t_minishell *ms_params)
+void	handler_func(int num)
 {
 	(void)num;
 	char	*prompt_header;
