@@ -122,6 +122,7 @@ bool	init_exec_io(t_block *block, t_minishell *ms_params)
 
 	tmp = block->io_redirect;
 	
+	ret = 0;
 	while (tmp && !errno)
 	{
 		if (tmp->mode == INPUT_MODE)
