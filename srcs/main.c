@@ -540,9 +540,13 @@ void	handler_func(int num)
 {
 	(void)num;
 
-	printf("\n");
-	rl_replace_line("", 0); // Clear the previous text
-	rl_forced_update_display();
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	// printf("\n");
+	// rl_replace_line("", 0); // Clear the previous text
+	// rl_forced_update_display();
 }
 
 int	main(int ac, char **av, char **envp)
