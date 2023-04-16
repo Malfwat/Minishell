@@ -66,5 +66,5 @@ void	flood_free(t_block *lst)
 	flood_free(lst->pipe_next);
 	lst->sub = NULL;
 	free(lst);
-	ft_bzero(lst, sizeof(*lst));
+	*lst = (t_block){0};
 }
