@@ -544,6 +544,7 @@ void	handler_func(int num)
 	char		*ms_prompt;
 	int			last_exit_code;
 
+	errno = 0;
 	last_exit_code = ms_params_global.last_exit_code;
 	if (!refresh_prompt_param(&ms_params_global.prompt_params, last_exit_code))
 		exit_ms(ms_params_global, 0, "prompt");
@@ -551,6 +552,7 @@ void	handler_func(int num)
 	ms_prompt = build_prompt(&ms_params_global.prompt_params);
 	if (!ms_prompt || errno)
 		exit_ms(ms_params_global, 0, "prompt");
+	errno = 0;
 	free(ms_prompt);
 	ms_params_global.last_exit_code = 0;
 	printf("\n");
