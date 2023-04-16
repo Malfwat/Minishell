@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/15 23:54:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 07:32:31 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -543,7 +543,7 @@ void	handler_func(int num)
 	(void)num;
 	char	*prompt_header;
 	
-	prompt_header = build_prompt(&ms_params_global->prompt_params, true);
+	prompt_header = build_prompt(&ms_params_global.prompt_params, true);
 	write(1, "\n", 1);
 	ft_putstr_fd(prompt_header, 2);
 	free(prompt_header);
