@@ -539,10 +539,9 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 void	handler_func(int num)
 {
 	(void)num;
-	ungetc(EOF, stdin);
-	// rl_replace_line("", 0); // Clear the previous text
-	// rl_on_new_line();	// move the cursor to a new line
-	// rl_redisplay();
+	rl_replace_line("", 0); // Clear the previous text
+	rl_on_new_line();	// move the cursor to a new line
+	rl_redisplay();
 	// rl_forced_update_display();
 }
 
@@ -560,7 +559,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		init_prompt(&ms_params, &user_input);
 		if (!user_input)
-			continue;
+			exit_ms(ms_add_history, 0, "readline");
 
 		ms_add_history(rl_line_buffer, ms_params.history_fd);
 
