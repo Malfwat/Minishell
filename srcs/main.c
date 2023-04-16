@@ -505,6 +505,7 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	ms_prompt = build_prompt(&ms_params->prompt_params);
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt");
+	rl_redisplay();
 	*user_input = readline(ms_prompt);
 	errno = 0;
 	free(ms_prompt);
