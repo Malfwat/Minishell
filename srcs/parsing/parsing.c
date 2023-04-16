@@ -113,7 +113,7 @@ char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 		}
 		free(tmp);
 	}
-	return (free(tab), res);
+	return (ft_strsfree(tab), res);
 }
 
 void	free_t_split_arg(t_split_arg **arg)
