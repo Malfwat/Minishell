@@ -560,7 +560,7 @@ int	main(int ac, char **av, char **envp)
 		init_prompt(&ms_params, &user_input);
 		if (!user_input)
 			exit_ms(ms_params, 0, "readline");
-
+	
 		ms_add_history(rl_line_buffer, ms_params.history_fd);
 
 		if (!parse_user_input(&ms_params, user_input))
