@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 19:53:59 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:45:48 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -522,15 +522,6 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 	ms_params->head = head;
 	return (true);
 }
-
-// void clear_line() {
-// 	printf("\33[2K\r");
-// }
-
-// void redisplay_full_prompt(vp) {
-// 	clear_line();
-// 	printf("%s%s\n", rl_prompt, rl_line_buffer);
-// }
 
 void	handler_func(int num)
 {

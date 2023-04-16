@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 20:21:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:44:34 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,12 +203,13 @@ void	free_split_args(t_split_arg *lst)
 	}
 }
 
-void	free_next_param(void *ptr, int type)
+void	free_next_param(void **ptr, int type)
 {
 	if (type == PARENTHESIS || type == INCOMPLETE_PARENTHESIS)
-		free(ptr);
+		free(*ptr);
 	else
-		free_split_args(ptr);
+		free_split_args(*ptr);
+	*ptr = NULL;
 }
 
 bool	check_parse_error(void *next_param, char *cmd_line, int type)
@@ -216,7 +217,7 @@ bool	check_parse_error(void *next_param, char *cmd_line, int type)
 	char	*tmp;
 
 	if (errno)
-		return(free(cmd_line), free_next_param(next_param, type), false);
+		return(free(cmd_line), free_next_param(&next_param, type), false);
 	if (next_param || type < 0)
 	{
 		tmp = ft_strtrim(cmd_line, " \t");
@@ -225,7 +226,7 @@ bool	check_parse_error(void *next_param, char *cmd_line, int type)
 		syntax_error(CMD_SYNTAX_ERR, next_param, type, tmp);
 		free(tmp);
 		free(cmd_line);
-		free_next_param(next_param, type);
+		free_next_param(&next_param, type);
 		return (false);
 	}
 	free(cmd_line);
@@ -250,7 +251,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 		{
 			if (!parse_cmds(&((*curr_block)->sub), ft_substr(next_param, 1, \
 			ft_strlen(next_param) - 2)))
-				return (free(cmd_line), free_next_param(next_param, type), false);
+				return (free(cmd_line), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
 		{
