@@ -544,6 +544,7 @@ void	handler_func(int num)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+	rl_redisplay();
 	// printf("\n");
 	// rl_replace_line("", 0); // Clear the previous text
 	// rl_forced_update_display();
