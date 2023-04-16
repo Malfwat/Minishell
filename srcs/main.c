@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 07:32:31 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 19:53:59 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,18 +101,14 @@ void	free_exec_vars(t_exec_vars exec_vars)
 void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
 {
 	if (*head == current)
-	{
 		*head = new_lst;
-	}
 	else
 	{
 		current->prev->next = new_lst;
 		new_lst->prev = current->prev;
 	}
 	if (current->next)
-	{
 		current->next->prev = last_args(new_lst);
-	}
 	last_args(new_lst)->next = current->next;
 }
 
