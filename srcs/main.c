@@ -551,8 +551,6 @@ void	handler_func(int num)
 	ms_prompt = build_prompt(&ms_params_global.prompt_params);
 	if (!ms_prompt || errno)
 		exit_ms(*ms_params_global, 0, "prompt");
-	*user_input = readline(ms_prompt);
-	errno = 0;
 	free(ms_prompt);
 	ms_params_global.last_exit_code = 0;
 	printf("\n");
