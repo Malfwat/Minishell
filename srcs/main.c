@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 20:58:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:59:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,7 @@ int	wait_children(t_minishell *ms_params)
 		children = children->next;
 	}
 	free_children(&ms_params->children);
-	ms_params->last_exit_code = status;
+	ms_params->last_exit_code = extract_exit_code(status);
 	return (status);
 }
 
