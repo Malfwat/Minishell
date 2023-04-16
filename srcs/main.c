@@ -517,7 +517,7 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
-		return (false);
+		return (flood_free(head), false);
 	if (errno)
 		exit_ms(*ms_params, 2, "parsing");
 	hd_manager(head);
