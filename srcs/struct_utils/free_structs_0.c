@@ -65,4 +65,5 @@ void	flood_free(t_block *lst)
 	flood_free(lst->pipe_next);
 	lst->sub = NULL;
 	free(lst);
+	*lst = NULL;
 }
