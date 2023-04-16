@@ -76,7 +76,7 @@ void	build_prompt_end_delim(t_prompt_blocks **pargs)
 {
 	char	*str;
 
-	str = ft_strsjoin(8, ENDC, LGREY, "▓▒░", ENDC, LLGREY, "\n╰─",
+	str = ft_strsjoin(9, ENDC, LGREY, "▓▒░", ENDC, "\n", LLGREY, "╰─",
 			BOLD, ENDC);
 	ls_p_args_addback(pargs, ls_new_p_args(P_END_DELIM, str, 0));
 }
