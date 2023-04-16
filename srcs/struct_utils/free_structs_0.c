@@ -24,6 +24,7 @@ void	free_t_args(t_args *ptr)
 	{
 		tmp = ptr->next;
 		free(ptr->final_arg);
+		free_t_split_arg(&ptr->s_args);
 		free(ptr);
 		ptr = tmp;
 	}
