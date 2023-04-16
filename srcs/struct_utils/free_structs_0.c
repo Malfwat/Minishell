@@ -23,7 +23,7 @@ void	free_t_args(t_args *ptr)
 	while (ptr)
 	{
 		tmp = ptr->next;
-		// free(ptr->final_arg);
+		free(ptr->final_arg);
 		free(ptr);
 		ptr = tmp;
 	}
