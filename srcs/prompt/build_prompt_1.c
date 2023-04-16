@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/15 23:39:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:53:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 	char	*str;
 	char	*ascii_status;
 
-	ascii_status = ft_itoa(extract_exit_code(params->last_exit_code));
+	ascii_status = ft_itoa(params->last_exit_code);
 	if (!ascii_status)
 		return ;
 	if (!params->last_exit_code)

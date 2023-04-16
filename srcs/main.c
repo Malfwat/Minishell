@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 20:45:48 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:58:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	{
 		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
-		ms_params->last_exit_code = block->cmd.exit_value;
+		ms_params->last_exit_code = extract_exit_code(block->cmd.exit_value);
 	}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);
@@ -213,7 +213,7 @@ t_block	*find_next_executable_block(t_block *block)
 {
 	int		exit_value;
 
-	exit_value = block->cmd.exit_value;
+	exit_value = extract_exit_code(block->cmd.exit_value);
 	while (block)
 	{
 		if (block->operator == AND_OPERATOR && exit_value == SUCCESS)
@@ -314,6 +314,7 @@ int	wait_children(t_minishell *ms_params)
 	t_pids	*children;
 
 	children = ms_params->children;
+	status = 0;
 	while (children)
 	{
 		if (waitpid(children->pid, &status, 0) == -1)
@@ -396,7 +397,7 @@ int	execute_commands(t_block *block, t_minishell *ms_params)
 		{
 			if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 				exit_ms(*ms_params, 2, "waitpid");
-			ms_params->last_exit_code = block->cmd.exit_value;
+			ms_params->last_exit_code = extract_exit_code(block->cmd.exit_value);
 		}
 		else
 			store_pid(block->cmd.pid, &ms_params->children);
