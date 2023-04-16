@@ -543,6 +543,7 @@ void	handler_func(int num)
 	(void)num;
 	char	*prompt_header;
 	
+	write(1, "\n", 1);
 	prompt_header = build_prompt(&ms_params_global.prompt_params, true);
 	write(1, "\n", 1);
 	ft_putstr_fd(prompt_header, 2);
