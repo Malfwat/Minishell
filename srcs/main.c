@@ -543,9 +543,9 @@ void	handler_func(int num)
 	(void)num;
 	char	*prompt_header;
 	
-	prompt_header = build_prompt(&ms_params_global.prompt_params, true);
+	write(1, "\033[1A", 4);
 	rl_on_new_line();
-	rl_replace_line(prompt_header, -1);
+	rl_replace_line("", 0);
 	rl_redisplay();
 	// printf("\n");
 	// rl_replace_line("", 0); // Clear the previous text
