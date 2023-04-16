@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/15 20:26:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:21:39 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,12 +168,17 @@ void	print_syntax_error(char c)
 
 void	syntax_error(int err, void *comment, int type, char *cmd_line)
 {
-	if (!comment)
+	if (type == EXPECTING_ARGUMENT)
+	{
+		ft_putstr_fd("minishell: syntax error: right hand operand cannot be empty\n", 2);
+		return ;
+	}
+	else if (!comment)
 	{
 		print_syntax_error(*cmd_line);
 		return ;
 	}
-	if (type == CMD_ARG || type == INPUT_OUTPUT)
+	else if (type == CMD_ARG || type == INPUT_OUTPUT)
 	{
 		comment = join_splitted_arg((t_split_arg *)comment, NULL, false);
 		if (!comment)
@@ -260,6 +265,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 				add_block_back(curr_block, last_sibling);
 				curr_block = &(*curr_block)->next;
 			}
+			type = EXPECTING_ARGUMENT;
 		}
 		next_param = get_next_param(cmd_line, &i, &type);
 	}
