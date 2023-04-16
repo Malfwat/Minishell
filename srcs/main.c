@@ -28,6 +28,8 @@
 #include <ncurses.h>
 #include <term.h>
 
+t_minishell	ms_params_global;
+
 void handle_execve_failure(t_minishell ms_params, char *program_name);
 
 void	close_block_fds(t_block *block)
@@ -539,8 +541,12 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 void	handler_func(int num)
 {
 	(void)num;
-	
+	char	*prompt;
+
+	prompt = build_prompt(&ms_params->prompt_params);
 	rl_replace_line("", 0);
+	printf("\n");
+	printf(prompt);
 	// printf("\n");
 	// rl_replace_line("", 0); // Clear the previous text
 	// rl_forced_update_display();
@@ -549,29 +555,28 @@ void	handler_func(int num)
 int	main(int ac, char **av, char **envp)
 {
 	char		*user_input;
-	t_minishell	ms_params;
 
-	if (!init_minishell(&ms_params, envp))
+	if (!init_minishell(&ms_params_global, envp))
 		return (1);
 	(void)ac;
 	(void)av;
 	signal(SIGINT, &handler_func);
 	while (1)
 	{
-		init_prompt(&ms_params, &user_input);
+		init_prompt(&ms_params_global, &user_input);
 		if (!user_input)
 			continue;
 
-		ms_add_history(rl_line_buffer, ms_params.history_fd);
+		ms_add_history(rl_line_buffer, ms_params_global.history_fd);
 
-		if (!parse_user_input(&ms_params, user_input))
+		if (!parse_user_input(&ms_params_global, user_input))
 			continue ;
 
-		execute_commands(ms_params.head, &ms_params);
-		if (wait_children(&ms_params) == -1)
-			exit_ms(ms_params, 2, "waitpid");
-		free_children(&ms_params.children);
-		flood_free(ms_params.head);
+		execute_commands(ms_params_global.head, &ms_params_global);
+		if (wait_children(&ms_params_global) == -1)
+			exit_ms(ms_params_global, 2, "waitpid");
+		free_children(&ms_params_global.children);
+		flood_free(ms_params_global.head);
 	}
 	return (0);
 }
