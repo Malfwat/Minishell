@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <minishell.h>
+#include <libft.h>
 
 void	free_t_args(t_args *ptr)
 {
@@ -63,7 +64,7 @@ void	flood_free(t_block *lst)
 	flood_free(lst->next);
 	flood_free(lst->sub);
 	flood_free(lst->pipe_next);
-	lst->sub = NULL;
+	ft_bzero(lst, sizeof(*lst));
 	free(lst);
 	*lst = 0;
 }
