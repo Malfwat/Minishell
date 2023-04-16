@@ -539,10 +539,10 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 void	handler_func(int num)
 {
 	(void)num;
-	printf("\n");
-	rl_replace_line("", 0); // Clear the previous text
-	rl_on_new_line();      // move the cursor to a new line
-	rl_redisplay();
+	printf("\04");
+	// rl_replace_line("", 0); // Clear the previous text
+	// rl_on_new_line();	// move the cursor to a new line
+	// rl_redisplay();
 	// rl_forced_update_display();
 }
 
