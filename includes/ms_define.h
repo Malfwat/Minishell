@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/15 18:41:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 20:07:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ enum e_operator
 
 enum e_type
 {
-	INCOMPLETE_INPUT_OUTPUT = -3,
+	EXPECTING_ARGUMENT = -4,
+	INCOMPLETE_INPUT_OUTPUT,
 	INCOMPLETE_CMD_ARG,
 	INCOMPLETE_PARENTHESIS,
 	INPUT_OUTPUT,
