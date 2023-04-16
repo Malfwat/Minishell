@@ -572,6 +572,7 @@ int	main(int ac, char **av, char **envp)
 			exit_ms(ms_params, 2, "waitpid");
 		free_children(&ms_params.children);
 		flood_free(ms_params.head);
+		ms_params.head = (t_block *){0};
 	}
 	return (0);
 }
