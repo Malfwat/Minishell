@@ -170,7 +170,6 @@ void	child_worker(t_block *block, t_minishell *ms_params, t_exec_vars exec_vars)
 		close(block->io_tab[1]);
 	if (block->pipe_next)
 		close(block->pipe_next->io_tab[0]);
-	free_exec_vars(exec_vars);
 	handle_execve_failure(*ms_params, block->cmd.args->final_arg);
 }
 
