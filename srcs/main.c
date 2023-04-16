@@ -543,7 +543,7 @@ void	handler_func(int num)
 	(void)num;
 	char	*prompt;
 
-	prompt = build_prompt(&ms_params_global->prompt_params);
+	prompt = build_prompt(&ms_params_global.prompt_params);
 	rl_replace_line("", 0);
 	printf("\n");
 	printf(prompt);
