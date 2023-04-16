@@ -134,13 +134,19 @@ char	*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret)
 {
 	char	*res;
 	char	*tmp;
+	char	*dollar_interpreted;
 
 	res = NULL;
+	dollar_interpreted = NULL;
 	while (arg)
 	{
 		tmp = res;
 		if (interpret)
-			res = ft_strjoin(res, interpret_dollars(arg, envp));
+		{
+			dollar_interpreted = interpret_dollars(arg, envp)
+			res = ft_strjoin(res, dollar_interpreted);
+			free(dollar_interpreted);
+		}
 		else
 			res = ft_strjoin(res, arg->str);
 		free(tmp);
