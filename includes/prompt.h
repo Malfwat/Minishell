@@ -52,7 +52,7 @@ void	build_prompt_time(t_prompt_blocks **pargs, t_prompt *params);
 void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params);
 void	build_prompt_mid_delim(t_prompt_blocks **pargs, int len);
 void	build_prompt_end_delim(t_prompt_blocks **pargs);
-char	*build_prompt(t_prompt *params);
+char	*build_prompt(t_prompt *params, bool header_only);
 bool	refresh_prompt_param(t_prompt *lst, int last_exit_code);
 
 void			ls_p_args_addback(t_prompt_blocks **head, t_prompt_blocks *new);
