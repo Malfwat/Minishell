@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 20:59:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/16 21:01:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -514,7 +514,10 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
+	{
+		ms_params->last_exit_code = 1;
 		return (flood_free(head), false);
+	}
 	if (errno)
 		exit_ms(*ms_params, 2, "parsing");
 	hd_manager(head);
