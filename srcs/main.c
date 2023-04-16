@@ -555,9 +555,9 @@ void	handler_func(int num)
 	errno = 0;
 	free(ms_prompt);
 	ms_params_global.last_exit_code = 0;
-	printf("\n");
 	rl_replace_line("", 0);
 	printf(ms_prompt);
+	printf("\n");
 	// printf("\n");
 	// rl_replace_line("", 0); // Clear the previous text
 	// rl_forced_update_display();
