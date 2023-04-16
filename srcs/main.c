@@ -540,7 +540,6 @@ void	handler_func(int num)
 {
 	(void)num;
 	
-	write(1, "\033[1A", 4);
 	rl_replace_line("", 0);
 	// printf("\n");
 	// rl_replace_line("", 0); // Clear the previous text
