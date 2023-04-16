@@ -546,11 +546,11 @@ void	handler_func(int num)
 
 	last_exit_code = ms_params_global.last_exit_code;
 	if (!refresh_prompt_param(&ms_params_global.prompt_params, last_exit_code))
-		exit_ms(*ms_params_global, 0, "prompt");
+		exit_ms(ms_params_global, 0, "prompt");
 	ensure_prompt_position();
 	ms_prompt = build_prompt(&ms_params_global.prompt_params);
 	if (!ms_prompt || errno)
-		exit_ms(*ms_params_global, 0, "prompt");
+		exit_ms(ms_params_global, 0, "prompt");
 	free(ms_prompt);
 	ms_params_global.last_exit_code = 0;
 	printf("\n");
