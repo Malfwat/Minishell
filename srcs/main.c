@@ -479,6 +479,7 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 	ft_memset(ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(ms_params);
 	toggle_control_character(VQUIT, _POSIX_VDISABLE);
+	signal(SIGTERM, SIG_IGN);
 	// set_sig_handler();
 	// if (!refresh_prompt_param(&ms_prompt.prompt_params))
 		// return (1);
@@ -505,7 +506,6 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	ms_prompt = build_prompt(&ms_params->prompt_params);
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt");
-	rl_redisplay();
 	*user_input = readline(ms_prompt);
 	errno = 0;
 	free(ms_prompt);
