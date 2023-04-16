@@ -143,7 +143,7 @@ char	*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret)
 		tmp = res;
 		if (interpret)
 		{
-			dollar_interpreted = interpret_dollars(arg, envp)
+			dollar_interpreted = interpret_dollars(arg, envp);
 			res = ft_strjoin(res, dollar_interpreted);
 			free(dollar_interpreted);
 		}
