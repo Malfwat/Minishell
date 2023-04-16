@@ -123,6 +123,7 @@ void	free_t_split_arg(t_split_arg **arg)
 	while (*arg)
 	{
 		ptr = (*arg)->next;
+		free((*arg)->str);
 		free(*arg);
 		*arg = ptr;
 	}
