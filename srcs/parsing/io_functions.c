@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/15 21:33:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:59:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ bool	init_exec_io(t_block *block, t_minishell *ms_params)
 		block->cmd.exit_value = 1;
 		ms_params->last_exit_code = block->cmd.exit_value;
 		perror("minishell1");
+		errno = 0;
 		return (false);
 	}
 	return (true);

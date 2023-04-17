@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 20:44:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 22:00:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,8 @@ char	*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret)
 		if (interpret)
 		{
 			dollar_interpreted = interpret_dollars(arg, envp);
+			if (!dollar_interpreted && !res)
+				dollar_interpreted = ft_strdup("");
 			res = ft_strjoin(res, dollar_interpreted);
 			free(dollar_interpreted);
 		}

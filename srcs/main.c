@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 21:01:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 21:55:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 #include <sys/wait.h>
 #include <ncurses.h>
 #include <term.h>
+
+t_minishell	g_ms_params;
+
 
 void handle_execve_failure(t_minishell ms_params, char *program_name);
 
@@ -160,12 +163,20 @@ void	child_worker(t_block *block, t_minishell *ms_params, t_exec_vars exec_vars)
 		return (free_exec_vars(exec_vars), exit_ms(*ms_params, 2, "exec dup"));
 	execve(exec_vars.argv[0], exec_vars.argv, exec_vars.envp);
 	free_exec_vars(exec_vars);
-	if (block->io_tab[0] >= 0)
-		close(block->io_tab[0]);
-	if (block->io_tab[1] >= 0)
-		close(block->io_tab[1]);
-	if (block->pipe_next)
-		close(block->pipe_next->io_tab[0]);
+	dprintf(2, "errno: %i\n", errno);
+	// if (block->io_tab[0] >= 0)
+	// {
+	// 	close(block->io_tab[0]);
+	// 	dprintf(2, "fd: %d\n", block->io_tab[0]);
+	// }
+	// if (block->io_tab[1] >= 0)
+	// {
+	// 	close(block->io_tab[1]);
+	// 	dprintf(2, "fd: %d\n", block->io_tab[1]);
+	// }
+	// if (block->pipe_next && block->pipe_next->io_tab[0] >= 0)
+	// 	close(block->pipe_next->io_tab[0]);
+	dprintf(2, "errno: %i\n", errno);
 	handle_execve_failure(*ms_params, block->cmd.args->final_arg);
 }
 
@@ -192,7 +203,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	{
 		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
-		ms_params->last_exit_code = extract_exit_code(block->cmd.exit_value);
+		ms_params->last_exit_code = block->cmd.exit_value;
 	}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);
@@ -397,7 +408,7 @@ int	execute_commands(t_block *block, t_minishell *ms_params)
 		{
 			if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 				exit_ms(*ms_params, 2, "waitpid");
-			ms_params->last_exit_code = extract_exit_code(block->cmd.exit_value);
+			ms_params->last_exit_code = block->cmd.exit_value;
 		}
 		else
 			store_pid(block->cmd.pid, &ms_params->children);
@@ -438,7 +449,7 @@ int	get_cursor_position(void)
 	tcgetattr(0, &restore);
 	term.c_lflag &= ~(ICANON|ECHO);
 	tcsetattr(0, TCSANOW, &term);
-	write(1, sc_cursor_pos, ft_strlen(sc_cursor_pos));
+	write(0, sc_cursor_pos, ft_strlen(sc_cursor_pos));
 	ret = 1;
 	i = 0;
 	while (ret > 0 && i < 9)
@@ -492,16 +503,23 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 
 void	init_prompt(t_minishell *ms_params, char **user_input)
 {
+	char		*ms_prompt_up;
 	char		*ms_prompt;
 	int			last_exit_code;
 
 	last_exit_code = ms_params->last_exit_code;
 	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
-		exit_ms(*ms_params, 0, "prompt");
+		exit_ms(*ms_params, 0, "prompt1");
 	ensure_prompt_position();
-	ms_prompt = build_prompt(&ms_params->prompt_params);
+	
+	ms_prompt_up = build_prompt(&ms_params->prompt_params, UP);
+	ft_putstr_fd(ms_prompt_up, 1);
+	free(ms_prompt_up);
+	ms_prompt = build_prompt(&ms_params->prompt_params, DOWN);
+	free_prompt_params(&ms_params->prompt_params);
+	
 	if (errno)
-		exit_ms(*ms_params, 0, "prompt");
+		exit_ms(*ms_params, 0, "prompt2");
 	*user_input = readline(ms_prompt);
 	errno = 0;
 	free(ms_prompt);
@@ -512,6 +530,11 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 {
 	t_block		*head;
 
+	if (!*user_input)
+	{
+		ms_params->last_exit_code = 0;
+		return (false);
+	}
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
 	{
@@ -530,7 +553,21 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 void	handler_func(int num)
 {
 	(void)num;
+
+	char		*ms_prompt_up;
+	int			last_exit_code;
+
+	last_exit_code = g_ms_params.last_exit_code;
+	errno = 0;
+
+	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
+		exit_ms(g_ms_params, 0, "promp2t");
 	write(1, "\n", 1);
+	ms_prompt_up = build_prompt(&g_ms_params.prompt_params, UP);
+	ft_putstr_fd(ms_prompt_up, 1);
+	free(ms_prompt_up);
+
+	
 	rl_replace_line("", 0); // Clear the previous text
 	rl_on_new_line();	// move the cursor to a new line
 	rl_redisplay();
@@ -539,31 +576,33 @@ void	handler_func(int num)
 
 int	main(int ac, char **av, char **envp)
 {
-	char		*user_input;
-	t_minishell	ms_params;
+	char	*user_input;
 
-	if (!init_minishell(&ms_params, envp))
+	if (ac != 1)
+		return (ft_putstr_fd("Usage:\t./minishell\n", 2), 1);
+	if (!init_minishell(&g_ms_params, envp))
 		return (1);
 	(void)ac;
 	(void)av;
 	signal(SIGINT, &handler_func);
+	user_input = NULL;
 	while (1)
 	{
-		init_prompt(&ms_params, &user_input);
+		init_prompt(&g_ms_params, &user_input);
 		if (!user_input)
-			exit_ms(ms_params, 0, "readline");
+			exit_ms(g_ms_params, 0, "readline");
 	
-		ms_add_history(rl_line_buffer, ms_params.history_fd);
+		ms_add_history(rl_line_buffer, g_ms_params.history_fd);
 
-		if (!parse_user_input(&ms_params, user_input))
+		if (!parse_user_input(&g_ms_params, user_input))
 			continue ;
 
-		execute_commands(ms_params.head, &ms_params);
-		if (wait_children(&ms_params) == -1)
-			exit_ms(ms_params, 2, "waitpid");
-		free_children(&ms_params.children);
-		flood_free(ms_params.head);
-		ms_params.head = (t_block *){0};
+		execute_commands(g_ms_params.head, &g_ms_params);
+		if (wait_children(&g_ms_params) == -1)
+			exit_ms(g_ms_params, 2, "waitpid");
+		free_children(&g_ms_params.children);
+		flood_free(g_ms_params.head);
+		g_ms_params.head = (t_block *){0};
 	}
-	return (0);
+	return (1);
 }

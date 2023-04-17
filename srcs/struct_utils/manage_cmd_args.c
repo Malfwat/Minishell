@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/15 20:26:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 21:45:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	wc_update_t_args(t_args **args)
 	lst = *args;
 	while (lst)
 	{
-		if (ft_strchr(lst->final_arg, '*'))
+		if (lst->final_arg && ft_strchr(lst->final_arg, '*'))
 		{
 			manage_wildcard(&wildcard, lst->final_arg);
 			if (wildcard)

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/14 22:16:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:08:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ int	slice_next_part(char *src, t_split_arg **last_args, char quotes)
 	i = -1;
 	while (src[++i])
 	{
-		if ((is_delim(&src[i]) && !quotes) || (quotes && src[i] == quotes))
+		if (((is_delim(&src[i]) || ft_strchr("()", src[i])) && !quotes) \
+		|| (quotes && src[i] == quotes))
 			break ;
 		else if (!quotes && ft_strchr("'\"", src[i]) && ft_strchr(&src[i + 1], src[i]))
 			break ;
@@ -115,7 +116,7 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 
 	*type = INCOMPLETE_CMD_ARG;
 	*i += pass_whitespaces(&str[*i]);
-	while (str[*i] && !is_delim(&str[*i]))
+	while (str[*i] && !is_delim(&str[*i]) && !ft_strchr("()", str[*i]))
 	{
 		quotes = 0;
 		if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
@@ -128,7 +129,7 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 			return (false);
 		// if (quotes)
 		// 	(*i)++;
-		if (str[*i] && !is_delim(&str[*i]))
+		if (str[*i] && !is_delim(&str[*i]) && !ft_strchr("()", str[*i]))
 			(*i)++;
 	}
 	if (*arg && !errno)

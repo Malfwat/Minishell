@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/16 20:53:53 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:34:54 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ void	build_prompt_end_delim(t_prompt_blocks **pargs)
 {
 	char	*str;
 
-	str = ft_strsjoin(9, ENDC, LGREY, "▓▒░", ENDC, "\n", LLGREY, "╰─",
-			BOLD, ENDC);
+	str = ft_strsjoin(5, ENDC, LGREY, "▓▒░", ENDC, "\n");
 	ls_p_args_addback(pargs, ls_new_p_args(P_END_DELIM, str, 0));
 }
 
@@ -189,7 +188,7 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 	ls_edit_p_args_if(pargs, P_MID_DELIM, build_mid_delim(new_delim_mlen), new_delim_mlen);
 }
 
-char	*build_prompt(t_prompt *params)
+char	*build_prompt(t_prompt *params, bool side)
 {
 	t_prompt_blocks	*pargs;
 	char			*prompt;
@@ -197,19 +196,24 @@ char	*build_prompt(t_prompt *params)
 	errno = 0;
 	pargs = NULL;
 
-	build_prompt_start_delim(&pargs);
-	build_prompt_cwd(&pargs, params);
-	if (params->git_branch_name)
-		build_prompt_git(&pargs, params);
-	build_prompt_mid_delim(&pargs, 10);
-	build_prompt_exit_status(&pargs, params);
-	build_prompt_time(&pargs, params);
-	build_prompt_end_delim(&pargs);
-	build_prompt_user(&pargs, params);
-	check_prompt_width(pargs, params);
+	if (side == UP)
+	{
+		build_prompt_start_delim(&pargs);
+		build_prompt_cwd(&pargs, params);
+		if (params->git_branch_name)
+			build_prompt_git(&pargs, params);
+		build_prompt_mid_delim(&pargs, 10);
+		build_prompt_exit_status(&pargs, params);
+		build_prompt_time(&pargs, params);
+		check_prompt_width(pargs, params);
+		build_prompt_end_delim(&pargs);
+	}
+	else if (side == DOWN)
+	{
+		build_prompt_user(&pargs, params);
+	}
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);
-	free_prompt_params(params);
 	if (errno)
 		return (free(prompt), NULL);
 	return (prompt);
