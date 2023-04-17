@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/15 22:21:00 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:25:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 # include <struct_ms.h>	
 # include <stdbool.h>
 # include <errno.h>
-
-
-
 
 // init_t_block.c
 

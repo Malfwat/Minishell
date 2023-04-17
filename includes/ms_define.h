@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/16 20:07:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/17 22:10:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 
 # define INPUT_MODE 0
 # define OUTPUT_MODE 1
+
+// indicate which line of the prompt is needed
+
+# define UP 0
+# define DOWN 1
 
 // input_source according to the last redirection encountered
 
@@ -45,6 +50,7 @@
 # define LCYAN "\033[38;5;38m"
 # define LBLUE "\033[38;5;110m"
 # define ENDC "\033[0m"
+# define R_ESC(sc) "\001"sc"\002"
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
 
