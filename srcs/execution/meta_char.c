@@ -6,16 +6,19 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:56:25 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 14:20:16 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ms_define.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <minishell.h>
+#include <env_function.h>
+#include <libft.h>
 #include <struct_ms.h>
 
-void	wc_update_t_args(t_args **args)
+void	update_t_args(t_args **args)
 {
 	t_args	*lst;
 	t_args	*tmp;

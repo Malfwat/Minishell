@@ -6,12 +6,16 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:01:40 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 06:04:22 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 13:41:12 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
 #include <ms_define.h>
+#include <libft.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <minishell.h>
 
 void	free_t_split_arg(t_split_arg **arg)
 {
@@ -26,7 +30,6 @@ void	free_t_split_arg(t_split_arg **arg)
 	}
 	*arg = NULL;
 }
-
 
 void	ls_split_args_addback(t_split_arg **head, t_split_arg *new)
 {

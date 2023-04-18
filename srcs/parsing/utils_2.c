@@ -6,12 +6,15 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 06:21:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 14:08:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ms_define.h>
 #include <stdbool.h>
+#include <libft.h>
+#include <minishell.h>
+#include <stdlib.h>
 #include <struct_ms.h>
 
 void	print_syntax_error(char c)
@@ -46,7 +49,6 @@ void	syntax_error(int err, void *comment, int type, char *cmd_line)
 	if (type == CMD_ARG || type == INPUT_OUTPUT)
 		free(comment);
 }
-
 
 bool	check_and_store_delimiter(char *str, int *storage)
 {

@@ -6,11 +6,15 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:46:33 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 14:23:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <libft.h>
+#include <termcap.h>
+#include <prompt.h>
+#include <env_function.h>
 #include <ms_define.h>
 #include <struct_ms.h>
 #include <signal.h>

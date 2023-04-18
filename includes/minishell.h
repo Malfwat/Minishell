@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:45:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 14:21:45 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int			hd_manager(t_block *block);
 
 // manage_cmd_args.c
 
-t_args		*new_cmd_arg(char *arg);
+t_args		*new_cmd_arg(t_split_arg *arg);
 t_args		*last_args(t_args *head);
 void		ft_ls_t_args_addback(t_args **head, t_split_arg *arg);
 char		**build_argv(t_args **head);
@@ -79,7 +79,54 @@ int			extract_exit_code(int status);
 
 char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
 
+// meta_char.c
+
+char		*interpret_dollars(t_split_arg *arg, t_env_var *envp);
+void		update_t_args(t_args **args);
+
 void		handler_func(int num);
 
+
+//   init_t_args.c
+
+void		ft_ls_t_args_addback(t_args **head, t_split_arg *arg);
+t_args		*last_args(t_args *head);
+void		ft_addarg_front(t_args **head, t_split_arg *arg);
+void		insert_t_args(t_args **head, t_args *current, t_args *new_lst);
+t_args		*new_cmd_arg(t_split_arg *arg);
+
+// init_t_split_args.c
+
+void		free_t_split_arg(t_split_arg **arg);
+char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
+void		ls_split_args_addback(t_split_arg **head, t_split_arg *new);
+t_split_arg	*ls_split_args_new(char *data, char scope);
+
+// utils_1.c
+
+char		is_quote(char c);
+bool		is_delim(char *str);
+int			slice_next_part(char *src, t_split_arg **last_args, char quotes);
+void		free_next_param(void **ptr, int type);
+bool		is_parenthesis_empty(char *str);
+
+
+// io_functions.c
+
+int		input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp);
+int		output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp);
+int		hd_manager(t_block *block);
+int		heredoc(char *limiter);
+
+// wildcard.c
+
+bool	manage_wildcard(t_args **head, char *str);
+
+// init_shell.c
+
+void	ensure_prompt_position(void);
+void	init_prompt(t_minishell *ms_params, char **user_input);
+bool	init_minishell(t_minishell *ms_params, char **envp);
+int		get_cursor_position(void);
 
 #endif /* MINISHELL_H */
