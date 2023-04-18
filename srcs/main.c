@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 05:46:16 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:12:14 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	handler_func(int num)
 	char		*ms_prompt_up;
 	int			last_exit_code;
 
-	last_exit_code = g_ms_params.last_exit_code;
+	last_exit_code = 130;
 	errno = 0;
 	(void)num;
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
@@ -82,20 +82,15 @@ int	main(int ac, char **av, char **envp)
 		return (ft_putstr_fd("Usage:\t./minishell\n", 2), 1);
 	if (!init_minishell(&g_ms_params, envp))
 		return ((void)ac, (void)av, 1);
-	// (void)ac;
-	// (void)av;
 	user_input = NULL;
 	while (1)
 	{
 		init_prompt(&g_ms_params, &user_input);
 		if (!user_input)
 			exit_ms(g_ms_params, 0, "readline");
-	
 		ms_add_history(user_input, &g_ms_params);
-
 		if (!parse_user_input(&g_ms_params, user_input))
 			continue ;
-
 		execute_commands(g_ms_params.head, &g_ms_params);
 		if (wait_children(&g_ms_params) == -1)
 			exit_ms(g_ms_params, 2, "waitpid");

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:07:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 13:43:27 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:06:05 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	is_quote(char c)
 
 bool	is_delim(char *str)
 {
-	if (*str && (ft_strchr(SINGLE_DELIM, *str)
+	if (str && (ft_strchr(SINGLE_DELIM, *str) \
 		|| ft_strschr_here(4, str, "&&", "||", "<<", ">>")))
 		return (true);
 	return (false);
@@ -44,7 +44,8 @@ int	slice_next_part(char *src, t_split_arg **last_args, char quotes)
 		if (((is_delim(&src[i]) || ft_strchr("()", src[i])) && !quotes) \
 		|| (quotes && src[i] == quotes))
 			break ;
-		else if (!quotes && ft_strchr("'\"", src[i]) && ft_strchr(&src[i + 1], src[i]))
+		else if (!quotes \
+			&& ft_strchr("'\"", src[i]) && ft_strchr(&src[i + 1], src[i]))
 			break ;
 	}
 	if (quotes && i == 0)

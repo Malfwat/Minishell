@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_signals.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:27 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/07 16:50:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 20:59:08 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-void	sigquit_handler(int num)
-{
-	(void)num;
-	// rl_replace_line("\b\b", 0);
-	// rl_on_new_line();
-	// rl_redisplay();
-	return ;
-}
+// void	sigquit_handler(int num)
+// {
+// 	(void)num;
+// 	// rl_replace_line("\b\b", 0);
+// 	// rl_on_new_line();
+// 	// rl_redisplay();
+// 	return ;
+// }
 
-bool	set_sig_handler(void)
-{
-	signal(SIGQUIT, sigquit_handler);
-	return (true);
-}
+// bool	set_sig_handler(void)
+// {
+// 	signal(SIGQUIT, sigquit_handler);
+// 	return (true);
+// }

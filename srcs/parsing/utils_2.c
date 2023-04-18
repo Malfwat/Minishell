@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:08:24 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:08:12 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	syntax_error(int err, void *comment, int type, char *cmd_line)
 {
 	if (type == EXPECTING_ARGUMENT)
 	{
-		ft_putstr_fd("minishell: syntax error: right hand operand cannot be empty\n", 2);
+		ft_putstr_fd \
+		("minishell: syntax error: right hand operand cannot be empty\n", 2);
 		return ;
 	}
 	else if (!comment)

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:06:20 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:03:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
 	return (0);
 }
 
-int	output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp)
+int	output_manager(t_redirect *ptr, t_fd *fd, t_env_var *envp)
 {
 	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
 	if (errno)
@@ -84,29 +84,39 @@ int	output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp)
 	return (0);
 }
 
+void	change_input_fd(t_block *block, t_fd *fd)
+{
+	if (block->input_source == HEREDOC)
+	{
+		if (block->io_tab[0] != INIT_FD_VALUE)
+			close(block->io_tab[0]);
+		block->io_tab[0] = *fd;
+	}
+	else
+	{
+		close(*fd);
+		*fd = INIT_FD_VALUE;
+	}
+}
+
 int	hd_manager(t_block *block)
 {
-	t_redirect *ptr;
-	
+	t_redirect	*ptr;
+
 	if (!block)
 		return (0);
 	ptr = block->heredoc;
 	while (ptr)
 	{
-		if (!ptr->heredoc_limiter)
+		if (!ptr->hd_lim)
 			return (0);
-		ptr->joined_name = join_splitted_arg(ptr->file_name->next, NULL, false);
+		ptr->joined_name = join_splitted_arg(ptr->hd_lim->next, NULL, false);
 		if (errno)
 			return (-1);
 		ptr->fd = heredoc(ptr->joined_name);
 		if (ptr->fd == -1)
 			return (-1);
-		if (block->input_source == HEREDOC)
-		{
-			if (block->io_tab[0] != INIT_FD_VALUE)
-				close(block->io_tab[0]);
-			block->io_tab[0] = ptr->fd;
-		}
+		change_input_fd(block, &ptr->fd);
 		ptr = ptr->next;
 	}
 	if (hd_manager(block->pipe_next) == -1 \

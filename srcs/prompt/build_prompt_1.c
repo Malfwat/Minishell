@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_prompt_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/17 17:34:54 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:23:17 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void	build_prompt_mid_delim(t_prompt_blocks **pargs, int len)
 	char	*str;
 
 	if (len < 5)
-		len = 5; // minimum width of mid delim
-	// len = params->term_width - params->width_without_mid_delim - offset;
+		len = 5;
 	str = build_mid_delim(len);
 	ls_p_args_addback(pargs, ls_new_p_args(P_MID_DELIM, str, len));
 }
@@ -111,10 +110,10 @@ char	*strjoin_pargs(t_prompt_blocks *pargs)
 	return (str);
 }
 
-int		pargs_len(t_prompt_blocks *pargs)
+int	pargs_len(t_prompt_blocks *pargs)
 {
-	int	total;
-	int	i;
+	int		total;
+	int		i;
 	bool	control_sequence;
 
 	control_sequence = true;
@@ -134,11 +133,11 @@ int		pargs_len(t_prompt_blocks *pargs)
 					control_sequence = false;
 				else if (!ft_isprint(pargs->str[i]))
 				{
-					total++; 
+					total++;
 					i += 2;
 				}
 				else if (!control_sequence)
-					total++; 
+					total++;
 			}
 		}
 		pargs = pargs->next;
@@ -146,21 +145,21 @@ int		pargs_len(t_prompt_blocks *pargs)
 	return (total);
 }
 
-void	ls_edit_p_args_if(t_prompt_blocks *pargs, int type, char *str, int delim_len)
+void	ls_edit_p_args_if(t_prompt_blocks *parg, int type, char *str, int dlen)
 {
-	while (pargs)
+	while (parg)
 	{
-		if (pargs->type == type)
+		if (parg->type == type)
 		{
-			free(pargs->str);
-			pargs->str = str;
-			pargs->delim_len = delim_len;
+			free(parg->str);
+			parg->str = str;
+			parg->delim_len = dlen;
 		}
-		pargs = pargs->next;
+		parg = parg->next;
 	}
 }
 
-int		current_mid_delim_len(t_prompt_blocks *pargs)
+int	current_mid_delim_len(t_prompt_blocks *pargs)
 {
 	while (pargs)
 	{
@@ -185,7 +184,8 @@ void	check_prompt_width(t_prompt_blocks *pargs, t_prompt *params)
 		new_delim_mlen = current_delim_mlen + (params->term_width - len);
 	else
 		return ;
-	ls_edit_p_args_if(pargs, P_MID_DELIM, build_mid_delim(new_delim_mlen), new_delim_mlen);
+	ls_edit_p_args_if(pargs, P_MID_DELIM, build_mid_delim(new_delim_mlen), \
+	new_delim_mlen);
 }
 
 char	*build_prompt(t_prompt *params, bool side)
@@ -195,7 +195,6 @@ char	*build_prompt(t_prompt *params, bool side)
 
 	errno = 0;
 	pargs = NULL;
-
 	if (side == UP)
 	{
 		build_prompt_start_delim(&pargs);

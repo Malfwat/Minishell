@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_structs_0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/14 19:59:36 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_redirect(t_redirect *ptr)
 	{
 		tmp = ptr->next;
 		free_t_split_arg(&ptr->file_name);
-		free_t_split_arg(&ptr->heredoc_limiter);
+		free_t_split_arg(&ptr->hd_lim);
 		free(ptr->joined_name);
 		free(ptr);
 		ptr = tmp;

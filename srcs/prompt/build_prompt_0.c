@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_prompt_0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:45:02 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/17 20:19:48 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 22:15:46 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void	build_prompt_user(t_prompt_blocks **pargs, t_prompt *params)
 {
 	char	*str;
 
-	str = ft_strsjoin(9, R_ESC(LLGREY"╰─"), "\2\3", R_ESC(ITALIC), R_ESC(LGREY), " ", \
-	params->session_user, R_ESC(DGREEN), " $ ", R_ESC(ENDC));
+	str = ft_strsjoin(9, R_ESC(LLGREY"╰─"), "\2\3", R_ESC(ITALIC), \
+	R_ESC(LGREY), " ", params->session_user, R_ESC(DGREEN), " $ ", \
+	R_ESC(ENDC));
 	ls_p_args_addback(pargs, ls_new_p_args(P_USER, str, 0));
 }

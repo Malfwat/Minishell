@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 04:35:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 21:39:27 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,18 @@ void	handle_execve_failure(t_minishell ms_params, char *program_name)
 	if (errno != ENOENT)
 	{
 		if (errno == EACCES)
-			exit_value = 126; // 126 == command found but cannot be executed
+			exit_value = 126;
 		else if (errno)
-			exit_value = 2; // valeur fourre-tout
+			exit_value = 2;
 		ms_perror("minishell6", program_name, strerror(errno));
 	}
 	else
 	{
 		ms_perror("minishell5", program_name, "Command not found");
-		exit_value = 127; // 127 == command not found
+		exit_value = 127;
 	}
 	errno = 0;
 	exit_ms(ms_params, exit_value, NULL);
-	// exit_ms(ms_params.envp, ms_params, exit_value);
 }
 
 void	exit_ms(t_minishell ms_params, int exitv, char *context)

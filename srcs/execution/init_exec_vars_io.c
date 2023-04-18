@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:02:27 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 21:09:21 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <env_function.h>
 #include <stdio.h>
 #include <parsing_ms.h>
-// #include <minishell.h>
 
 char	**build_path(t_minishell ms_params)
 {
@@ -33,7 +32,6 @@ char	**build_argv(t_args **head)
 	t_args	*tmp;
 
 	len = 0;
-	tmp = NULL;
 	if (errno)
 		return (NULL);
 	update_t_args(head);
@@ -89,7 +87,6 @@ bool	init_exec_io(t_block *block, t_minishell *ms_params)
 	int			ret;
 
 	tmp = block->io_redirect;
-	
 	ret = 0;
 	while (tmp && !errno)
 	{
