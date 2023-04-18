@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:42:57 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 # include <sys/types.h>
 # include <termios.h>
 
-typedef int t_fd;
-
+typedef int	t_fd;
 typedef struct s_env_var
 {
 	char				*var_name;
@@ -30,13 +29,6 @@ typedef struct s_env_var
 	struct s_env_var	*prev;
 	struct s_env_var	*next;
 }	t_env_var;
-
-// typedef struct s_wc_args
-// {
-// 	char				*name;
-// 	struct s_wc_args	*prev;
-// 	struct s_wc_args	*next;
-// }	t_wc_args;
 
 typedef struct s_split_arg
 {
@@ -98,7 +90,6 @@ typedef struct s_block
 	struct s_block	*next;
 	struct s_block	*sub;
 }	t_block;
-
 
 typedef struct s_prompt
 {

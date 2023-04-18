@@ -6,13 +6,12 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:49:12 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:41:46 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_MS_H
 # define EXEC_MS_H
-
 
 # include <libft.h>
 # include <minishell.h>
@@ -32,8 +31,8 @@ bool		create_pipe(t_block *blck);
 void		manage_subshell(t_block *block, t_minishell *ms_params);
 pid_t		create_subshell(t_block *block, t_minishell *ms_prm);
 void		execute_t_block_cmd(t_block *block, t_minishell *ms_params);
-void		child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs);
-
+void		child_worker(t_block *blck, t_minishell *ms_params, \
+t_exec_vars exc_vrs);
 
 // execute_utils_0,c
 
@@ -57,6 +56,6 @@ char		**build_argv(t_args **head);
 char		**build_envp(t_env_var	*envp);
 t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block);
 
-void	handle_execve_failure(t_minishell ms_params, char *program_name);
+void		handle_execve_failure(t_minishell ms_params, char *program_name);
 
 #endif /* EXEC_MS_H */

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard.c                                         :+:      :+:    :+:   */
+/*   wildcard_0.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:17:28 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:35:06 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <libft.h>
-
-bool	compare_wildcard(char *pattern, char *str)
-{
-	int		i;
-	char	**tab;
-	char	*tmp;
-
-	i = 0;
-	tab = ft_split(pattern, '*');
-	if (!tab || !*tab)
-		return (ft_strsfree(tab), !errno);
-	tmp = str;
-	while (tab[i])
-	{
-		tmp = ft_strstr(tmp, tab[i]);
-		if (!tmp)
-			return (ft_strsfree(tab), false);
-		if (i == 0)
-			if (*pattern != '*' && *str != *tmp)
-				return (ft_strsfree(tab), false);
-		tmp += ft_strlen(tab[i++]);
-	}
-	if (tab[i])
-		return (ft_strsfree(tab), false);
-	if (pattern[ft_strlen(pattern) - 1] != '*' && *tmp)
-		return (ft_strsfree(tab), false);
-	return (ft_strsfree(tab), true);
-}
 
 static void	ft_add_t_args(t_args **head, char *str)
 {
@@ -140,18 +112,4 @@ void	split_path_pattern(char *str, char **path, char **pattern)
 	if (i)
 		*path = ft_substr(str, 0, i++);
 	*pattern = ft_substr(str, i, len - i + 1);
-}
-
-bool	manage_wildcard(t_args **head, char *str)
-{
-	char	*path;
-	char	*pattern;
-
-	path = NULL;
-	pattern = NULL;
-	split_path_pattern(str, &path, &pattern);
-	*head = wildcard(path, pattern);
-	free(pattern);
-	free(path);
-	return (true);
 }

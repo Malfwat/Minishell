@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/18 14:22:31 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/18 23:30:47 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,11 @@ HISTORY_DIR			=	history/
 
 PROMPT				=	prompt_utils_0.c	\
 						prompt_utils_1.c	\
+						prompt_utils_2.c	\
+						prompt_utils_3.c	\
 						build_prompt_0.c	\
-						build_prompt_1.c
+						build_prompt_1.c	\
+						build_prompt_2.c
 
 PROMPT_DIR			=	prompt/
 
@@ -66,7 +69,8 @@ PARSING				=	input_output.c	\
 						utils_2.c		\
 						check_cmd.c		\
 						parsing.c		\
-						wildcard.c		\
+						wildcard_0.c	\
+						wildcard_1.c	\
 						word.c
 
 PARSING_DIR			=	parsing/

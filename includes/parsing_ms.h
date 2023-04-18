@@ -6,18 +6,17 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 13:47:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:39:43 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#ifndef PARSING_MS_H
+# define PARSING_MS_H
 # include <stdlib.h>
 # include <sys/types.h>
 # include <struct_ms.h>
 # include <errno.h>
 # include <stdbool.h>
-
 
 // parenthesis.c
 
@@ -34,7 +33,6 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line);
 // check_cmd.c
 
 bool	get_cmd_path(char **path, char **cmd, char **dest);
-
 
 // utils.c 
 
@@ -56,16 +54,15 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg);
 // io_functions.c
 
 int		heredoc(char *limiter);
-int		input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp);
+int		input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
+t_env_var *envp);
 bool	init_exec_io(t_block *block, t_minishell *ms_params);
-int		output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp);
+int		output_manager(t_redirect *ptr, t_fd *fd, t_env_var *envp);
 
 bool	is_delim(char *str);
-
 
 bool	check_and_store_delimiter(char *str, int *storage);
 void	syntax_error(int err, void *comment, int type, char *cmd_line);
 void	print_syntax_error(char c);
 
-
-#endif /* PARSING_H */
+#endif /* PARSING_MS_H */
