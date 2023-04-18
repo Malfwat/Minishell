@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   opendir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 18:12:07 by hateisse          #+#    #+#             */
-/*   Updated: 2023/03/29 16:41:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:21:23 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(void)
 	struct dirent	*dir_entry;
 
 	// On ouvre un flux vers le repertoire courant
-	dirp = opendir(".");
+	dirp = opendir("./libft");
 	if (!dirp)
 	{
 		perror("dirp");
