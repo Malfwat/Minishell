@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 02:08:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 03:02:28 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,19 +100,7 @@ void	free_exec_vars(t_exec_vars exec_vars)
 	ft_strsfree(exec_vars.path);
 }
 
-void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
-{
-	if (*head == current)
-		*head = new_lst;
-	else
-	{
-		current->prev->next = new_lst;
-		new_lst->prev = current->prev;
-	}
-	if (current->next)
-		current->next->prev = last_args(new_lst);
-	last_args(new_lst)->next = current->next;
-}
+
 
 bool	rebuild_args(t_args **head, t_env_var *envp)
 {
@@ -162,20 +150,6 @@ void	child_worker(t_block *block, t_minishell *ms_params, t_exec_vars exec_vars)
 		return (free_exec_vars(exec_vars), exit_ms(*ms_params, 2, "exec dup"));
 	execve(exec_vars.argv[0], exec_vars.argv, exec_vars.envp);
 	free_exec_vars(exec_vars);
-	dprintf(2, "errno: %i\n", errno);
-	// if (block->io_tab[0] >= 0)
-	// {
-	// 	close(block->io_tab[0]);
-	// 	dprintf(2, "fd: %d\n", block->io_tab[0]);
-	// }
-	// if (block->io_tab[1] >= 0)
-	// {
-	// 	close(block->io_tab[1]);
-	// 	dprintf(2, "fd: %d\n", block->io_tab[1]);
-	// }
-	// if (block->pipe_next && block->pipe_next->io_tab[0] >= 0)
-	// 	close(block->pipe_next->io_tab[0]);
-	dprintf(2, "errno: %i\n", errno);
 	handle_execve_failure(*ms_params, block->cmd.args->final_arg);
 }
 
@@ -339,8 +313,6 @@ int	wait_children(t_minishell *ms_params)
 pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 {
 	pid_t	sub_pid;
-	// int		i1;
-	// int		i2;
 
 	sub_pid = fork();
 	if (!sub_pid)
@@ -356,9 +328,7 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_params)
 		if (close(block->io_tab[0]) == -1)
 		{
 			if (block->io_tab[1] != INIT_FD_VALUE)
-			{
 				close(block->io_tab[1]);
-			}
 			exit_ms(*ms_params, 2, "subshell");
 		}
 	}

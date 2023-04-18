@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_cmd_args.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/17 21:45:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:08:07 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <libft.h>
 #include <stdlib.h>
 #include <errno.h>
+
+void	free_split_args(t_split_arg *lst);
+
 
 bool		manage_wildcard(t_args **head, char *str);
 
@@ -68,6 +71,23 @@ void	ft_addarg_front(t_args **head, t_split_arg *arg)
 	}
 }
 
+void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
+{
+	if (*head == current)
+		*head = new_lst;
+	else
+	{
+		current->prev->next = new_lst;
+		new_lst->prev = current->prev;
+	}
+	if (current->next)
+		current->next->prev = last_args(new_lst);
+	last_args(new_lst)->next = current->next;
+	free(current->final_arg);
+	free_split_args(current->s_args);
+	free(current);
+}
+
 void	wc_update_t_args(t_args **args)
 {
 	t_args	*lst;
@@ -82,23 +102,8 @@ void	wc_update_t_args(t_args **args)
 			manage_wildcard(&wildcard, lst->final_arg);
 			if (wildcard)
 			{
-				if (!lst->prev)
-				{
-					*args = wildcard;
-				}
-				else
-				{
-					lst->prev->next = wildcard;
-					wildcard->prev = lst->prev;
-				}
-				if (lst->next)
-				{
-					lst->next->prev = last_args(wildcard);
-				}
-				last_args(wildcard)->next = lst->next;
 				tmp = lst->next;
-				free(lst->final_arg);
-				free(lst);
+				insert_t_args(args, lst, wildcard);
 				lst = tmp;
 			}
 			else
