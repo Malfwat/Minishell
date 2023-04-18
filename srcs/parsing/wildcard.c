@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/15 20:24:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 03:01:10 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	compare_wildcard(char *pattern, char *str)
 	return (ft_strsfree(tab), true);
 }
 
-void	ft_add_wc_args(t_args **head, char *str)
+void	ft_add_t_args(t_args **head, char *str)
 {
 	t_args	*new;
 	t_args	*tmp;
@@ -56,6 +56,7 @@ void	ft_add_wc_args(t_args **head, char *str)
 	new = ft_calloc(1, sizeof(*new));
 	if (!new)
 		return ;
+	new->final_arg = str;
 	if (!(*head))
 	{
 		*head = new;
@@ -76,8 +77,6 @@ t_args	*wildcard(char *dir, char *pattern)
 	struct dirent	*dir_entry;
 	t_args		*lst;
 
-	printf("dir: %s\npattern: %s\n", dir, pattern);
-
 	dirp = opendir(dir);
 	if (!dirp)
 		return (perror("dirp"), NULL);
@@ -86,7 +85,7 @@ t_args	*wildcard(char *dir, char *pattern)
 	while (dir_entry && !errno)
 	{
 		if (compare_wildcard(pattern, dir_entry->d_name))
-			ft_add_wc_args(&lst, ft_strdup(dir_entry->d_name));
+			ft_add_t_args(&lst, ft_strdup(dir_entry->d_name));
 		dir_entry = readdir(dirp);
 	}
 	if (errno)
@@ -133,5 +132,7 @@ bool	manage_wildcard(t_args **head, char *str)
 	pattern = NULL;
 	split_path_pattern(str, &path, &pattern);
 	*head = wildcard(path, pattern);
+	free(path);
+	free(pattern);
 	return (true);
 }
