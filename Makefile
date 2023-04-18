@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/17 18:34:55 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/18 05:58:27 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,15 @@ NAME	=	minishell
 ################################################################################
 
 SRCS_DIR			=	srcs/
+
+EXECUTION_DIR		=	execution/
+
+EXECUTION			=	execute_cmd.c			\
+						execute_utils_0.c		\
+						execute_utils_1.c		\
+						children_functions.c	\
+						init_exec_vars_io.c		\
+						meta_char.c	
 
 SIGNAL				=	manage_signals.c
 
@@ -60,8 +69,8 @@ PARSING				=	input_output.c	\
 
 PARSING_DIR			=	parsing/
 
-STRUCT_UTILS		=	init_t_block.c		\
-						manage_cmd_args.c	\
+STRUCT_UTILS		=	init_t_block.c			\
+						init_t_args.c			\
 						free_structs_0.c		\
 						free_structs_1.c		\
 						manage_io_params.c
@@ -92,6 +101,7 @@ SRCS				+=	$(addprefix $(ENV_DIR), $(ENV))
 SRCS				+=	$(addprefix $(PROMPT_DIR), $(PROMPT))
 SRCS				+=	$(addprefix $(HISTORY_DIR), $(HISTORY))
 SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
+SRCS				+=	$(addprefix $(EXECUTION_DIR), $(EXECUTION))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
 SRCS				+=	main.c
 
@@ -101,6 +111,7 @@ DEPS				= 	$(OBJ:.o=.d)
 
 DIRS				=	$(addprefix $(BUILD), $(BUILT_INS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(ENV_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(EXECUTION_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(HISTORY_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(SIGNAL_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PROMPT_DIR))
