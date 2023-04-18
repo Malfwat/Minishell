@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_structs_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/12 17:05:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 02:01:23 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	free_prompt_params(t_prompt *lst)
 
 void	free_ms_params(t_minishell ms_params)
 {
+	free(ms_params.prev_line);
 	free_prompt_params(&ms_params.prompt_params);
 	free_env_lst(ms_params.envp);
 	ms_params.envp = NULL;

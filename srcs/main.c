@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/17 21:55:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 02:08:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 #include <term.h>
 
 t_minishell	g_ms_params;
-
 
 void handle_execve_failure(t_minishell ms_params, char *program_name);
 
@@ -492,7 +491,7 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 		// return (1);
 	// res = NULL;
 	// type = -1;
-	ms_params->history_fd = get_my_history();
+	ms_params->history_fd = get_my_history(ms_params);
 	if (ms_params->history_fd == -1)
 		return (false);
 	ms_params->envp = get_env_var(envp);
@@ -592,7 +591,7 @@ int	main(int ac, char **av, char **envp)
 		if (!user_input)
 			exit_ms(g_ms_params, 0, "readline");
 	
-		ms_add_history(rl_line_buffer, g_ms_params.history_fd);
+		ms_add_history(user_input, &g_ms_params);
 
 		if (!parse_user_input(&g_ms_params, user_input))
 			continue ;
