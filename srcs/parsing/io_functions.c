@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/17 20:59:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 05:30:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,33 +113,4 @@ int	hd_manager(t_block *block)
 		|| hd_manager(block->next) == -1 || hd_manager(block->sub) == -1)
 		return (-1);
 	return (0);
-}
-
-bool	init_exec_io(t_block *block, t_minishell *ms_params)
-{
-	t_redirect	*tmp;
-	int			ret;
-
-	tmp = block->io_redirect;
-	
-	ret = 0;
-	while (tmp && !errno)
-	{
-		if (tmp->mode == INPUT_MODE)
-			ret = input_manager(tmp, &block->io_tab[0], block, ms_params->envp);
-		else if (tmp->mode == OUTPUT_MODE)
-			ret = output_manager(tmp, &block->io_tab[1], ms_params->envp);
-		tmp = tmp->next;
-	}
-	if (ret == -1)
-		exit_ms(*ms_params, 2, "exec init");
-	else if (ret == -2)
-	{
-		block->cmd.exit_value = 1;
-		ms_params->last_exit_code = block->cmd.exit_value;
-		perror("minishell1");
-		errno = 0;
-		return (false);
-	}
-	return (true);
 }

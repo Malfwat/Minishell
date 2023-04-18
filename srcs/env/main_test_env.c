@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_test_env.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:15:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:17:25 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 04:35:09 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@
 int	main(int ac, char **av, char **envp)
 {
 	t_env_var	*env_lst;
-	char *str1 = "test=sdfsf";
-	char *str3 = "test=sdfsf";
-	char *str2 = "test2=bonjour";
+	char		*str1;
+	char		*str3;
+	char		*str2;
+
+	*str1 = "test=sdfsf";
+	*str3 = "test=sdfsf";
+	*str2 = "test2=bonjour";
 	(void)ac;
 	(void)av;
-
 	env_lst = get_env_var(envp);
 	env(env_lst);
 	export(&env_lst, get_env_var_name(str1), get_env_var_value(str1), 0);

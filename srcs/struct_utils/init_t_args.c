@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_cmd_args.c                                  :+:      :+:    :+:   */
+/*   init_t_args.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 04:10:34 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 05:58:45 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-
-void	free_split_args(t_split_arg *lst);
-
-
-bool		manage_wildcard(t_args **head, char *str);
 
 t_args	*new_cmd_arg(t_split_arg *arg)
 {
@@ -87,61 +82,4 @@ void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
 	free(current->final_arg);
 	free_split_args(current->s_args);
 	free(current);
-}
-
-void	wc_update_t_args(t_args **args)
-{
-	t_args	*lst;
-	t_args	*tmp;
-	t_args	*wildcard;
-
-	lst = *args;
-	wildcard = NULL;
-	while (lst)
-	{
-		if (lst->final_arg && ft_strchr(lst->final_arg, '*'))
-		{
-			manage_wildcard(&wildcard, lst->final_arg);
-			if (wildcard)
-			{
-				tmp = lst->next;
-				insert_t_args(args, lst, wildcard);
-				lst = tmp;
-			}
-			else
-				lst = lst->next;
-		}
-		else
-			lst = lst->next;
-	}
-}
-
-char	**build_argv(t_args **head)
-{
-	char	**tab;
-	int		len;
-	t_args	*tmp;
-
-	len = 0;
-	tmp = NULL;
-	if (errno)
-		return (NULL);
-	wc_update_t_args(head);
-	tmp = *head;
-	while (tmp)
-	{
-		tmp = tmp->next;
-		len++;
-	}
-	tab = ft_calloc(len + 1, sizeof(char *));
-	if (!tab)
-		return (0);
-	len = 0;
-	tmp = *head;
-	while (tmp)
-	{
-		tab[len++] = tmp->final_arg;
-		tmp = tmp->next;
-	}
-	return (tab);
 }

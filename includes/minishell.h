@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 01:56:50 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 05:45:29 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ t_args		*last_args(t_args *head);
 void		ft_ls_t_args_addback(t_args **head, t_split_arg *arg);
 char		**build_argv(t_args **head);
 
-
 // free_struct_0.c
 
 void		flood_free(t_block *lst);
@@ -54,12 +53,14 @@ void		free_cmd(t_cmd lst);
 void		free_t_args(t_args *ptr);
 
 // free_struct_1.c
+
 void		free_ms_params(t_minishell ms_params);
 void		free_env_lst(t_env_var *envp_lst);
 void		free_prompt_params(t_prompt *lst);
 void		free_t_split_arg(t_split_arg **arg);
 
 // term_utils
+
 bool		toggle_control_character(int control_character, int mode);
 bool		save_terminal_params(t_minishell *ms_params);
 bool		restore_terminal_params(struct termios saved_term, t_fd stdin_fileno);
@@ -76,9 +77,9 @@ int			execute_commands(t_block *block, t_minishell *ms_params);
 
 int			extract_exit_code(int status);
 
-
 char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
 
+void		handler_func(int num);
 
 
 #endif /* MINISHELL_H */
