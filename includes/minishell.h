@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:21:45 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 23:37:10 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void		free_t_split_arg(t_split_arg **arg);
 
 bool		toggle_control_character(int control_character, int mode);
 bool		save_terminal_params(t_minishell *ms_params);
-bool		restore_terminal_params(struct termios saved_term, t_fd stdin_fileno);
+bool		restore_terminal_params(struct termios saved_term, \
+t_fd stdin_fileno);
 void		exit_ms(t_minishell ms_params, int exitv, char *context);
 void		ms_perror(char *program, char *subname, char *error);
 
@@ -77,7 +78,8 @@ int			execute_commands(t_block *block, t_minishell *ms_params);
 
 int			extract_exit_code(int status);
 
-char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
+char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, \
+bool interpret);
 
 // meta_char.c
 
@@ -85,7 +87,6 @@ char		*interpret_dollars(t_split_arg *arg, t_env_var *envp);
 void		update_t_args(t_args **args);
 
 void		handler_func(int num);
-
 
 //   init_t_args.c
 
@@ -98,7 +99,8 @@ t_args		*new_cmd_arg(t_split_arg *arg);
 // init_t_split_args.c
 
 void		free_t_split_arg(t_split_arg **arg);
-char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret);
+char		*join_splitted_arg(t_split_arg *arg, t_env_var *envp, \
+bool interpret);
 void		ls_split_args_addback(t_split_arg **head, t_split_arg *new);
 t_split_arg	*ls_split_args_new(char *data, char scope);
 
@@ -110,23 +112,26 @@ int			slice_next_part(char *src, t_split_arg **last_args, char quotes);
 void		free_next_param(void **ptr, int type);
 bool		is_parenthesis_empty(char *str);
 
-
 // io_functions.c
 
-int		input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp);
-int		output_manager(t_redirect *ptr, t_fd *fd,t_env_var *envp);
-int		hd_manager(t_block *block);
-int		heredoc(char *limiter);
+int			input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
+t_env_var *envp);
+int			output_manager(t_redirect *ptr, t_fd *fd, t_env_var *envp);
+int			hd_manager(t_block *block);
+int			heredoc(char *limiter);
 
-// wildcard.c
+// wildcard
 
-bool	manage_wildcard(t_args **head, char *str);
+bool		manage_wildcard(t_args **head, char *str);
+void		split_path_pattern(char *str, char **path, char **pattern);
+t_args		*wildcard(char *dir, char *pattern);
+bool		compare_wildcard(char *pattern, char *str);
 
 // init_shell.c
 
-void	ensure_prompt_position(void);
-void	init_prompt(t_minishell *ms_params, char **user_input);
-bool	init_minishell(t_minishell *ms_params, char **envp);
-int		get_cursor_position(void);
+void		ensure_prompt_position(void);
+void		init_prompt(t_minishell *ms_params, char **user_input);
+bool		init_minishell(t_minishell *ms_params, char **envp);
+int			get_cursor_position(void);
 
 #endif /* MINISHELL_H */

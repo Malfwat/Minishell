@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:46:05 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,10 @@ void	ft_add_io(t_block *block, t_split_arg *io)
 bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 {
 	char		quotes;
-	char		redirect[3];
+	static char	redirect[3];
 
 	*type = INCOMPLETE_INPUT_OUTPUT;
 	*i += pass_whitespaces(&str[*i]);
-	ft_bzero(redirect, 3);
 	if (str[*i] && ft_strchr("><", str[*i]))
 	{
 		redirect[0] = str[*i];
@@ -94,25 +93,16 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 		*arg = ls_split_args_new(ft_strdup(redirect), 0);
 		if (!(*arg))
 			return (true);
-		(*i)++;
-		*i += pass_whitespaces(&str[*i]);
+		*i += pass_whitespaces(&str[(*i) + 1]) + 1;
 		while (str[*i] && !ft_strchr("><", str[*i]) && !is_delim(&str[*i]))
 		{
 			quotes = 0;
 			if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
-			{
-				quotes = str[*i];
-				(*i)++;
-			}
-			(*i) += slice_next_part(&str[*i], arg, quotes);
-			if (quotes)
-				(*i)++;
+				quotes = str[(*i)++];
+			(*i) += slice_next_part(&str[*i], arg, quotes) + (quotes);
 		}
 		if (*arg && !errno)
-		{
-			*type = INPUT_OUTPUT;
-			return (true);
-		}
+			return (*type = INPUT_OUTPUT, true);
 	}
 	return (false);
 }
