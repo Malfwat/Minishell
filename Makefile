@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/18 05:58:27 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/18 14:22:31 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,9 @@ ENV_DIR				=	env/
 PARSING				=	input_output.c	\
 						io_functions.c	\
 						parenthesis.c	\
-						utils.c			\
+						utils_0.c		\
+						utils_1.c		\
+						utils_2.c		\
 						check_cmd.c		\
 						parsing.c		\
 						wildcard.c		\
@@ -71,6 +73,7 @@ PARSING_DIR			=	parsing/
 
 STRUCT_UTILS		=	init_t_block.c			\
 						init_t_args.c			\
+						init_t_split_args.c		\
 						free_structs_0.c		\
 						free_structs_1.c		\
 						manage_io_params.c
@@ -78,7 +81,8 @@ STRUCT_UTILS		=	init_t_block.c			\
 STRUCT_UTILS_DIR	=	struct_utils/
 
 TERM_UTILS			=	term_params_handler.c	\
-						exit_minishell.c
+						exit_minishell.c		\
+						init_shell.c
 
 TERM_UTILS_DIR		=	term_utils/
 
