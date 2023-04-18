@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/14 19:57:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 02:00:29 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ typedef struct s_exec_vars
 typedef struct s_minishell
 {
 	int				last_exit_code;
+	char			*prev_line;
 	t_prompt		prompt_params;
 	t_env_var		*envp;
 	t_pids			*children;
