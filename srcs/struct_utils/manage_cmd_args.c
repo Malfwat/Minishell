@@ -6,13 +6,14 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 03:08:07 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 04:10:34 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
 #include <libft.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <errno.h>
 
 void	free_split_args(t_split_arg *lst);
@@ -95,6 +96,7 @@ void	wc_update_t_args(t_args **args)
 	t_args	*wildcard;
 
 	lst = *args;
+	wildcard = NULL;
 	while (lst)
 	{
 		if (lst->final_arg && ft_strchr(lst->final_arg, '*'))
@@ -122,7 +124,6 @@ char	**build_argv(t_args **head)
 
 	len = 0;
 	tmp = NULL;
-	// ft_addarg_front(head, cmd);
 	if (errno)
 		return (NULL);
 	wc_update_t_args(head);
