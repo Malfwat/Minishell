@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/17 17:08:43 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 04:36:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	ft_substr_word_param(char *src, char *dest)
 	*(dest) = 0;
 	return (i);
 }
-
-#include <stdio.h>
 
 void	ls_split_args_addback(t_split_arg **head, t_split_arg *new)
 {

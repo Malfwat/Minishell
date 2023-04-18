@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/17 22:00:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 05:55:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,37 +83,6 @@ void	*get_next_param(char *str, int *i, int *type)
 		|| (!errno && check_word_param(str, i, type, (t_split_arg **)&res)))
 		return (res);
 	return (res);
-}
-
-char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
-{
-	char		*tmp;
-	char		*res;
-	t_env_var	*env_var;
-	char		**tab;
-	int			i;
-
-	tab = ft_split(arg->str, '$');
-	if (!tab)
-		return (NULL);
-	i = -1;
-	res = NULL;
-	while (tab[++i] && !errno)
-	{
-		tmp = res;
-		if ((i == 0 && arg->str[0] != '$') || (arg->scope == '\''))
-			res = ft_strjoin(res, tab[i]);
-		else
-		{
-			env_var = find_env_var(envp, tab[i]);
-			if (!env_var)
-				res = ft_strjoin(res, "");
-			else
-				res = ft_strjoin(res, env_var->var_value);
-		}
-		free(tmp);
-	}
-	return (ft_strsfree(tab), res);
 }
 
 void	free_t_split_arg(t_split_arg **arg)

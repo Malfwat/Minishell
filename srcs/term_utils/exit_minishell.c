@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/17 20:32:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 04:35:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	ms_perror(char *program, char *subname, char *error)
 	ft_putendl_fd(error, 2);
 }
 
-void handle_execve_failure(t_minishell ms_params, char *program_name)
+void	handle_execve_failure(t_minishell ms_params, char *program_name)
 {
-	int exit_value;
+	int	exit_value;
 
 	exit_value = 2;
 	if (errno != ENOENT)
