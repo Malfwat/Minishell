@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 06:11:26 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_redirect	*new_redirect(t_split_arg *arg, int mode)
 	if (!new)
 		return (free_t_split_arg(&arg), NULL);
 	if (!ft_strncmp(arg->str, "<<", 2))
-		new->heredoc_limiter = arg;
+		new->hd_lim = arg;
 	else if (arg->str[0] == '<')
 		new->file_name = arg;
 	else if (!ft_strncmp(arg->str, ">>", 2))

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:20:16 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 20:59:53 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,22 @@ void	update_t_args(t_args **args)
 	}
 }
 
+char	*replace_dollars_var(char *res, t_env_var *envp, char *var)
+{
+	t_env_var	*env_var;
+
+	env_var = find_env_var(envp, var);
+	if (!env_var)
+		res = ft_strjoin(res, "");
+	else
+		res = ft_strjoin(res, env_var->var_value);
+	return (res);
+}
+
 char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 {
 	char		*tmp;
 	char		*res;
-	t_env_var	*env_var;
 	char		**tab;
 	int			i;
 
@@ -64,13 +75,7 @@ char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 		if ((i == 0 && arg->str[0] != '$') || (arg->scope == '\''))
 			res = ft_strjoin(res, tab[i]);
 		else
-		{
-			env_var = find_env_var(envp, tab[i]);
-			if (!env_var)
-				res = ft_strjoin(res, "");
-			else
-				res = ft_strjoin(res, env_var->var_value);
-		}
+			res = replace_dollars_var(res, envp, tab[i]);
 		free(tmp);
 	}
 	return (ft_strsfree(tab), res);

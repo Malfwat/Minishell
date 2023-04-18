@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 06:18:24 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:07:17 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	*get_next_param(char *str, int *i, int *type)
 	if (!str[*i])
 		return (NULL);
 	if ((!errno && check_parenthesis_param(str, i, (char **)&res, type)) \
-		|| (!errno && check_io_param(str, i, type,  (t_split_arg **)&res)) \
+		|| (!errno && check_io_param(str, i, type, (t_split_arg **)&res)) \
 		|| (!errno && check_word_param(str, i, type, (t_split_arg **)&res)))
 		return (res);
 	return (res);
@@ -61,7 +61,7 @@ bool	check_parse_error(void *next_param, char *cmd_line, int type)
 	char	*tmp;
 
 	if (errno)
-		return(free(cmd_line), free_next_param(&next_param, type), false);
+		return (free(cmd_line), free_next_param(&next_param, type), false);
 	if (next_param || type < 0)
 	{
 		tmp = ft_strtrim(cmd_line, " \t");

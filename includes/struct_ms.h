@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 02:00:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_redirect
 	bool				mode;
 	char				*joined_name;
 	t_split_arg			*file_name;
-	t_split_arg			*heredoc_limiter;
+	t_split_arg			*hd_lim;
 	t_fd				fd;
 	int					errno_value;
 	bool				append;
