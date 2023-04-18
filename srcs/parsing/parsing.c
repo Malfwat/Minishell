@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 05:55:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 06:18:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,6 @@
 #include <libft.h>
 #include <errno.h>
 #include <stdio.h>
-
-bool	check_and_store_delimiter(char *str, int *storage)
-{
-	if (str[0] == '|')
-	{
-		if (str[1] == '|')
-			*storage = OR_OPERATOR;
-		else
-			*storage = PIPE_OPERATOR;
-	}
-	else if (str[0] == '&' && str[1] == '&')
-		*storage = AND_OPERATOR;
-	else if (str[0] == ';')
-		*storage = SEMI_COLON;
-	if (*storage)
-		return (true);
-	return (false);
-}
-
-bool	is_parenthesis_empty(char *str)
-{
-	int	i;
-
-	i = 1;
-	i += pass_whitespaces(&str[i]);
-	if (str[i] == ')' && !str[i + 1])
-		return (true);
-	return (false);
-}
 
 bool	is_valid_param(void *param, int type, t_block *block)
 {
@@ -85,104 +56,6 @@ void	*get_next_param(char *str, int *i, int *type)
 	return (res);
 }
 
-void	free_t_split_arg(t_split_arg **arg)
-{
-	t_split_arg	*ptr;
-
-	while (*arg)
-	{
-		ptr = (*arg)->next;
-		free((*arg)->str);
-		free(*arg);
-		*arg = ptr;
-	}
-	*arg = NULL;
-}
-
-char	*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret)
-{
-	char	*res;
-	char	*tmp;
-	char	*dollar_interpreted;
-
-	res = NULL;
-	dollar_interpreted = NULL;
-	while (arg)
-	{
-		tmp = res;
-		if (interpret)
-		{
-			dollar_interpreted = interpret_dollars(arg, envp);
-			if (!dollar_interpreted && !res)
-				dollar_interpreted = ft_strdup("");
-			res = ft_strjoin(res, dollar_interpreted);
-			free(dollar_interpreted);
-		}
-		else
-			res = ft_strjoin(res, arg->str);
-		free(tmp);
-		if (errno)
-			return (free(res), NULL);
-		arg = arg->next;
-	}
-	return (res);
-}
-
-void	print_syntax_error(char c)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd("syntax error near unexpected token ", 2);
-	ft_putchar_fd('`', 2);
-	ft_putchar_fd(c, 2);
-	ft_putstr_fd("`\n", 2);
-}
-
-void	syntax_error(int err, void *comment, int type, char *cmd_line)
-{
-	if (type == EXPECTING_ARGUMENT)
-	{
-		ft_putstr_fd("minishell: syntax error: right hand operand cannot be empty\n", 2);
-		return ;
-	}
-	else if (!comment)
-	{
-		print_syntax_error(*cmd_line);
-		return ;
-	}
-	else if (type == CMD_ARG || type == INPUT_OUTPUT)
-	{
-		comment = join_splitted_arg((t_split_arg *)comment, NULL, false);
-		if (!comment)
-			return ;
-	}
-	if (err == CMD_SYNTAX_ERR)
-		print_syntax_error(*(char *)comment);
-	if (type == CMD_ARG || type == INPUT_OUTPUT)
-		free(comment);
-}
-
-void	free_split_args(t_split_arg *lst)
-{
-	t_split_arg	*tmp;
-
-	while (lst)
-	{
-		tmp = lst->next;
-		free(lst->str);
-		free(lst);
-		lst = tmp;
-	}
-}
-
-void	free_next_param(void **ptr, int type)
-{
-	if (type == PARENTHESIS || type == INCOMPLETE_PARENTHESIS)
-		free(*ptr);
-	else
-		free_split_args(*ptr);
-	*ptr = NULL;
-}
-
 bool	check_parse_error(void *next_param, char *cmd_line, int type)
 {
 	char	*tmp;
@@ -202,6 +75,22 @@ bool	check_parse_error(void *next_param, char *cmd_line, int type)
 	}
 	free(cmd_line);
 	return (true);
+}
+
+int	manage_delim(t_block **curr_block, char *cmd_line, int *i)
+{
+	*i += pass_ws_and_delim(&cmd_line[*i], (*curr_block)->operator);
+	if ((*curr_block)->operator == PIPE_OPERATOR)
+	{
+		curr_block = &(*curr_block)->pipe_next;
+		add_block_back(curr_block, last_pipe);
+	}
+	else
+	{
+		add_block_back(curr_block, last_sibling);
+		curr_block = &(*curr_block)->next;
+	}
+	return (EXPECTING_ARGUMENT);
 }
 
 bool	parse_cmds(t_block **curr_block, char *cmd_line)
@@ -225,20 +114,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 				return (free(cmd_line), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
-		{
-			i += pass_ws_and_delim(&cmd_line[i], (*curr_block)->operator);
-			if ((*curr_block)->operator == PIPE_OPERATOR)
-			{
-				curr_block = &(*curr_block)->pipe_next;
-				add_block_back(curr_block, last_pipe);
-			}
-			else
-			{
-				add_block_back(curr_block, last_sibling);
-				curr_block = &(*curr_block)->next;
-			}
-			type = EXPECTING_ARGUMENT;
-		}
+			type = manage_delim(curr_block, cmd_line, &i);
 		next_param = get_next_param(cmd_line, &i, &type);
 	}
 	return (check_parse_error(next_param, cmd_line, type));
