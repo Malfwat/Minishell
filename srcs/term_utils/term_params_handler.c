@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   term_params_handler.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:37:26 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/11 21:05:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/18 21:09:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ bool	toggle_control_character(int control_character, int mode)
 
 	if (tcgetattr(STDIN_FILENO, &term) == -1)
 		return (false);
-	// term.c_lflag &= ~ECHOCTL; // est-ce nécessaire ?
-	term.c_cc[control_character] = mode; // _POSIX_VDISABLE; // VQUIT, ...
+	term.c_cc[control_character] = mode;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
 		return (false);
 	return (true);

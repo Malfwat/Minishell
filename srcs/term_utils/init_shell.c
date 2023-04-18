@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 14:23:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 21:35:04 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,33 +20,40 @@
 #include <signal.h>
 #include <history.h>
 
-int	get_cursor_position(void)
+bool	init_termois_struct(void)
 {
 	struct termios	term;
-	struct termios	restore;
 	char			*sc_cursor_pos;
+
+	sc_cursor_pos = tgetstr("u7", NULL);
+	if (!sc_cursor_pos)
+		return (false);
+	tcgetattr(0, &term);
+	term.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(0, TCSANOW, &term);
+	write(0, sc_cursor_pos, ft_strlen(sc_cursor_pos));
+	return (true);
+}
+
+int	get_cursor_position(void)
+{
+	struct termios	restore;
 	char			buf[100];
 	int				i;
 	int				ret;
 	char			*digit_index[1];
 
-	ft_bzero(buf, 10);
-	sc_cursor_pos = tgetstr("u7", NULL);
-	if (!sc_cursor_pos)
-		return (-1);
-	tcgetattr(0, &term);
 	tcgetattr(0, &restore);
-	term.c_lflag &= ~(ICANON|ECHO);
-	tcsetattr(0, TCSANOW, &term);
-	write(0, sc_cursor_pos, ft_strlen(sc_cursor_pos));
+	if (!init_termois_struct())
+		return (tcsetattr(0, TCSANOW, &restore), -1);
+	ft_bzero(buf, 10);
 	ret = 1;
-	i = 0;
-	while (ret > 0 && i < 9)
+	i = -1;
+	while (ret > 0 && ++i < 9)
 	{
 		ret = read(STDIN_FILENO, &buf[i], 1);
 		if (ret <= 0 || buf[i] == 'R')
 			break ;
-		i++;
 	}
 	digit_index[0] = ft_strchr(buf, ';');
 	tcsetattr(0, TCSANOW, &restore);
@@ -78,13 +85,11 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
 		exit_ms(*ms_params, 0, "prompt1");
 	ensure_prompt_position();
-	
 	ms_prompt_up = build_prompt(&ms_params->prompt_params, UP);
 	ft_putstr_fd(ms_prompt_up, 1);
 	free(ms_prompt_up);
 	ms_prompt = build_prompt(&ms_params->prompt_params, DOWN);
 	free_prompt_params(&ms_params->prompt_params);
-	
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt2");
 	*user_input = readline(ms_prompt);
@@ -102,10 +107,6 @@ bool	init_minishell(t_minishell *ms_params, char **envp)
 	save_terminal_params(ms_params);
 	toggle_control_character(VQUIT, _POSIX_VDISABLE);
 	signal(SIGINT, &handler_func);
-	// if (!refresh_prompt_param(&ms_prompt.prompt_params))
-		// return (1);
-	// res = NULL;
-	// type = -1;
 	ms_params->history_fd = get_my_history(ms_params);
 	if (ms_params->history_fd == -1)
 		return (false);
