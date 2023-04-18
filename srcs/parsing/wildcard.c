@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 04:26:22 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 14:17:28 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	compare_wildcard(char *pattern, char *str)
 	return (ft_strsfree(tab), true);
 }
 
-void	ft_add_t_args(t_args **head, char *str)
+static void	ft_add_t_args(t_args **head, char *str)
 {
 	t_args	*new;
 	t_args	*tmp;

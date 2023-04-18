@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:07:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 06:13:40 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 13:43:27 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	free_next_param(void **ptr, int type)
 	if (type == PARENTHESIS || type == INCOMPLETE_PARENTHESIS)
 		free(*ptr);
 	else
-		free_split_args(*ptr);
+		free_t_split_arg((t_split_arg **)ptr);
 	*ptr = NULL;
 }
 

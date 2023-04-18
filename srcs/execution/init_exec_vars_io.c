@@ -6,12 +6,15 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:36:42 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/18 14:02:27 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec_ms.h>
 #include <env_function.h>
+#include <stdio.h>
+#include <parsing_ms.h>
+// #include <minishell.h>
 
 char	**build_path(t_minishell ms_params)
 {
@@ -33,7 +36,7 @@ char	**build_argv(t_args **head)
 	tmp = NULL;
 	if (errno)
 		return (NULL);
-	wc_update_t_args(head);
+	update_t_args(head);
 	tmp = *head;
 	while (tmp)
 	{
