@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 22:08:12 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/21 15:20:35 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	check_and_store_delimiter(char *str, int *storage)
 		*storage = AND_OPERATOR;
 	else if (str[0] == ';')
 		*storage = SEMI_COLON;
-	if (*storage)
-		return (true);
-	return (false);
+	else
+		return (false);
+	return (true);
 }
