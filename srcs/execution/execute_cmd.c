@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 15:57:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/21 21:56:31 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	if (!init_exec_io(block, ms_params))
 		return ;
 	exec_vars = init_exec_vars(*ms_params, block);
+	if (is_builtin(exec_vars.argv[0]))
+		return (exec_builtin(block, ms_params, exec_vars));
 	block->cmd.pid = fork();
 	if (block->cmd.pid == 0)
 		child_worker(block, ms_params, exec_vars);
