@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/21 15:06:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/21 23:01:30 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,29 +74,49 @@ void	handler_func(int num)
 	rl_redisplay();
 }
 
+// int	main(int ac, char **av, char **envp)
+// {
+// 	char	*user_input;
+
+// 	if (ac != 1)
+// 		return (ft_putstr_fd("Usage:\t./minishell\n", 2), 1);
+// 	if (!init_minishell(&g_ms_params, envp))
+// 		return ((void)ac, (void)av, 1);
+// 	user_input = NULL;
+// 	while (1)
+// 	{
+// 		init_prompt(&g_ms_params, &user_input);
+// 		if (!user_input)
+// 			exit_ms(g_ms_params, 0, "readline");
+// 		ms_add_history(user_input, &g_ms_params);
+// 		if (!parse_user_input(&g_ms_params, user_input))
+// 			continue ;
+// 		execute_commands(g_ms_params.head, &g_ms_params);
+// 		if (wait_children(&g_ms_params) == -1)
+// 			exit_ms(g_ms_params, 2, "waitpid");
+// 		free_children(&g_ms_params.children);
+// 		flood_free(g_ms_params.head);
+// 		g_ms_params.head = (t_block *){0};
+// 	}
+// 	return (1);
+// }
+
 int	main(int ac, char **av, char **envp)
 {
-	char	*user_input;
+	t_env_var	*env_lst;
 
-	if (ac != 1)
-		return (ft_putstr_fd("Usage:\t./minishell\n", 2), 1);
-	if (!init_minishell(&g_ms_params, envp))
-		return ((void)ac, (void)av, 1);
-	user_input = NULL;
-	while (1)
-	{
-		init_prompt(&g_ms_params, &user_input);
-		if (!user_input)
-			exit_ms(g_ms_params, 0, "readline");
-		ms_add_history(user_input, &g_ms_params);
-		if (!parse_user_input(&g_ms_params, user_input))
-			continue ;
-		execute_commands(g_ms_params.head, &g_ms_params);
-		if (wait_children(&g_ms_params) == -1)
-			exit_ms(g_ms_params, 2, "waitpid");
-		free_children(&g_ms_params.children);
-		flood_free(g_ms_params.head);
-		g_ms_params.head = (t_block *){0};
-	}
-	return (1);
+	if (ac < 2)
+		return (0);
+	env_lst = get_env_var(envp);
+	pwd();
+	cd(NULL, env_lst, &av[1]);
+	pwd();
+	ms_echo(av + 2);
+	// env(env_lst);
+	// unset(&env_lst, find_env_var(env_lst, "TERM"));
+	// export(&env_lst, "test=95", 0);
+	// write(1, "\n\n", 2);
+	// env(env_lst);
+	free_env_lst(env_lst);
+	return (0);
 }

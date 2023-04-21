@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
+#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/18 23:30:47 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/21 21:57:21 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ EXECUTION_DIR		=	execution/
 EXECUTION			=	execute_cmd.c			\
 						execute_utils_0.c		\
 						execute_utils_1.c		\
+						execute_built_ins.c		\
 						children_functions.c	\
 						init_exec_vars_io.c		\
 						meta_char.c	

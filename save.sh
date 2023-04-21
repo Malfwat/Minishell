@@ -60,12 +60,9 @@ Final_result()
 	echo -e "\033[38;5;208m==== RESULT ====\033[0m"
 	echo "correct exit values:$TOTAL_EV_SUCCESS/$TOTAL_TESTS"
 	echo "correct output values:$TOTAL_OV_SUCCESS/$TOTAL_TESTS"
-}
-
-############################################################################
+}directory    #
 #                                                                          #
-#                                                                          #
-#                             NO OPERATORS                                 #
+#                                NO OPERATORS                              #
 #                                                                          #
 #                                                                          #
 ############################################################################
