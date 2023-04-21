@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:20:41 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/11 21:06:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/21 22:03:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,40 @@
 #include <libft.h>
 #include <unistd.h>
 
-void	ms_echo(bool nl, int nb, ...)
+bool	check_nl_arg(char *arg)
 {
-	va_list	ap;
+	int	i;
 
-	va_start(ap, nb);
-	while (nb--)
+	i = 1;
+	if (arg[0] != '-')
+		return (false);
+	while (arg[i])
 	{
-		ft_putstr_fd(va_arg(ap, char *), 1);
-		if (nb)
+		if (arg[i++] != 'n')
+			return (false);
+	}
+	return (true);
+}
+
+void	ms_echo(char **tab)
+{
+	int		i;
+	bool	nl;
+	
+	i = 0;
+	if (!tab)
+	{
+		write(1, "\n\n", 2);
+		return ;
+	}
+	while (tab[i] && check_nl_arg(tab[i]))
+		i++;
+	if (i != 0)
+		nl = 0;
+	while (tab[i])
+	{
+		ft_putstr_fd(tab[i++], 1);
+		if (tab[i])
 			write(1, " ", 1);
 	}
 	if (nl)

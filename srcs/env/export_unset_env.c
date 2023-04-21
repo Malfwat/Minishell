@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:18:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/21 21:28:04 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,16 @@
 #include <libft.h>
 #include <minishell.h>
 
-void	export(t_env_var **lst, char *name, char *value, bool temp)
+void	export(t_env_var **lst, char *str, bool temp)
 {
 	t_env_var	*tmp;
+	char		*name;
+	char		*value;
 
+	name = get_env_var_name(str);
+	if (!name)
+		return ;
+	value = get_env_var_value(str);
 	tmp = find_env_var(*lst, name);
 	if (!tmp)
 	{
