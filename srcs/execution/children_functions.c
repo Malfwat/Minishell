@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:15:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:52:54 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/21 15:59:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,16 @@ int	wait_children(t_minishell *ms_params)
 
 	children = ms_params->children;
 	status = 0;
-	while (children)
+	if (children)
 	{
-		if (waitpid(children->pid, &status, 0) == -1)
-			return (-1);
-		children = children->next;
+		while (children)
+		{
+			if (waitpid(children->pid, &status, 0) == -1)
+				return (-1);
+			children = children->next;
+		}
+		free_children(&ms_params->children);
+		ms_params->last_exit_code = status;
 	}
-	free_children(&ms_params->children);
-	ms_params->last_exit_code = extract_exit_code(status);
-	return (status);
+	return (ms_params->last_exit_code);
 }
