@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:46:05 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/21 18:18:46 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 			quotes = 0;
 			if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
 				quotes = str[(*i)++];
-			(*i) += slice_next_part(&str[*i], arg, quotes) + (quotes);
+			(*i) += slice_next_part(&str[*i], arg, quotes);
 		}
 		if (*arg && !errno)
 			return (*type = INPUT_OUTPUT, true);

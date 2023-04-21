@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:14:21 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 21:39:48 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/21 18:01:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ bool	check_word_param(char *str, int *i, int *type, t_split_arg	**arg)
 		(*i) += slice_next_part(&str[*i], arg, quotes);
 		if (errno)
 			return (false);
-		if (str[*i] && !is_delim(&str[*i]) && !ft_strchr("()", str[*i]))
-			(*i)++;
+		// if (str[*i] && !is_delim(&str[*i]) && !ft_strchr("()\'\"", str[*i]))
+		// 	(*i)++;
 	}
 	if (*arg && !errno)
 	{
