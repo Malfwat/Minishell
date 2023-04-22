@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 15:32:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 21:10:13 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ bool	is_delim(char *str);
 
 bool	check_and_store_delimiter(char *str, int *storage);
 void	syntax_error(int err, void *comment, int type, char *cmd_line);
-void	print_syntax_error(char c);
+void	print_syntax_error(int type, char *str);
+void	print_heredoc_syntax_error(char *heredoc_delimiter);
+
 
 #endif /* PARSING_MS_H */

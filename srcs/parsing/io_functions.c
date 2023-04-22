@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 22:03:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 20:10:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ int	heredoc(char *limiter)
 		return (-1);
 	get_next_line(0, &str);
 	tmp = ft_strjoin(limiter, "\n");
-	while (ft_strcmp(str, tmp) && !errno)
+	while (str && ft_strcmp(str, tmp) && !errno)
 	{
 		write(test[1], str, ft_strlen(str));
 		free(str);
 		get_next_line(0, &str);
 	}
+	if (!str)
+		print_heredoc_syntax_error(limiter);
 	free(str);
 	free(tmp);
 	close(test[1]);

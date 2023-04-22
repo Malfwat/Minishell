@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 21:11:31 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
 	{
-		ms_params->last_exit_code = 1;
+		ms_params->last_exit_code = 256;
 		return (flood_free(head), false);
 	}
 	if (errno)
@@ -60,6 +60,8 @@ void	handler_func(int num)
 	char		*ms_prompt_up;
 	int			last_exit_code;
 
+	if (g_ms_params.children)
+		return ;
 	last_exit_code = 130;
 	errno = 0;
 	(void)num;
