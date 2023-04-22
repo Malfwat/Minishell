@@ -24,7 +24,7 @@ Test()
 {
 	((TOTAL_TESTS++))
 	cd expected_output_dir
-	bash -c "$1" > output 2>> output 
+	bash --posix -c "$1" > output 2>> output 
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
 	$1 > output 2>> output 
