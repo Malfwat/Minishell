@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 02:35:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	handler_func(int num)
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
 		exit_ms(g_ms_params, 0, "promp2t");
 	write(1, "\n", 1);
-	ms_prompt_up = build_prompt(&g_ms_params.prompt_params, UP);
+	ms_prompt_up = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	ft_putstr_fd(ms_prompt_up, 1);
 	free(ms_prompt_up);
 	rl_replace_line("", 0);
