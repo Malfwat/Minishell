@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_env_var.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 21:27:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:28:40 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,6 @@ void	update_env_var(t_env_var **head)
 		tmp = curr;
 		curr = curr->next;
 		if (tmp->temp)
-			unset(head, tmp);
+			unset(head, (char *[]){tmp->var_name, NULL});
 	}
 }
