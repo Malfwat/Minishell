@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 22:48:10 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:48:03 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	cd(t_minishell *ms_params, t_env_var *head, char **tab)
 		ms_perror("minishell", "cd", strerror(errno));
 		errno = 0;
 		free(previous_directory);
+		ms_params->last_exit_code = 256;
 		return ;
 	}
 	free(ms_params->previous_directory);
@@ -49,7 +50,7 @@ void	cd(t_minishell *ms_params, t_env_var *head, char **tab)
 	tmp = ft_strjoin("PWD=", cwd);
 	if (!tmp)
 		return (free(cwd));
-	export(&head, tmp, 0);
+	export(&head, (char *[]){tmp, NULL}, 0);
 	free(cwd);
 	return ;
 }
