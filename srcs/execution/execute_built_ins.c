@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 05:08:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 16:43:56 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars)
 	else if (!ft_strcmp(str, "cd"))
 		cd(ms_params, ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "echo"))
-		ms_echo(vars.argv);
+		ms_echo(&vars.argv[1]);
 }
 
 void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
