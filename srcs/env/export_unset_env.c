@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 21:28:04 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 02:32:00 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,56 @@
 #include <libft.h>
 #include <minishell.h>
 
-void	export(t_env_var **lst, char *str, bool temp)
+void	export(t_env_var **lst, char **tab, bool temp)
 {
 	t_env_var	*tmp;
 	char		*name;
 	char		*value;
+	int			i;
 
-	name = get_env_var_name(str);
-	if (!name)
-		return ;
-	value = get_env_var_value(str);
-	tmp = find_env_var(*lst, name);
-	if (!tmp)
+	i = -1;
+	while (tab && tab[++i])
 	{
-		if (!add_env_var(lst, name, value, temp))
-			return (free_env_lst(*lst));
-	}
-	else
-	{
-		free(name);
-		free(tmp->var_value);
-		tmp->var_value = value;
+		name = get_env_var_name(tab[i]);
+		if (!name)
+			return ;
+		value = get_env_var_value(tab[i]);
+		tmp = find_env_var(*lst, name);
+		if (!tmp)
+		{
+			if (!add_env_var(lst, name, value, temp))
+				return (free_env_lst(*lst));
+		}
+		else
+		{
+			free(name);
+			free(tmp->var_value);
+			tmp->var_value = value;
+		}
 	}
 }
 
-void	unset(t_env_var **head, t_env_var *to_pop)
+void	unset(t_env_var **head, char **tab)
 {
-	if (!to_pop)
-		return ;
-	if (to_pop->prev)
-		to_pop->prev->next = to_pop->next;
-	if (to_pop->next)
-		to_pop->next->prev = to_pop->prev;
-	if (to_pop == *head)
-		*head = to_pop->next;
-	free(to_pop->var_name);
-	free(to_pop->var_value);
-	free(to_pop);
+	t_env_var	*to_pop;
+	int			i;
+
+	i = -1;
+	while (tab[++i])
+	{
+		to_pop = find_env_var(*head, tab[i]);
+		if (!to_pop)
+			continue ;
+		if (to_pop->prev)
+			to_pop->prev->next = to_pop->next;
+		if (to_pop->next)
+			to_pop->next->prev = to_pop->prev;
+		if (to_pop == *head)
+			*head = to_pop->next;
+		free(to_pop->var_name);
+		free(to_pop->var_value);
+		free(to_pop);
+	}
 }
 
 void	env(t_env_var *lst)
