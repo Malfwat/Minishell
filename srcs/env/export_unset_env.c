@@ -6,16 +6,17 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 02:32:00 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 03:43:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct_ms.h>
+#include <stdio.h>
 #include <env_function.h>
 #include <libft.h>
 #include <minishell.h>
 
-void	export(t_env_var **lst, char **tab, bool temp)
+void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 {
 	t_env_var	*tmp;
 	char		*name;
@@ -28,6 +29,12 @@ void	export(t_env_var **lst, char **tab, bool temp)
 		name = get_env_var_name(tab[i]);
 		if (!name)
 			return ;
+		if (!ft_strcmp(name, "?"))
+		{
+			ms_perror("minishell: export", tab[i], "not a valid identifier");
+			ms_params->last_exit_code = 1;
+			continue ;
+		}
 		value = get_env_var_value(tab[i]);
 		tmp = find_env_var(*lst, name);
 		if (!tmp)
