@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 23:01:02 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 17:39:10 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include <struct_ms.h>	
 # include <stdbool.h>
+# include <ms_define.h>
 # include <errno.h>
 
 // init_t_block.c
@@ -26,9 +27,9 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 // built_in/
 
-void		pwd(void);
+void		pwd(t_fd fd);
 void		cd(t_minishell *ms_params, t_env_var *head, char **tab);
-void		ms_echo(char **tab);
+void		ms_echo(char **tab, t_fd fd);
 
 // manage_io_params.c
 

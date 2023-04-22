@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 17:03:31 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/22 17:58:36 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,43 +17,43 @@
 #include <stdlib.h>
 #include <minishell.h>
 
-t_env_var	*cpy_t_env_var(t_env_var *lst)
-{
-	t_env_var	*new_lst;
+// t_env_var	*cpy_t_env_var(t_env_var *lst)
+// {
+// 	t_env_var	*new_lst;
 
-	new_lst = NULL;
-	while (lst)
-	{
-		if (!add_env_var(&new_lst, lst->name, lst->value, 0))
-			return (free_env_lst(new), NULL);
-		lst = lst->next;
-	}
-	return (new_lst);
-}
+// 	new_lst = NULL;
+// 	while (lst)
+// 	{
+// 		if (!add_env_var(&new_lst, lst->name, lst->value, 0))
+// 			return (free_env_lst(new), NULL);
+// 		lst = lst->next;
+// 	}
+// 	return (new_lst);
+// }
 
-void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
-{
-	t_env_var *a_prev;
-	t_env_var *a_next;
-	t_env_var *b_next;
-	t_env_var *b_prev;
+// void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
+// {
+// 	t_env_var *a_prev;
+// 	t_env_var *a_next;
+// 	t_env_var *b_next;
+// 	t_env_var *b_prev;
 
-	a_prev = a->prev;
-	a_next = a->next;
-	b_next = b->next;
-	b_prev = b->prev;
-	a_prev->next = b;
-	b_next->prev = a;
-}
+// 	a_prev = a->prev;
+// 	a_next = a->next;
+// 	b_next = b->next;
+// 	b_prev = b->prev;
+// 	a_prev->next = b;
+// 	b_next->prev = a;
+// }
 
-void	print_lst(t_env_var *lst)
-{
-	t_env_var	*cpy;
+// void	print_lst(t_env_var *lst)
+// {
+// 	t_env_var	*cpy;
 
-	cpy = cpy_t_env_var(lst);
-	if (!cpy)
-		return ;
-}
+// 	cpy = cpy_t_env_var(lst);
+// 	if (!cpy)
+// 		return ;
+// }
 
 void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 {
@@ -63,14 +63,14 @@ void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 	int			i;
 
 	i = -1;
-	if (!*tab)
-		print_export(*lst);
+	// if (!*tab)
+	// 	print_export(*lst);
 	while (tab && tab[++i])
 	{
 		name = get_env_var_name(tab[i]);
 		if (!name)
 			return ;
-		if (!ft_strcmp(name, "?"))
+		if (ft_strchr(name, '?'))
 		{
 			ms_perror("minishell: export", tab[i], "not a valid identifier");
 			ms_params->last_exit_code = 1;
