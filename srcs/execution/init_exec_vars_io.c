@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 21:09:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 05:40:35 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,11 @@ t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block)
 	if (!rebuild_args(&block->cmd.args, ms_params.envp))
 		exit_ms(ms_params, 2, "exec_build");
 	exec_vars.path = build_path(ms_params);
+	if (!block->cmd.args)
+	{
+		block->cmd.args = new_cmd_arg(NULL);
+		block->cmd.args->final_arg = ft_strdup("");
+	}
 	get_cmd_path(exec_vars.path, &block->cmd.args->final_arg, &tmp);
 	block->cmd.args->final_arg = tmp;
 	exec_vars.argv = build_argv(&block->cmd.args);
