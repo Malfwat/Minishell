@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:15:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 04:21:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:32:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ bool	store_pid(pid_t pid, t_pids **nursery)
 	t_pids	*new;
 	t_pids	*lst;
 
+	if (!pid)
+		return (true);
 	new = ft_calloc(1, sizeof(t_pids));
 	if (!new)
 		return (infanticides(*nursery), false);

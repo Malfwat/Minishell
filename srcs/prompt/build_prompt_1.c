@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 16:01:17 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ char	*build_prompt(t_prompt *params, bool side)
 
 	errno = 0;
 	pargs = NULL;
-	if (side == UP)
+	if (side == P_HEADER)
 		build_upper_prompt(params, &pargs);
-	else if (side == DOWN)
+	else if (side == P_FOOTER)
 		build_prompt_user(&pargs, params);
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 22:31:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
 		exit_ms(*ms_params, 0, "prompt1");
 	ensure_prompt_position();
-	ms_prompt_up = build_prompt(&ms_params->prompt_params, UP);
+	ms_prompt_up = build_prompt(&ms_params->prompt_params, P_HEADER);
 	ft_putstr_fd(ms_prompt_up, 1);
 	free(ms_prompt_up);
-	ms_prompt = build_prompt(&ms_params->prompt_params, DOWN);
+	ms_prompt = build_prompt(&ms_params->prompt_params, P_FOOTER);
 	free_prompt_params(&ms_params->prompt_params);
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt2");

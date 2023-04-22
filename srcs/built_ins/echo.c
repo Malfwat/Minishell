@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:20:41 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 05:15:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:37:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include <stdarg.h>
 #include <libft.h>
+#include <ms_define.h>
 #include <unistd.h>
 
 bool	check_nl_arg(char *arg)
@@ -30,16 +31,18 @@ bool	check_nl_arg(char *arg)
 	return (true);
 }
 
-void	ms_echo(char **tab)
+void	ms_echo(char **tab, t_fd fd)
 {
 	int		i;
 	bool	nl;
 	
 	i = 0;
 	nl = true;
+	if (fd == INIT_FD_VALUE)
+		fd = 1;
 	if (!tab)
 	{
-		write(1, "\n\n", 2);
+		write(fd, "\n\n", 2);
 		return ;
 	}
 	while (tab[i] && check_nl_arg(tab[i]))
@@ -48,10 +51,10 @@ void	ms_echo(char **tab)
 		nl = false;
 	while (tab[i])
 	{
-		ft_putstr_fd(tab[i++], 1);
+		ft_putstr_fd(tab[i++], fd);
 		if (tab[i])
-			write(1, " ", 1);
+			write(fd, " ", 1);
 	}
 	if (nl)
-		write(1, "\n", 1);
+		write(fd, "\n", 1);
 }

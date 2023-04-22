@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 04:17:31 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:45:31 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,16 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	errno = 0;
 	if (!init_exec_io(block, ms_params))
 		return ;
-	exec_vars = init_exec_vars(*ms_params, block);
-	if (is_builtin(exec_vars.argv[0]))
-		return (exec_builtin(block, ms_params, exec_vars));
-	block->cmd.pid = fork();
-	if (block->cmd.pid == 0)
-		child_worker(block, ms_params, exec_vars);
+	exec_vars = (t_exec_vars){0};
+	if (block->cmd.args)
+	{
+		exec_vars = init_exec_vars(*ms_params, block);
+		if (is_builtin(exec_vars.argv[0]))
+			return (exec_builtin(block, ms_params, exec_vars));
+		block->cmd.pid = fork();
+		if (block->cmd.pid == 0)
+			child_worker(block, ms_params, exec_vars);
+	}
 	if (block->io_tab[0] >= 0)
 		close(block->io_tab[0]);
 	if (block->io_tab[1] >= 0)
@@ -47,7 +51,7 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
 		|| block->operator == SEMI_COLON)
 	{
-		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
+		if (block->cmd.pid && waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
 		ms_params->last_exit_code = block->cmd.exit_value;
 		free(find_env_var(ms_params->envp, "?")->var_value);

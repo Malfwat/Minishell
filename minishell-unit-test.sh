@@ -24,13 +24,13 @@ Test()
 {
 	((TOTAL_TESTS++))
 	cd expected_output_dir
-	bash --posix -c "$1" > output 2>> output 
+	bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	$1 > output 2>> output 
+	bash --posix -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	cd ..
-	local OUTPUTS_DIFFS=$(diff -ru expected_output_dir original_output_dir)
+	local OUTPUTS_DIFFS=$(diff --color=always -ru expected_output_dir original_output_dir)
 
 	echo -e "\033[38;5;208m==== TEST $TOTAL_TESTS ====\033[0m"
 	echo -e "\033[37mcommand: \033[0m\033[4m$1\033[0m"
@@ -61,6 +61,8 @@ Final_result()
 	echo "correct exit values:$TOTAL_EV_SUCCESS/$TOTAL_TESTS"
 	echo "correct output values:$TOTAL_OV_SUCCESS/$TOTAL_TESTS"
 }
+
+Build_test_environment
 
 ############################################################################
 #                                                                          #
@@ -96,7 +98,7 @@ Test ">> ../test_files/a_pipe_1 echo lol>> ../test_files/a_pipe_1 >> ../test_fil
 Test "inexistant_command lol >> ../test_files/a_pipe_4 | echo test"
 Test "cat inexistant_file | echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command | >>../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 | echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 | echo test"
 Test "cat inexistant_file | echo ergerg > ../test_files/o_pipe_5"
@@ -109,7 +111,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4 | echo test"
 Test "cat inexistant_file | echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command | >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 Test "> o_pipe_1"
 Test "> o_pipe_1 > o_pipe_2"
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 | echo test1 > ../test_files/o_pipe_3"
@@ -128,7 +130,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4| echo test"
 Test "cat inexistant_file | echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command | >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 | echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 |echo test"
 Test "cat inexistant_file | echo ergerg > ../test_files/o_pipe_5"
@@ -141,7 +143,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >>../test_files/a_pipe_4 |echo test"
 Test "cat inexistant_file | echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command|>> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 
 ############################################################################
 #                                                                          #
@@ -169,7 +171,7 @@ Test ">> ../test_files/a_pipe_1 echo lol>> ../test_files/a_pipe_1 >> ../test_fil
 Test "inexistant_command lol >> ../test_files/a_pipe_4 && echo test"
 Test "cat inexistant_file && echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command && >>../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 && echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 && echo test"
 Test "cat inexistant_file && echo ergerg > ../test_files/o_pipe_5"
@@ -182,7 +184,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4 && echo test"
 Test "cat inexistant_file && echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command && >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 Test "> o_pipe_1"
 Test "> o_pipe_1 > o_pipe_2"
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 && echo test1 > ../test_files/o_pipe_3"
@@ -201,7 +203,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4&& echo test"
 Test "cat inexistant_file && echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command && >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 && echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 &&echo test"
 Test "cat inexistant_file && echo ergerg > ../test_files/o_pipe_5"
@@ -214,7 +216,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >>../test_files/a_pipe_4 &&echo test"
 Test "cat inexistant_file && echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command&&>> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 
 ############################################################################
 #                                                                          #
@@ -242,7 +244,7 @@ Test ">> ../test_files/a_pipe_1 echo lol>> ../test_files/a_pipe_1 >> ../test_fil
 Test "inexistant_command lol >> ../test_files/a_pipe_4 ; echo test"
 Test "cat inexistant_file ; echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command ; >>../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 ; echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 ; echo test"
 Test "cat inexistant_file ; echo ergerg > ../test_files/o_pipe_5"
@@ -255,7 +257,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4 ; echo test"
 Test "cat inexistant_file ; echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command ; >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 Test "> o_pipe_1"
 Test "> o_pipe_1 > o_pipe_2"
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 ; echo test1 > ../test_files/o_pipe_3"
@@ -274,7 +276,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4; echo test"
 Test "cat inexistant_file ; echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command ; >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 ; echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 ;echo test"
 Test "cat inexistant_file ; echo ergerg > ../test_files/o_pipe_5"
@@ -287,7 +289,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >>../test_files/a_pipe_4 ;echo test"
 Test "cat inexistant_file ; echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command;>> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 
 ############################################################################
 #                                                                          #
@@ -315,7 +317,7 @@ Test ">> ../test_files/a_pipe_1 echo lol>> ../test_files/a_pipe_1 >> ../test_fil
 Test "inexistant_command lol >> ../test_files/a_pipe_4 || echo test"
 Test "cat inexistant_file || echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command || >>../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 || echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 || echo test"
 Test "cat inexistant_file || echo ergerg > ../test_files/o_pipe_5"
@@ -328,7 +330,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4 || echo test"
 Test "cat inexistant_file || echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command || >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 Test "> o_pipe_1"
 Test "> o_pipe_1 > o_pipe_2"
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 || echo test1 > ../test_files/o_pipe_3"
@@ -347,7 +349,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >> ../test_files/a_pipe_4|| echo test"
 Test "cat inexistant_file || echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command || >> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 000 
+ls ../test_files/*pipe* | xargs chmod 000 
 Test "> ../test_files/o_pipe_1 echo lol > ../test_files/o_pipe_1 > ../test_files/o_pipe_2 || echo test1 > ../test_files/o_pipe_3"
 Test "inexistant_command lol > ../test_files/o_pipe_4 ||echo test"
 Test "cat inexistant_file || echo ergerg > ../test_files/o_pipe_5"
@@ -360,7 +362,7 @@ Test ">> ../test_files/a_pipe_1 echo lol >> ../test_files/a_pipe_1 >> ../test_fi
 Test "inexistant_command lol >>../test_files/a_pipe_4 ||echo test"
 Test "cat inexistant_file || echo ergerg >> ../test_files/a_pipe_5"
 Test "inexistant_command||>> ../test_files/a_pipe_6 inexistant_command"
-ls *pipe* | xargs chmod 644
+ls ../test_files/*pipe* | xargs chmod 666
 Test ""
 Test ""
 Test ""

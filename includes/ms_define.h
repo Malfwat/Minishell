@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/21 15:15:16 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 17:48:36 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 
 // indicate which line of the prompt is needed
 
-# define UP 0
-# define DOWN 1
+# define P_HEADER 0
+# define P_FOOTER 1
 
 // input_source according to the last redirection encountered
 
