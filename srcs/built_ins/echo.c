@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:20:41 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 22:03:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 05:15:53 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	ms_echo(char **tab)
 	bool	nl;
 	
 	i = 0;
+	nl = true;
 	if (!tab)
 	{
 		write(1, "\n\n", 2);
@@ -44,7 +45,7 @@ void	ms_echo(char **tab)
 	while (tab[i] && check_nl_arg(tab[i]))
 		i++;
 	if (i != 0)
-		nl = 0;
+		nl = false;
 	while (tab[i])
 	{
 		ft_putstr_fd(tab[i++], 1);
