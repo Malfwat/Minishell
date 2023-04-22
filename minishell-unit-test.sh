@@ -27,7 +27,7 @@ Test()
 	bash -c "$1" > output 2>> output 
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	bash -c "$1" > output 2>> output 
+	$1 > output 2>> output 
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	cd ..
 	local OUTPUTS_DIFFS=$(diff -ru expected_output_dir original_output_dir)

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 02:42:06 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 03:41:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars)
 	else if (!ft_strcmp(str, "pwd"))
 		pwd();
 	else if (!ft_strcmp(str, "unset"))
-		unset(&ms_params->envp, vars.argv);
+		unset(&ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "export"))
-		export(&ms_params->envp, vars.argv, 0);
+		export(ms_params, &ms_params->envp, &vars.argv[1], 0);
 	else if (!ft_strcmp(str, "cd"))
 		cd(ms_params, ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "echo"))
