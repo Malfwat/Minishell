@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 05:13:07 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:03:31 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,46 @@
 #include <stdio.h>
 #include <env_function.h>
 #include <libft.h>
+#include <stdlib.h>
 #include <minishell.h>
+
+t_env_var	*cpy_t_env_var(t_env_var *lst)
+{
+	t_env_var	*new_lst;
+
+	new_lst = NULL;
+	while (lst)
+	{
+		if (!add_env_var(&new_lst, lst->name, lst->value, 0))
+			return (free_env_lst(new), NULL);
+		lst = lst->next;
+	}
+	return (new_lst);
+}
+
+void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
+{
+	t_env_var *a_prev;
+	t_env_var *a_next;
+	t_env_var *b_next;
+	t_env_var *b_prev;
+
+	a_prev = a->prev;
+	a_next = a->next;
+	b_next = b->next;
+	b_prev = b->prev;
+	a_prev->next = b;
+	b_next->prev = a;
+}
+
+void	print_lst(t_env_var *lst)
+{
+	t_env_var	*cpy;
+
+	cpy = cpy_t_env_var(lst);
+	if (!cpy)
+		return ;
+}
 
 void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 {
@@ -24,6 +63,8 @@ void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 	int			i;
 
 	i = -1;
+	if (!*tab)
+		print_export(*lst);
 	while (tab && tab[++i])
 	{
 		name = get_env_var_name(tab[i]);
