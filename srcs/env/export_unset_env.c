@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 04:43:25 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 05:13:07 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ void	env(t_env_var *lst)
 	i = -1;
 	while (tab && tab[++i])
 	{
-		if (ft_strncmp(tab[i], "?=", 2))
-			ft_putstr_fd(tab[i], 1);
+		if (!ft_strncmp(tab[i], "?=", 2))
+			continue ;
+		ft_putendl_fd(tab[i], 1);
 	}
 	ft_strsfree(tab);
 }

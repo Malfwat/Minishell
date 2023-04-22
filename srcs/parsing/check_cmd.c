@@ -6,13 +6,14 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 07:53:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 22:06:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 05:12:31 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <minishell.h>
 #include <stdbool.h>
 #include <errno.h>
 #include <libft.h>
@@ -34,7 +35,7 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 	int		i;
 
 	i = 0;
-	if (ft_strchr(*cmd, '/'))
+	if (ft_strchr(*cmd, '/') || is_builtin(*cmd))
 	{
 		*dest = *cmd;
 		return (true);
