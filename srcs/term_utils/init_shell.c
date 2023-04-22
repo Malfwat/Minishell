@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 19:55:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,23 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	ms_params->last_exit_code = 0;
 }
 
+int	ft1(int a, int b)
+{
+	rl_replace_line("echo test", 0);
+	return ((void)a, (void)b, 1);
+}
+
+void	init_keyhooks(void)
+{
+	// rl_bind_key(27, NULL);
+	rl_bind_keyseq("\\e[A", ft1);
+}
+
 bool	init_minishell(t_minishell *ms_params, char **envp)
 {
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (perror("minishell"), false);
+	// init_keyhooks();
 	tgetent(0, getenv("TERM"));
 	ft_memset(ms_params, 0, sizeof(t_minishell));
 	save_terminal_params(ms_params);
