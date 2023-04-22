@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 03:43:24 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 04:43:25 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	unset(t_env_var **head, char **tab)
 	i = -1;
 	while (tab[++i])
 	{
+		if (!ft_strcmp(tab[i], "?"))
+			continue ;
 		to_pop = find_env_var(*head, tab[i]);
 		if (!to_pop)
 			continue ;
@@ -77,8 +79,14 @@ void	unset(t_env_var **head, char **tab)
 void	env(t_env_var *lst)
 {
 	char	**tab;
+	int		i;
 
 	tab = build_envp(lst);
-	ft_print_array_str(tab);
+	i = -1;
+	while (tab && tab[++i])
+	{
+		if (ft_strncmp(tab[i], "?=", 2))
+			ft_putstr_fd(tab[i], 1);
+	}
 	ft_strsfree(tab);
 }

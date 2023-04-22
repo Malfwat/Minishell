@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 21:56:31 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 04:17:31 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec_ms.h>
 #include <minishell.h>
 #include <sys/wait.h>
+#include <env_function.h>
 
 void	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 {
@@ -49,6 +50,8 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
 		ms_params->last_exit_code = block->cmd.exit_value;
+		free(find_env_var(ms_params->envp, "?")->var_value);
+		find_env_var(ms_params->envp, "?")->var_value = ft_itoa(block->cmd.exit_value);
 	}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);
