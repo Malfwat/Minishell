@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/21 21:57:21 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/23 14:15:05 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ PROMPT_DIR			=	prompt/
 
 BUILT_INS			=	cd.c	\
 						echo.c	\
+						exit.c	\
 						pwd.c
 
 BUILT_INS_DIR		=	built_ins/
