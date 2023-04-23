@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/23 19:33:48 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/23 19:40:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,10 @@ void	init_keyhooks(void)
 
 void	print_usage(void)
 {
-	ft_putstr_fd("\
-	Usage: ./minishell [-c arg]\n \
-	\t-c arg:\
-	if present then commands are read \
-	from the first non-option argument \033[4marg\033[0m", 2);
+	ft_putstr_fd("Usage: ./minishell [-c arg]\n", 2);
+	ft_putstr_fd("   -c arg: ", 2);
+	ft_putstr_fd("if present then commands are read \
+from the first non-option argument \033[4marg\033[0m\n", 2);
 }
 
 bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
