@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/23 14:14:32 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/23 14:30:50 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd)
+void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd[])
 {
 	char	*str;
 
@@ -44,7 +44,7 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd)
 	if (!ft_strcmp(str, "env"))
 		env(ms_params->envp);
 	else if (!ft_strcmp(str, "pwd"))
-		pwd(fd);
+		pwd(fd[1]);
 	else if (!ft_strcmp(str, "unset"))
 		unset(&ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "export"))
@@ -52,14 +52,14 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd)
 	else if (!ft_strcmp(str, "cd"))
 		cd(ms_params, ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "echo"))
-		ms_echo(&vars.argv[1], fd);
+		ms_echo(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "exit"))
-		ms_exit_builtin(*ms_params, &vars.argv[1], fd);
+		ms_exit_builtin(ms_params, vars, fd);
 }
 
 void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
 {
-	launch_builtins(ms_params, vars, block->io_tab[1]);
+	launch_builtins(ms_params, vars, block->io_tab);
 	block->cmd.exit_value = ms_params->last_exit_code;
 	free(find_env_var(ms_params->envp, "?")->var_value);
 	find_env_var(ms_params->envp, "?")->var_value = ft_itoa(block->cmd.exit_value);
