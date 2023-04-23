@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 19:55:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/23 19:33:48 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,36 @@ void	init_keyhooks(void)
 	rl_bind_keyseq("\\e[A", ft1);
 }
 
-bool	init_minishell(t_minishell *ms_params, char **envp)
+void	print_usage(void)
 {
-	if (!isatty(0) || !isatty(1) || !isatty(2))
+	ft_putstr_fd("\
+	Usage: ./minishell [-c arg]\n \
+	\t-c arg:\
+	if present then commands are read \
+	from the first non-option argument \033[4marg\033[0m", 2);
+}
+
+bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
+{
+	ft_memset(ms_params, 0, sizeof(t_minishell));
+	if (ac == 3 && !ft_strcmp(av[1], "-c"))
+		ms_params->flags |= C_FLAG;
+	if (ac > 1 && (ms_params->flags & C_FLAG) == 0)
+		return (print_usage(), false);
+	if ((ms_params->flags & C_FLAG) == 0
+		&& (!isatty(0) || !isatty(1) || !isatty(2)))
 		return (perror("minishell"), false);
 	// init_keyhooks();
-	tgetent(0, getenv("TERM"));
-	ft_memset(ms_params, 0, sizeof(t_minishell));
-	save_terminal_params(ms_params);
-	toggle_control_character(VQUIT, _POSIX_VDISABLE);
-	signal(SIGINT, &handler_func);
-	ms_params->history_fd = get_my_history(ms_params);
-	if (ms_params->history_fd == -1)
-		return (false);
+	if ((ms_params->flags & C_FLAG) == 0)
+	{
+		tgetent(0, getenv("TERM"));
+		save_terminal_params(ms_params);
+		toggle_control_character(VQUIT, _POSIX_VDISABLE);
+		signal(SIGINT, &handler_func);
+		ms_params->history_fd = get_my_history(ms_params);
+		if (ms_params->history_fd == -1)
+			return (false);
+	}
 	ms_params->envp = get_env_var(envp);
 	if (errno)
 		return (perror("minishell"), false);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/23 14:32:52 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/23 18:07:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ bool		compare_wildcard(char *pattern, char *str);
 
 void		ensure_prompt_position(void);
 void		init_prompt(t_minishell *ms_params, char **user_input);
-bool		init_minishell(t_minishell *ms_params, char **envp);
+bool		init_minishell(t_minishell *ms_params, int ac, char **av, char **envp);
 int			get_cursor_position(void);
 
 
