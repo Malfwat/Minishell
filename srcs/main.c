@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 21:11:31 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/23 14:19:11 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ int	main(int ac, char **av, char **envp)
 	{
 		init_prompt(&g_ms_params, &user_input);
 		if (!user_input)
+		{
+			ft_putendl_fd("exit", 1);
 			exit_ms(g_ms_params, 0, "readline");
+		}
 		ms_add_history(user_input, &g_ms_params);
 		if (!parse_user_input(&g_ms_params, user_input))
 			continue ;

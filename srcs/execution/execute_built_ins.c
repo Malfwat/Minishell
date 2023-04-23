@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 17:46:44 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/23 14:14:32 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ bool	is_builtin(char *str)
 		return (true);
 	if (!ft_strcmp(str, "echo"))
 		return (true);
+	if (!ft_strcmp(str, "exit"))
+		return (true);
 	return (false);
 }
 
@@ -51,6 +53,8 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd)
 		cd(ms_params, ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "echo"))
 		ms_echo(&vars.argv[1], fd);
+	else if (!ft_strcmp(str, "exit"))
+		ms_exit_builtin(*ms_params, &vars.argv[1], fd);
 }
 
 void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
