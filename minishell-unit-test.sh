@@ -33,7 +33,7 @@ Test()
 	bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	$1 > output
+	~/42-CURSUS/Minishell/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	cd ..
 	local OUTPUTS_DIFFS=$(diff --color=always -ru expected_output_dir original_output_dir)

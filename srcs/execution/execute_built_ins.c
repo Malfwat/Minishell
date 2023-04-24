@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/23 14:30:50 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 17:10:09 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
 	block->cmd.exit_value = ms_params->last_exit_code;
 	free(find_env_var(ms_params->envp, "?")->var_value);
 	find_env_var(ms_params->envp, "?")->var_value = ft_itoa(block->cmd.exit_value);
-	if (block->io_tab[0] >= 0)
-		close(block->io_tab[0]);
-	if (block->io_tab[1] >= 0)
-		close(block->io_tab[1]);
-	free_exec_vars(vars);
+	// if (block->io_tab[0] >= 0)
+	// 	close(block->io_tab[0]);
+	// if (block->io_tab[1] >= 0)
+	// 	close(block->io_tab[1]);
+	//free_exec_vars(vars);
 	if (errno)
 		exit_ms(*ms_params, 2, "builtins");
 	block->cmd.exit_value = 0;
