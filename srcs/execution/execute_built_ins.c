@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 17:10:09 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:18:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
 	// 	close(block->io_tab[1]);
 	//free_exec_vars(vars);
 	if (errno)
+	{
+		free_exec_vars(vars);
 		exit_ms(*ms_params, 2, "builtins");
+	}
 	block->cmd.exit_value = 0;
 	// ms_params->last_exit_code = 0;
 }
