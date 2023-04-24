@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/23 14:35:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 19:00:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	ft_isnum(char *str)
 	return (true);
 }
 
-void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[])
+void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 {
 	int	length;
 	int	exit_value;
@@ -39,7 +39,7 @@ void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[])
 	length = 0;
 	if (fd[1] == INIT_FD_VALUE)
 		fd[1] = 1;
-	ft_putstr_fd("exit\n", fd[1]);
+	ft_putstr_fd("exit\n", ms_params->stdin_fileno);
 	while (vars.argv[length + 1])
 		length++;
 	if (!length)

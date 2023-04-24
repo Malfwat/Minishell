@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:18:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:57:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd[])
+void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 {
 	char	*str;
 
