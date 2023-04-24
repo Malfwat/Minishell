@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 17:31:41 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 01:52:33 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,46 @@ char	**build_path(t_minishell ms_params)
 	return (path);
 }
 
+bool	is_colorable(char *str)
+{
+	if (!ft_strcmp(str, "/usr/bin/ls") || !ft_strcmp(str, "/bin/ls"))
+		return (true);
+	if (!ft_strcmp(str, "/usr/bin/grep") || !ft_strcmp(str, "/bin/grep"))
+		return (true);
+	if (!ft_strcmp(str, "/usr/bin/egrep") || !ft_strcmp(str, "/bin/egrep"))
+		return (true);
+	if (!ft_strcmp(str, "/usr/bin/fgrep") || !ft_strcmp(str, "/bin/fgrep"))
+		return (true);
+	if (!ft_strcmp(str, "/usr/bin/diff") || !ft_strcmp(str, "/bin/diff"))
+		return (true);
+	if (!ft_strcmp(str, "/usr/bin/git") || !ft_strcmp(str, "/bin/git"))
+		return (true);
+	if (!ft_strcmp(str, "/usr/bin/ip") || !ft_strcmp(str, "/bin/ip"))
+		return (true);
+	return (false);
+}
+
+void	check_for_color(t_args **head)
+{
+	t_args	*tmp;
+
+	if (is_colorable((*head)->final_arg))
+	{
+		if (!(*head)->next || ft_strncmp((*head)->next->final_arg, "--color=", 8))
+		{
+			tmp = new_cmd_arg(NULL);
+			tmp->final_arg = ft_strdup("--color=auto");
+			if (!tmp->final_arg)
+				return ;
+			tmp->prev = *head;
+			if ((*head)->next)
+				(*head)->next->prev = tmp;
+			tmp->next = (*head)->next;
+			(*head)->next = tmp;
+		}
+	}
+}
+
 char	**build_argv(t_args **head)
 {
 	char	**tab;
@@ -35,6 +75,7 @@ char	**build_argv(t_args **head)
 	if (errno)
 		return (NULL);
 	update_t_args(head);
+	check_for_color(head);
 	tmp = *head;
 	while (tmp)
 	{
