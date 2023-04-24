@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/23 14:32:52 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 18:57:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 void		pwd(t_fd fd);
 void		cd(t_minishell *ms_params, t_env_var *head, char **tab);
-void		ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[]);
+void		ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2]);
 void		ms_echo(char **tab, t_fd fd);
 
 // manage_io_params.c
@@ -133,7 +133,7 @@ bool		compare_wildcard(char *pattern, char *str);
 
 void		ensure_prompt_position(void);
 void		init_prompt(t_minishell *ms_params, char **user_input);
-bool		init_minishell(t_minishell *ms_params, char **envp);
+bool		init_minishell(t_minishell *ms_params, int ac, char **av, char **envp);
 int			get_cursor_position(void);
 
 

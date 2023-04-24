@@ -1,0 +1,3 @@
+- ajouter --color=tty a ls / grep / egrep / fgrep / diff / git / ip
+
+- 

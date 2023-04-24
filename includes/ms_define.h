@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 20:46:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:02:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 // charset of single delimiter to check
 
 # define SINGLE_DELIM " \t><|;"
+
+// hex representing the -c flag in ms_params
+
+# define C_FLAG 0x1
 
 // indicate if we are going to open an input or output file
 
@@ -76,6 +80,9 @@ enum e_operator
 
 enum e_type
 {
+	ILLEGAL_INPUT = -8,
+	ILLEGAL_OUTPUT,
+	ILLEGAL_AOUTPUT,
 	ILLEGAL_HEREDOC = -5,
 	EXPECTING_ARGUMENT,
 	INCOMPLETE_INPUT_OUTPUT,
