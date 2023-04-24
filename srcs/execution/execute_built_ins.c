@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:57:42 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 22:45:09 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,15 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 
 	str = vars.argv[0];
 	if (!ft_strcmp(str, "env"))
-		env(ms_params->envp);
+		env(ms_params->envp, fd[1]);
 	else if (!ft_strcmp(str, "pwd"))
 		pwd(fd[1]);
 	else if (!ft_strcmp(str, "unset"))
 		unset(&ms_params->envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "export"))
-		export(ms_params, &ms_params->envp, &vars.argv[1], 0);
+		export(ms_params, &vars.argv[1], 0, fd[1]);
 	else if (!ft_strcmp(str, "cd"))
-		cd(ms_params, ms_params->envp, &vars.argv[1]);
+		cd(ms_params, &vars.argv[1]);
 	else if (!ft_strcmp(str, "echo"))
 		ms_echo(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "exit"))

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 03:36:47 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 22:42:50 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ bool		add_env_var(t_env_var **head, char *name, char *value, bool temp);
 
 // export_unset.c
 
-void		export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp);
+void		export(t_minishell *ms_params, char **tab, bool temp, t_fd fd);
 void		unset(t_env_var **head, char **tab);
-void		env(t_env_var *lst);
+void		env(t_env_var *lst, t_fd fd);
 
 // manage_env_var.c
 

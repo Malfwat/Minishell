@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 14:40:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 22:49:50 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,38 +48,23 @@ bool	is_in_order(t_env_var *lst)
 
 void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
 {
-	t_env_var *a_prev;
-	t_env_var *a_next;
-	t_env_var *b_next;
-	t_env_var *b_prev;
-
-	a_prev = a->prev;
-	a_next = a->next;
-	b_next = b->next;
-	b_prev = b->prev;
-	if (a_prev)
-		a_prev->next = b;
-	if (a_next)
-		a_next->prev = b;
-	if (b_next)
-		b_next->prev = a;
-	if (b_prev)
-		b_prev->next = a;
 	if (*lst == a)
 		*lst = b;
-	else if (*lst == b)
-		*lst = a;
-	a->next = b_next;
-	a->prev = b_prev;
-	b->next = a_next;
-	b->prev = a_prev;
+	// a->next->prev = b;
+	a->next = b->next;
+	if (b->next)
+		b->next->prev = a;
+	b->next = a;
+	b->prev = a->prev;
+	if (a->prev)
+		a->prev->next = b;
+	a->prev = b;
 }
 
-void	print_export(t_env_var *lst)
+void	print_export(t_env_var *lst, t_fd fd)
 {
 	t_env_var	*cpy;
 	t_env_var	*tmp;
-	t_env_var	*tmp_next;
 
 	cpy = cpy_t_env_var(lst);
 	if (!cpy)
@@ -87,23 +72,19 @@ void	print_export(t_env_var *lst)
 	while (!is_in_order(cpy))
 	{
 		tmp = cpy;
-		while (tmp && tmp->next)
+		while (tmp->next)
 		{
-			tmp_next = tmp->next->next;
 			if (ft_strcmp(tmp->var_name, tmp->next->var_name) > 0)
-			{
 				swap_env_node(&cpy, tmp, tmp->next);
-				tmp = tmp_next;
-			}
 			else
 				tmp = tmp->next;
 		}
 	}
-	env(cpy);
-	free_env_lst(cpy);
+	env(cpy, fd);
+	// free_env_lst(cpy);
 }
 
-void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
+void	export(t_minishell *ms_params, char **tab, bool temp, t_fd fd)
 {
 	t_env_var	*tmp;
 	char		*name;
@@ -112,7 +93,7 @@ void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 
 	i = -1;
 	if (!*tab)
-		return (print_export(*lst));
+		return (print_export(ms_params->envp, fd));
 	while (tab && tab[++i])
 	{
 		name = get_env_var_name(tab[i]);
@@ -125,11 +106,11 @@ void	export(t_minishell *ms_params, t_env_var **lst, char **tab, bool temp)
 			continue ;
 		}
 		value = get_env_var_value(tab[i]);
-		tmp = find_env_var(*lst, name);
+		tmp = find_env_var(ms_params->envp, name);
 		if (!tmp)
 		{
-			if (!add_env_var(lst, name, value, temp))
-				return (free_env_lst(*lst));
+			if (!add_env_var(&ms_params->envp, name, value, temp))
+				return (free_env_lst(ms_params->envp));
 		}
 		else
 		{
@@ -148,8 +129,11 @@ void	unset(t_env_var **head, char **tab)
 	i = -1;
 	while (tab[++i])
 	{
-		if (!ft_strcmp(tab[i], "?"))
+		if (ft_strchr(tab[i], '?'))
+		{
+			ms_perror("minishell: unset", tab[i], "not a valid identifier");
 			continue ;
+		}
 		to_pop = find_env_var(*head, tab[i]);
 		if (!to_pop)
 			continue ;
@@ -165,18 +149,20 @@ void	unset(t_env_var **head, char **tab)
 	}
 }
 
-void	env(t_env_var *lst)
+void	env(t_env_var *lst, t_fd fd)
 {
 	char	**tab;
 	int		i;
 
 	tab = build_envp(lst);
 	i = -1;
+	if (fd == INIT_FD_VALUE)
+		fd = 1;
 	while (tab && tab[++i])
 	{
 		if (!ft_strncmp(tab[i], "?=", 2))
 			continue ;
-		ft_putendl_fd(tab[i], 1);
+		ft_putendl_fd(tab[i], fd);
 	}
 	ft_strsfree(tab);
 }
