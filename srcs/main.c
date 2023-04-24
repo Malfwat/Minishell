@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/23 20:29:18 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 17:49:25 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
 	{
-		ms_params->last_exit_code = 256;
+		ms_params->last_exit_code = 640; // exit status = 2
 		return (flood_free(head), false);
 	}
 	if (errno)
@@ -83,7 +83,7 @@ bool	init_and_parse_input(t_minishell *ms_params, char **av, char **u_in)
 		av[2] += pass_whitespaces(av[2]);
 		*u_in = ft_strdup(av[2]);
 		if (!*u_in || !parse_user_input(ms_params, *u_in))
-			exit_ms(*ms_params, 0, "parse (-c flag case)");
+			exit_ms(*ms_params, extract_exit_code(ms_params->last_exit_code), "parse (-c flag case)");
 	}
 	else
 	{
