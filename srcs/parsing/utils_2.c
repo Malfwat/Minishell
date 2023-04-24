@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 21:10:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:52:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ void	print_syntax_error(int type, char *str)
 	char	c;
 
 	if (type == ILLEGAL_HEREDOC)
-	{
 		str = ft_strchr(str, '<') + 2;
-		str += pass_whitespaces(str);
-	}
+	else if (type == ILLEGAL_OUTPUT)
+		str = ft_strchr(str, '>') + 1;
+	else if (type == ILLEGAL_AOUTPUT)
+		str = ft_strchr(str, '>') + 2;
+	else if (type == ILLEGAL_INPUT)
+		str = ft_strchr(str, '<') + 1;
+	str += pass_whitespaces(str);
 	c = *str;	
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd("syntax error near unexpected token ", 2);
@@ -52,13 +56,13 @@ void	syntax_error(int err, void *comment, int type, char *cmd_line)
 {
 	if (type == EXPECTING_ARGUMENT)
 	{
-		ft_putstr_fd \
-		("minishell: syntax error: right hand operand cannot be empty\n", 2);
+		ms_perror("minishell", "syntax error",
+		"right hand operand cannot be empty");
 		return ;
 	}
 	else if (!comment)
 	{
-		if (type == ILLEGAL_HEREDOC)
+		if (type <= ILLEGAL_HEREDOC)
 			print_syntax_error(type, cmd_line);
 		else
 			print_syntax_error(type, cmd_line);
