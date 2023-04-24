@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/22 20:45:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:03:09 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	*get_next_param(char *str, int *i, int *type)
 		return (NULL);
 	if ((!errno && check_parenthesis_param(str, i, (char **)&res, type)) \
 		|| (!errno && check_io_param(str, i, type, (t_split_arg **)&res)) \
-		|| (!errno && *type != ILLEGAL_HEREDOC \
+		|| (!errno && *type > ILLEGAL_HEREDOC \
 		&& check_word_param(str, i, type, (t_split_arg **)&res)))
 		return (res);
 	return (res);
