@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:46:41 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:49:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 
 	if (!*user_input)
 	{
+		free(user_input);
 		ms_params->last_exit_code = 0;
 		return (false);
 	}
@@ -91,7 +92,6 @@ bool	init_and_parse_input(t_minishell *ms_params, char **av, char **u_in)
 		init_prompt(ms_params, u_in);
 		if (!*u_in)
 		{
-			free(*u_in);
 			ft_putendl_fd("exit", 1);
 			exit_ms(*ms_params, 0, "readline");
 		}
