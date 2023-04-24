@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 17:49:25 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:43:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	handler_func(int num)
 	ms_prompt_up = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	ft_putstr_fd(ms_prompt_up, 1);
 	free(ms_prompt_up);
+	free_prompt_params(&g_ms_params.prompt_params);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
