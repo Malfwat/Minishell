@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 19:00:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 19:01:27 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 	int	exit_value;
 
 	length = 0;
-	if (fd[1] == INIT_FD_VALUE)
-		fd[1] = 1;
+	if (fd[0] >= 0)
+		close(fd[0]);
+	if (fd[1] >= 0)
+		close(fd[1]);
 	ft_putstr_fd("exit\n", ms_params->stdin_fileno);
 	while (vars.argv[length + 1])
 		length++;
@@ -56,9 +58,5 @@ void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 	}
 	exit_value = ft_atoi(vars.argv[1]);
 	free_exec_vars(vars);
-	if (fd[0] >= 0)
-		close(fd[0]);
-	if (fd[1] >= 0)
-		close(fd[1]);
 	return (exit_ms(*ms_params, exit_value, NULL));
 }
