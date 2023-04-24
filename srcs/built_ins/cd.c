@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 03:37:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 22:44:37 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <libft.h>
 #include <struct_ms.h>
 
-void	cd(t_minishell *ms_params, t_env_var *head, char **tab)
+void	cd(t_minishell *ms_params, char **tab)
 {
 	char	*dir;
 	char	*tmp;
@@ -50,7 +50,7 @@ void	cd(t_minishell *ms_params, t_env_var *head, char **tab)
 	tmp = ft_strjoin("PWD=", cwd);
 	if (!tmp)
 		return (free(cwd));
-	export(ms_params, &head, (char *[]){tmp, NULL}, 0);
+	export(ms_params, (char *[]){tmp, NULL}, 0, 1);
 	free(cwd);
 	return ;
 }

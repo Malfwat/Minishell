@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:49:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/24 22:17:03 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,22 +135,23 @@ int	main(int ac, char **av, char **envp)
 	return (1);
 }
 
+
+
+
 // int	main(int ac, char **av, char **envp)
 // {
 // 	t_env_var	*env_lst;
 
-// 	if (ac < 2)
-// 		return (0);
+// 	if (ac < 1)
+// 		return ((void)av, 0);
 // 	env_lst = get_env_var(envp);
-// 	pwd();
-// 	cd(NULL, env_lst, &av[1]);
-// 	pwd();
-// 	ms_echo(av + 2);
-// 	// env(env_lst);
+// 	env(env_lst);
+	
 // 	// unset(&env_lst, find_env_var(env_lst, "TERM"));
 // 	// export(&env_lst, "test=95", 0);
-// 	// write(1, "\n\n", 2);
-// 	// env(env_lst);
+// 	write(1, "\n\n", 2);
+// 	swap_env_node(&env_lst, env_lst, env_lst->next);
+// 	env(env_lst);
 // 	free_env_lst(env_lst);
 // 	return (0);
 // }
