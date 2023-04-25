@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:52:16 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 18:39:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec_ms.h>
 #include <minishell.h>
 #include <sys/wait.h>
+#include <env_function.h>
 
 void	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 {
@@ -23,6 +24,16 @@ void	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 	handle_execve_failure(*ms_params, blck->cmd.args->final_arg);
 }
 
+void	puppet_child(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
+{
+	if (blck->io_tab[0] >= 0)
+		close(blck->io_tab[0]);
+	if (blck->io_tab[1] >= 0)
+		close(blck->io_tab[1]);
+	free_exec_vars(exc_vrs);
+	exit_ms(*ms_params, blck->cmd.exit_value, "puppet_child");
+}
+
 void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 {
 	t_exec_vars	exec_vars;
@@ -30,10 +41,18 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	errno = 0;
 	if (!init_exec_io(block, ms_params))
 		return ;
-	exec_vars = init_exec_vars(*ms_params, block);
-	block->cmd.pid = fork();
-	if (block->cmd.pid == 0)
-		child_worker(block, ms_params, exec_vars);
+	exec_vars = (t_exec_vars){0};
+	if (block->cmd.args)
+	{
+		exec_vars = init_exec_vars(*ms_params, block);
+		if (is_builtin(exec_vars.argv[0]))
+			exec_builtin(block, ms_params, exec_vars);
+		block->cmd.pid = fork();
+		if (block->cmd.pid == 0 && !is_builtin(exec_vars.argv[0]))
+			child_worker(block, ms_params, exec_vars);
+		else if (block->cmd.pid == 0 && is_builtin(exec_vars.argv[0]))
+			puppet_child(block, ms_params, exec_vars);
+	}
 	if (block->io_tab[0] >= 0)
 		close(block->io_tab[0]);
 	if (block->io_tab[1] >= 0)
@@ -44,9 +63,11 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
 		|| block->operator == SEMI_COLON)
 	{
-		if (waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
+		if (block->cmd.pid && waitpid(block->cmd.pid, &block->cmd.exit_value, 0) == -1)
 			exit_ms(*ms_params, 2, "waitpid");
 		ms_params->last_exit_code = block->cmd.exit_value;
+		free(find_env_var(ms_params->envp, "?")->var_value);
+		find_env_var(ms_params->envp, "?")->var_value = ft_itoa(block->cmd.exit_value);
 	}
 	else
 		store_pid(block->cmd.pid, &ms_params->children);

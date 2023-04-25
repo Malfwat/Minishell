@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:07:17 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 01:39:31 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 #include <libft.h>
 #include <errno.h>
 #include <stdio.h>
+
+
+
+
 
 bool	is_valid_param(void *param, int type, t_block *block)
 {
@@ -51,7 +55,8 @@ void	*get_next_param(char *str, int *i, int *type)
 		return (NULL);
 	if ((!errno && check_parenthesis_param(str, i, (char **)&res, type)) \
 		|| (!errno && check_io_param(str, i, type, (t_split_arg **)&res)) \
-		|| (!errno && check_word_param(str, i, type, (t_split_arg **)&res)))
+		|| (!errno && *type > ILLEGAL_HEREDOC \
+		&& check_word_param(str, i, type, (t_split_arg **)&res)))
 		return (res);
 	return (res);
 }
@@ -77,18 +82,18 @@ bool	check_parse_error(void *next_param, char *cmd_line, int type)
 	return (true);
 }
 
-int	manage_delim(t_block **curr_block, char *cmd_line, int *i)
+int	manage_delim(t_block ***curr_block, char *cmd_line, int *i)
 {
-	*i += pass_ws_and_delim(&cmd_line[*i], (*curr_block)->operator);
-	if ((*curr_block)->operator == PIPE_OPERATOR)
+	*i += pass_ws_and_delim(&cmd_line[*i], (**curr_block)->operator);
+	if ((**curr_block)->operator == PIPE_OPERATOR)
 	{
-		curr_block = &(*curr_block)->pipe_next;
-		add_block_back(curr_block, last_pipe);
+		*curr_block = &(**curr_block)->pipe_next;
+		add_block_back(*curr_block, last_pipe);
 	}
 	else
 	{
-		add_block_back(curr_block, last_sibling);
-		curr_block = &(*curr_block)->next;
+		add_block_back(*curr_block, last_sibling);
+		*curr_block = &(**curr_block)->next;
 	}
 	return (EXPECTING_ARGUMENT);
 }
@@ -114,7 +119,7 @@ bool	parse_cmds(t_block **curr_block, char *cmd_line)
 				return (free(cmd_line), false);
 		}
 		if (check_and_store_delimiter(&cmd_line[i], &(*curr_block)->operator))
-			type = manage_delim(curr_block, cmd_line, &i);
+			type = manage_delim(&curr_block, cmd_line, &i);
 		next_param = get_next_param(cmd_line, &i, &type);
 	}
 	return (check_parse_error(next_param, cmd_line, type));

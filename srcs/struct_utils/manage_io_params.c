@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:46:05 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 18:01:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,11 @@ void	ft_add_io(t_block *block, t_split_arg *io)
 bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 {
 	char		quotes;
-	static char	redirect[3];
+	char		redirect[3];
 
 	*type = INCOMPLETE_INPUT_OUTPUT;
 	*i += pass_whitespaces(&str[*i]);
+	ft_bzero(redirect, 3 * sizeof(char));
 	if (str[*i] && ft_strchr("><", str[*i]))
 	{
 		redirect[0] = str[*i];
@@ -99,10 +100,18 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 			quotes = 0;
 			if (ft_strchr("'\"", str[*i]) && ft_strchr(&str[*i + 1], str[*i]))
 				quotes = str[(*i)++];
-			(*i) += slice_next_part(&str[*i], arg, quotes) + (quotes);
+			(*i) += slice_next_part(&str[*i], arg, quotes);
 		}
+		if (!ft_strcmp(redirect, "<<") && !(*arg)->next)
+			return (free_t_split_arg(arg), *type = ILLEGAL_HEREDOC, false);
+		else if (!ft_strcmp(redirect, "<") && !(*arg)->next)
+			return (free_t_split_arg(arg), *type = ILLEGAL_INPUT, false);
+		else if (!ft_strcmp(redirect, ">") && !(*arg)->next)
+			return (free_t_split_arg(arg), *type = ILLEGAL_OUTPUT, false);
+		else if (!ft_strcmp(redirect, ">>") && !(*arg)->next)
+			return (free_t_split_arg(arg), *type = ILLEGAL_AOUTPUT, false);
 		if (*arg && !errno)
 			return (*type = INPUT_OUTPUT, true);
 	}
-	return (false);
+	return (free_t_split_arg(arg), false);
 }

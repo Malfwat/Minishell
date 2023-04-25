@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_prompt_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 23:24:35 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	build_prompt_exit_status(t_prompt_blocks **pargs, t_prompt *params)
 	char	*str;
 	char	*ascii_status;
 
-	ascii_status = ft_itoa(params->last_exit_code);
+	ascii_status = ft_itoa(extract_exit_code(params->last_exit_code));
 	if (!ascii_status)
 		return ;
 	if (!params->last_exit_code)
@@ -78,9 +78,9 @@ char	*build_prompt(t_prompt *params, bool side)
 
 	errno = 0;
 	pargs = NULL;
-	if (side == UP)
+	if (side == P_HEADER)
 		build_upper_prompt(params, &pargs);
-	else if (side == DOWN)
+	else if (side == P_FOOTER)
 		build_prompt_user(&pargs, params);
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);

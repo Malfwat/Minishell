@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env_var.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 23:59:34 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/08 19:18:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/22 04:11:48 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,13 @@ t_env_var	*get_env_var(char **env)
 	{
 		name = get_env_var_name(env[i]);
 		value = get_env_var_value(env[i]);
-		if (!add_env_var(&lst, name, value, 0))
+		if (!name || !value || !add_env_var(&lst, name, value, 0))
 			return (free(name), free(value), free_env_lst(lst), NULL);
 		i++;
 	}
+	name = ft_strdup("?");
+	value = ft_strdup("0");
+	if (!name || !value || !add_env_var(&lst, name, value, 0))
+		return (free(name), free(value), free_env_lst(lst), NULL);
 	return (lst);
 }
