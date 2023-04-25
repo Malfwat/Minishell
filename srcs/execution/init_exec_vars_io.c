@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 01:52:33 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 02:20:37 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,19 @@ char	**build_path(t_minishell ms_params)
 
 bool	is_colorable(char *str)
 {
-	if (!ft_strcmp(str, "/usr/bin/ls") || !ft_strcmp(str, "/bin/ls"))
+	if (!ft_strcmp(str, "ls"))
 		return (true);
-	if (!ft_strcmp(str, "/usr/bin/grep") || !ft_strcmp(str, "/bin/grep"))
+	if (!ft_strcmp(str, "grep"))
 		return (true);
-	if (!ft_strcmp(str, "/usr/bin/egrep") || !ft_strcmp(str, "/bin/egrep"))
+	if (!ft_strcmp(str, "egrep"))
 		return (true);
-	if (!ft_strcmp(str, "/usr/bin/fgrep") || !ft_strcmp(str, "/bin/fgrep"))
+	if (!ft_strcmp(str, "fgrep"))
 		return (true);
-	if (!ft_strcmp(str, "/usr/bin/diff") || !ft_strcmp(str, "/bin/diff"))
+	if (!ft_strcmp(str, "diff"))
 		return (true);
-	if (!ft_strcmp(str, "/usr/bin/git") || !ft_strcmp(str, "/bin/git"))
+	if (!ft_strcmp(str, "git"))
 		return (true);
-	if (!ft_strcmp(str, "/usr/bin/ip") || !ft_strcmp(str, "/bin/ip"))
+	if (!ft_strcmp(str, "ip"))
 		return (true);
 	return (false);
 }
@@ -65,10 +65,11 @@ void	check_for_color(t_args **head)
 	}
 }
 
-char	**build_argv(t_args **head)
+char	**build_argv(t_args **head, char **path)
 {
 	char	**tab;
 	int		len;
+	char	*str;
 	t_args	*tmp;
 
 	len = 0;
@@ -76,6 +77,8 @@ char	**build_argv(t_args **head)
 		return (NULL);
 	update_t_args(head);
 	check_for_color(head);
+	get_cmd_path(path, &(*head)->final_arg, &str);
+	(*head)->final_arg = str;
 	tmp = *head;
 	while (tmp)
 	{
@@ -153,7 +156,7 @@ bool	init_exec_io(t_block *block, t_minishell *ms_params)
 t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block)
 {
 	t_exec_vars	exec_vars;
-	char		*tmp;
+	// char		*tmp;
 
 	if (!rebuild_args(&block->cmd.args, ms_params.envp))
 		exit_ms(ms_params, 2, "exec_build");
@@ -163,9 +166,8 @@ t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block)
 	// 	block->cmd.args = new_cmd_arg(NULL);
 	// 	block->cmd.args->final_arg = ft_strdup("");
 	// }
-	get_cmd_path(exec_vars.path, &block->cmd.args->final_arg, &tmp);
-	block->cmd.args->final_arg = tmp;
-	exec_vars.argv = build_argv(&block->cmd.args);
+
+	exec_vars.argv = build_argv(&block->cmd.args, exec_vars.path);
 	exec_vars.envp = build_envp(ms_params.envp);
 	if (errno)
 	{
