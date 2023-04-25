@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/25 21:27:47 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/25 21:54:24 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -159,8 +159,8 @@ $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile
 
 launch:
 	@make all
-	@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
-# @valgrind --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
+	@valgrind --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
+# @valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
 
 clean:
 	@rm -rf $(BUILD)
@@ -168,7 +168,7 @@ clean:
 
 fclean:	clean
 	@rm -f script.txt
-	@make fclean -C libft
+	@make fclean -C libft > /dev/null
 	@rm -rf $(NAME)
 	@echo "================fcleaned==============="
 
