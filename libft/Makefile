@@ -114,10 +114,10 @@ so:
 	$(CC) $(CFLAGS) -I$(INCLUDES) -I$(GNL_INCLUDES) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS) $(BONUS_OBJS)
+	@$(RM) $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
-	$(RM) $(NAME) $(NAME:.a=.so)
+	@$(RM) $(NAME) $(NAME:.a=.so)
 
 re: clean all
 
