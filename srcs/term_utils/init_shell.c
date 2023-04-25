@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 21:35:26 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 21:40:02 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <struct_ms.h>
 #include <signal.h>
 #include <history.h>
+#include <ncurses.h>
 
 bool	init_termois_struct(void)
 {
@@ -26,7 +27,6 @@ bool	init_termois_struct(void)
 	char			*sc_cursor_pos;
 
 	sc_cursor_pos = tgetstr("u7", NULL);
-	printf("\001%s\002\n", sc_cursor_pos);
 	if (!sc_cursor_pos)
 		return (false);
 	tcgetattr(0, &term);
