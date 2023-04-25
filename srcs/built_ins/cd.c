@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 20:40:59 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 21:01:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <libft.h>
 #include <struct_ms.h>
 
-void	cd(t_minishell *ms_params, char **tab)
+void	cd(t_minishell *ms_params, char **tab, t_fd fd)
 {
 	char	*dir;
 	char	*tmp;
@@ -30,7 +30,12 @@ void	cd(t_minishell *ms_params, char **tab)
 	if (!*tab)
 		dir = getenv("HOME");
 	else if (!ft_strcmp(*tab, "-"))
+	{
 		dir = ms_params->previous_directory;
+		if (fd == INIT_FD_VALUE)
+			fd = 1;
+		ft_putendl_fd(ms_params->previous_directory, fd);
+	}
 	else
 		dir =  *tab;
 	previous_directory = getcwd(NULL, 0);

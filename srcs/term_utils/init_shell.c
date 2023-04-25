@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 17:44:56 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/25 21:03:26 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 			return (false);
 	}
 	ms_params->envp = get_env_var(envp);
+	ms_params->previous_directory = getcwd(NULL, 0);
 	if (errno)
 		return (perror("minishell"), false);
 	return (true);
