@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 21:35:04 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/23 19:40:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
 		exit_ms(*ms_params, 0, "prompt1");
 	ensure_prompt_position();
-	ms_prompt_up = build_prompt(&ms_params->prompt_params, UP);
+	ms_prompt_up = build_prompt(&ms_params->prompt_params, P_HEADER);
 	ft_putstr_fd(ms_prompt_up, 1);
 	free(ms_prompt_up);
-	ms_prompt = build_prompt(&ms_params->prompt_params, DOWN);
+	ms_prompt = build_prompt(&ms_params->prompt_params, P_FOOTER);
 	free_prompt_params(&ms_params->prompt_params);
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt2");
@@ -98,18 +98,47 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	ms_params->last_exit_code = 0;
 }
 
-bool	init_minishell(t_minishell *ms_params, char **envp)
+int	ft1(int a, int b)
 {
-	if (!isatty(0) || !isatty(1) || !isatty(2))
-		return (perror("minishell"), false);
-	tgetent(0, getenv("TERM"));
+	rl_replace_line("echo test", 0);
+	return ((void)a, (void)b, 1);
+}
+
+void	init_keyhooks(void)
+{
+	// rl_bind_key(27, NULL);
+	rl_bind_keyseq("\\e[A", ft1);
+}
+
+void	print_usage(void)
+{
+	ft_putstr_fd("Usage: ./minishell [-c arg]\n", 2);
+	ft_putstr_fd("   -c arg: ", 2);
+	ft_putstr_fd("if present then commands are read \
+from the first non-option argument \033[4marg\033[0m\n", 2);
+}
+
+bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
+{
 	ft_memset(ms_params, 0, sizeof(t_minishell));
-	save_terminal_params(ms_params);
-	toggle_control_character(VQUIT, _POSIX_VDISABLE);
-	signal(SIGINT, &handler_func);
-	ms_params->history_fd = get_my_history(ms_params);
-	if (ms_params->history_fd == -1)
-		return (false);
+	if (ac == 3 && !ft_strcmp(av[1], "-c"))
+		ms_params->flags |= C_FLAG;
+	if (ac > 1 && (ms_params->flags & C_FLAG) == 0)
+		return (print_usage(), false);
+	if ((ms_params->flags & C_FLAG) == 0
+		&& (!isatty(0) || !isatty(1) || !isatty(2)))
+		return (perror("minishell"), false);
+	// init_keyhooks();
+	if ((ms_params->flags & C_FLAG) == 0)
+	{
+		tgetent(0, getenv("TERM"));
+		save_terminal_params(ms_params);
+		toggle_control_character(VQUIT, _POSIX_VDISABLE);
+		signal(SIGINT, &handler_func);
+		ms_params->history_fd = get_my_history(ms_params);
+		if (ms_params->history_fd == -1)
+			return (false);
+	}
 	ms_params->envp = get_env_var(envp);
 	if (errno)
 		return (perror("minishell"), false);

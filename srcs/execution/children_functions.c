@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   children_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:15:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 05:52:54 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/22 17:32:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec_ms.h>
+#include <env_function.h>
 #include <sys/wait.h>
 #include <signal.h>
 
@@ -28,6 +29,8 @@ bool	store_pid(pid_t pid, t_pids **nursery)
 	t_pids	*new;
 	t_pids	*lst;
 
+	if (!pid)
+		return (true);
 	new = ft_calloc(1, sizeof(t_pids));
 	if (!new)
 		return (infanticides(*nursery), false);
@@ -69,13 +72,18 @@ int	wait_children(t_minishell *ms_params)
 
 	children = ms_params->children;
 	status = 0;
-	while (children)
+	if (children)
 	{
-		if (waitpid(children->pid, &status, 0) == -1)
-			return (-1);
-		children = children->next;
+		while (children)
+		{
+			if (waitpid(children->pid, &status, 0) == -1)
+				return (-1);
+			children = children->next;
+		}
+		free_children(&ms_params->children);
+		ms_params->last_exit_code = status;
+		free(find_env_var(ms_params->envp, "?")->var_value);
+		find_env_var(ms_params->envp, "?")->var_value = ft_itoa(extract_exit_code(ms_params->last_exit_code));
 	}
-	free_children(&ms_params->children);
-	ms_params->last_exit_code = extract_exit_code(status);
-	return (status);
+	return (ms_params->last_exit_code);
 }

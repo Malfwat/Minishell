@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:07:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 22:06:05 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/21 18:16:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,22 @@ int	slice_next_part(char *src, t_split_arg **last_args, char quotes)
 			break ;
 	}
 	if (quotes && i == 0)
+	{
 		sliced = ft_strdup("");
+		// i++;
+	}
 	else if (!quotes && i == 0)
+	{
+		errno = 1;
 		return (0);
+	}
 	else
 		sliced = ft_substr(src, 0, i);
 	new = ls_split_args_new(sliced, quotes);
 	if (!new)
 		return (0);
+	if (src[i] && !is_delim(&src[i]) && (src[i] == quotes || !ft_strchr("()\'\"", src[i])))
+		i++;
 	ls_split_args_addback(last_args, new);
 	return (i);
 }

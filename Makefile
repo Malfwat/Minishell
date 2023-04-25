@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/18 23:30:47 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/24 23:58:47 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ EXECUTION_DIR		=	execution/
 EXECUTION			=	execute_cmd.c			\
 						execute_utils_0.c		\
 						execute_utils_1.c		\
+						execute_built_ins.c		\
 						children_functions.c	\
 						init_exec_vars_io.c		\
 						meta_char.c	
@@ -51,6 +52,7 @@ PROMPT_DIR			=	prompt/
 
 BUILT_INS			=	cd.c	\
 						echo.c	\
+						exit.c	\
 						pwd.c
 
 BUILT_INS_DIR		=	built_ins/
@@ -127,6 +129,7 @@ DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 
+
 ################################################################################
 #                                                                              #
 #                                                                              #
@@ -137,23 +140,30 @@ DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 
 all:	$(NAME)
 
+libft:
+	make -C libft
+
+libft/libft.a: libft
+
 $(BUILD):
 	mkdir $(BUILD) $(DIRS)
 		
-$(NAME):	$(BUILD) $(OBJ)
+$(NAME):	libft/libft.a $(BUILD) $(OBJ)
 	$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
 	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 
 
 clean:
+	make clean -C libft
 	rm -rf $(BUILD)
 
 fclean:	clean
+	make fclean -C libft
 	rm -rf $(NAME)
 
 re:	fclean all
 
-.PHONY:	clean fclean all re
+.PHONY:	clean fclean all re libft
 
 -include $(DEPS)
