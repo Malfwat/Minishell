@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 23:41:46 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 02:19:39 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		free_exec_vars(t_exec_vars exec_vars);
 
 char		**build_path(t_minishell ms_params);
 bool		init_exec_io(t_block *block, t_minishell *ms_params);
-char		**build_argv(t_args **head);
+char		**build_argv(t_args **head, char **path);
 char		**build_envp(t_env_var	*envp);
 t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block);
 

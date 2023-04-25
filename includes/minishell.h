@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 22:44:55 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 02:20:04 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			hd_manager(t_block *block);
 t_args		*new_cmd_arg(t_split_arg *arg);
 t_args		*last_args(t_args *head);
 void		ft_ls_t_args_addback(t_args **head, t_split_arg *arg);
-char		**build_argv(t_args **head);
+char		**build_argv(t_args **head, char **path);
 
 // free_struct_0.c
 
