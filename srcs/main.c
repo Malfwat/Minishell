@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 22:17:03 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 18:56:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	parse_user_input(t_minishell *ms_params, char *user_input)
 	head = new_block();
 	if (parse_cmds(&head, user_input) == false)
 	{
-		ms_params->last_exit_code = 640; // exit status = 2
+		ms_params->last_exit_code = SET_EXIT_CODE(2); // exit status = 2
 		return (flood_free(head), false);
 	}
 	if (errno)
