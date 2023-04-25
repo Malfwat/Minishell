@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/23 19:22:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 21:32:33 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <libft.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include <ncurses.h>
 void	ms_perror(char *program, char *subname, char *error)
 {
 	if (program)
