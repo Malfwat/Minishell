@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
+#    By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/24 23:58:47 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/25 16:31:36 by amouflet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -141,9 +141,12 @@ DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 all:	$(NAME)
 
 libft:
-	make -C libft
+	@make -C libft
 
 libft/libft.a: libft
+
+suppr_script:
+	@echo '{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}\n{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}' > suppr.txt
 
 $(BUILD):
 	mkdir $(BUILD) $(DIRS)
@@ -154,13 +157,19 @@ $(NAME):	libft/libft.a $(BUILD) $(OBJ)
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
 	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 
 
+launch:
+	@make all
+	@valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
+
 clean:
-	make clean -C libft
-	rm -rf $(BUILD)
+	@rm -rf $(BUILD)
+	@echo "================cleaned================"
 
 fclean:	clean
-	make fclean -C libft
-	rm -rf $(NAME)
+	@rm -f script.txt
+	@make fclean -C libft
+	@rm -rf $(NAME)
+	@echo "================fcleaned==============="
 
 re:	fclean all
 
