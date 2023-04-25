@@ -2,7 +2,7 @@
 
 nb=$(echo $#)
 
-if [ "$nb" -lt 2 ]; then
+if [ ! "$nb" -eq 2 ]; then
     echo 'example of usage: my_push.sh "MAJ" "modifications"'
     exit
 fi
