@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 02:20:37 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 02:55:25 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ bool	is_colorable(char *str)
 		return (true);
 	if (!ft_strcmp(str, "diff"))
 		return (true);
-	if (!ft_strcmp(str, "git"))
-		return (true);
+	// if (!ft_strcmp(str, "git"))
+		// return (true);
 	if (!ft_strcmp(str, "ip"))
 		return (true);
 	return (false);
