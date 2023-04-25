@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 21:39:27 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/23 19:22:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,16 @@ void	exit_ms(t_minishell ms_params, int exitv, char *context)
 	flood_free(ms_params.head);
 	infanticides(ms_params.children);
 	free_children(&ms_params.children);
-	restore_terminal_params(ms_params.saved_params, ms_params.stdin_fileno);
-	free_ms_params(ms_params);
+	if ((ms_params.flags & C_FLAG) == 0)
+	{
+		restore_terminal_params(ms_params.saved_params, ms_params.stdin_fileno);
+		clear_history();
+		if (ms_params.history_fd)
+			close(ms_params.history_fd);
+		free(rl_line_buffer);
+	}
 	close(ms_params.stdin_fileno);
-	free(rl_line_buffer);
-	clear_history();
-	if (ms_params.history_fd)
-		close(ms_params.history_fd);
+	free_ms_params(ms_params);
 	if (errno)
 		ms_perror("minishell7", context, strerror(errno));
 	exit(exitv);

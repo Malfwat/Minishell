@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 23:41:12 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/24 18:02:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 
 # define SINGLE_DELIM " \t><|;"
 
+// hex representing the -c flag in ms_params
+
+# define C_FLAG 0x1
+
 // indicate if we are going to open an input or output file
 
 # define INPUT_MODE 0
@@ -28,8 +32,8 @@
 
 // indicate which line of the prompt is needed
 
-# define UP 0
-# define DOWN 1
+# define P_HEADER 0
+# define P_FOOTER 1
 
 // input_source according to the last redirection encountered
 
@@ -76,7 +80,11 @@ enum e_operator
 
 enum e_type
 {
-	EXPECTING_ARGUMENT = -4,
+	ILLEGAL_INPUT = -8,
+	ILLEGAL_OUTPUT,
+	ILLEGAL_AOUTPUT,
+	ILLEGAL_HEREDOC = -5,
+	EXPECTING_ARGUMENT,
 	INCOMPLETE_INPUT_OUTPUT,
 	INCOMPLETE_CMD_ARG,
 	INCOMPLETE_PARENTHESIS,

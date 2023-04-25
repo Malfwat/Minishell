@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 23:42:57 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/23 18:13:28 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include <sys/types.h>
 # include <termios.h>
 
-typedef int	t_fd;
+typedef int		t_fd;
+typedef char	t_flags;
 typedef struct s_env_var
 {
 	char				*var_name;
@@ -119,12 +120,14 @@ typedef struct s_minishell
 {
 	int				last_exit_code;
 	char			*prev_line;
+	char			*previous_directory;
 	t_prompt		prompt_params;
 	t_env_var		*envp;
 	t_pids			*children;
 	t_block			*head;
 	t_fd			history_fd;
 	t_fd			stdin_fileno;
+	t_flags			flags;
 	struct termios	saved_params;
 }	t_minishell;
 

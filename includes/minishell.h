@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 23:37:10 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 02:20:04 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include <struct_ms.h>	
 # include <stdbool.h>
+# include <ms_define.h>
 # include <errno.h>
 
 // init_t_block.c
@@ -26,9 +27,10 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 // built_in/
 
-void		pwd(void);
-int			cd(t_env_var	*head, char *str);
-void		ms_echo(bool nl, int nb, ...);
+void		pwd(t_fd fd);
+void		cd(t_minishell *ms_params, char **tab);
+void		ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2]);
+void		ms_echo(char **tab, t_fd fd);
 
 // manage_io_params.c
 
@@ -43,7 +45,7 @@ int			hd_manager(t_block *block);
 t_args		*new_cmd_arg(t_split_arg *arg);
 t_args		*last_args(t_args *head);
 void		ft_ls_t_args_addback(t_args **head, t_split_arg *arg);
-char		**build_argv(t_args **head);
+char		**build_argv(t_args **head, char **path);
 
 // free_struct_0.c
 
@@ -131,7 +133,11 @@ bool		compare_wildcard(char *pattern, char *str);
 
 void		ensure_prompt_position(void);
 void		init_prompt(t_minishell *ms_params, char **user_input);
-bool		init_minishell(t_minishell *ms_params, char **envp);
+bool		init_minishell(t_minishell *ms_params, int ac, char **av, char **envp);
 int			get_cursor_position(void);
+
+
+bool	is_builtin(char *str);
+void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars);
 
 #endif /* MINISHELL_H */
