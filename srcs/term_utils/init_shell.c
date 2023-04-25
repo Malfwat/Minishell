@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 21:03:26 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 21:35:26 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ bool	init_termois_struct(void)
 	char			*sc_cursor_pos;
 
 	sc_cursor_pos = tgetstr("u7", NULL);
+	printf("\001%s\002\n", sc_cursor_pos);
 	if (!sc_cursor_pos)
 		return (false);
 	tcgetattr(0, &term);
