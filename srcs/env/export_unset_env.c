@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 19:14:26 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 20:55:54 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,20 @@ void	print_export(t_env_var *lst, t_fd fd)
 				tmp = tmp->next;
 		}
 	}
-	env(cpy, fd);
+	char	**tab;
+	int		i;
+
+	tab = build_envp(cpy);
+	i = -1;
+	if (fd == INIT_FD_VALUE)
+		fd = 1;
+	while (tab && tab[++i])
+	{
+		if (!ft_strncmp(tab[i], "?=", 2))
+			continue ;
+		ft_putstr_fd("export ", fd);
+		ft_putendl_fd(tab[i], fd);
+	}
 	// free_env_lst(cpy);
 }
 
