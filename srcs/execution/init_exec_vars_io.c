@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 02:55:25 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 19:16:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ bool	init_exec_io(t_block *block, t_minishell *ms_params)
 		exit_ms(*ms_params, 2, "exec init");
 	else if (ret == -2)
 	{
-		block->cmd.exit_value = 256;
+		block->cmd.exit_value = SET_EXIT_CODE(1);
 		ms_params->last_exit_code = block->cmd.exit_value;
 		perror("minishell1");
 		errno = 0;

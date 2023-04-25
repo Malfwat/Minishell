@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 22:44:37 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/25 20:40:59 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ void	cd(t_minishell *ms_params, char **tab)
 	previous_directory = getcwd(NULL, 0);
 	if (chdir(dir) == -1 || !previous_directory)
 	{
-		ms_perror("minishell", "cd", strerror(errno));
+		if (previous_directory)
+			ms_perror("minishell", "cd", strerror(errno));
 		errno = 0;
 		free(previous_directory);
-		ms_params->last_exit_code = 256;
+		ms_params->last_exit_code = 1;
 		return ;
 	}
 	free(ms_params->previous_directory);
@@ -52,5 +53,6 @@ void	cd(t_minishell *ms_params, char **tab)
 		return (free(cwd));
 	export(ms_params, (char *[]){tmp, NULL}, 0, 1);
 	free(cwd);
+	free(tmp);
 	return ;
 }
