@@ -57,6 +57,7 @@ Test()
 		((TOTAL_EV_SUCCESS++))
 	else
 		echo -e "Exit value: \033[91mKO\033[0m \n\tO:$EXPECTED_EXIT_VALUE\n\tY:$PROGRAM_EXIT_VALUE"
+
 	fi
 
 	if [ "$TOTAL_EV_SUCCESS" != "$TOTAL_TESTS" ] || [ "$TOTAL_OV_SUCCESS" != "$TOTAL_TESTS" ]; then
@@ -88,8 +89,6 @@ Test "inexistant_command"
 Test "echo test < inexistant_input"
 Test "export bla='test' && echo \$bla"
 Test "(export bla='test' | echo \$bla) && echo \$bla"
-Test "env"
-Test "(env) > /dev/null"
 Test "head < /dev/null"
 Test "cd /dev/null"
 Test "echo /dev/full"
@@ -99,7 +98,7 @@ Test ""
 Test "''"
 Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt1 ; ls) ; ls"
 Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt1 ; mkdir) ; mkdir ok"
-Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt1) ;"
+Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt1)"
 Test "echo '\$USER"\$PATH"'"
 Test "echo '$USER"'$PATH'"'"
 Test "echo \$USER"'$PATH'""

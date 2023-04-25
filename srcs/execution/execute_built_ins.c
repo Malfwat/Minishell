@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/25 20:36:25 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 20:58:41 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 	else if (!ft_strcmp(str, "export"))
 		export(ms_params, &vars.argv[1], 0, fd[1]);
 	else if (!ft_strcmp(str, "cd"))
-		cd(ms_params, &vars.argv[1]);
+		cd(ms_params, &vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "echo"))
 		ms_echo(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "exit"))
@@ -95,6 +95,8 @@ void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
 		}
 		block->cmd.pid = pid;
 	}
+	else
+		launch_builtins(ms_params, vars, block->io_tab);
 	block->cmd.exit_value = ms_params->last_exit_code;
 	free(find_env_var(ms_params->envp, "?")->var_value);
 	find_env_var(ms_params->envp, "?")->var_value \
