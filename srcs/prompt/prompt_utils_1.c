@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:07:16 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 17:24:35 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/25 18:32:14 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*get_cwd_path_since_home(void)
 	home_path = getenv("HOME");
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (errno = 0, ft_strdup("-"));
+		return (errno = 0, ft_strdup("\033[38;5;9munreachable\033[0m"));
 	else if (home_path && *home_path)
 	{
 		home_in_cwd = ft_strnstr(cwd, home_path, ft_strlen(home_path));

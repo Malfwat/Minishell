@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 17:17:14 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/25 20:41:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,22 @@ void	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 
 void	puppet_child(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 {
+	int *exit_value;
+
+	exit_value = &blck->cmd.exit_value;
 	if (blck->io_tab[0] >= 0)
 		close(blck->io_tab[0]);
 	if (blck->io_tab[1] >= 0)
 		close(blck->io_tab[1]);
 	free_exec_vars(exc_vrs);
-	exit_ms(*ms_params, blck->cmd.exit_value, "puppet_child");
+	if (blck->pipe_next)
+		close(blck->pipe_next->io_tab[0]);
+	if (blck->cmd.pid)
+	{
+		waitpid(blck->cmd.pid, exit_value, 0);
+		*exit_value = extract_exit_code(*exit_value);
+	}
+	exit_ms(*ms_params, *exit_value, "puppet_child");
 }
 
 void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
@@ -48,9 +58,9 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		if (is_builtin(exec_vars.argv[0]))
 			exec_builtin(block, ms_params, exec_vars);
 		block->cmd.pid = fork();
-		if (block->cmd.pid == 0 && !is_builtin(exec_vars.argv[0]))
+		if (block->cmd.pid == 0 && !is_builtin(exec_vars.argv[0]) && !errno)
 			child_worker(block, ms_params, exec_vars);
-		else if (block->cmd.pid == 0 && is_builtin(exec_vars.argv[0]))
+		else if (block->cmd.pid == 0 && is_builtin(exec_vars.argv[0]) && !errno)
 			puppet_child(block, ms_params, exec_vars);
 	}
 	if (block->io_tab[0] >= 0)
@@ -59,7 +69,11 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		close(block->io_tab[1]);
 	free_exec_vars(exec_vars);
 	if (block->cmd.pid == -1 || errno)
+	{
+		if (block->pipe_next)
+			close(block->pipe_next->io_tab[0]);
 		exit_ms(*ms_params, 2, "exec fork");
+	}
 	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
 		|| block->operator == SEMI_COLON)
 	{

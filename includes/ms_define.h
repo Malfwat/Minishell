@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:02:55 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 19:11:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@
 # define R_ESC(sc) "\001"sc"\002"
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
+
+# define SET_EXIT_CODE(x) x << 8
 
 enum e_prompt_args_type
 {
