@@ -1,7 +1,9 @@
 #! /bin/bash
 
-if [$# != 2]; then
-    echo "example of usage\nmy_push.sh 'MAJ' 'moficications'"
+nb=$(echo $#)
+
+if [ "$nb" -lt 2 ]; then
+    echo 'example of usage: my_push.sh "MAJ" "modifications"'
     exit
 fi
 
