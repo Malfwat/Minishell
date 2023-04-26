@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/25 19:11:20 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 19:49:06 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ enum e_type
 	ILLEGAL_INPUT = -8,
 	ILLEGAL_OUTPUT,
 	ILLEGAL_AOUTPUT,
-	ILLEGAL_HEREDOC = -5,
+	ILLEGAL_HEREDOC,
 	EXPECTING_ARGUMENT,
 	INCOMPLETE_INPUT_OUTPUT,
 	INCOMPLETE_CMD_ARG,
