@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/25 21:54:24 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/26 19:57:07 by amouflet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -141,7 +141,7 @@ DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 all:	$(NAME)
 
 libft:
-	@make -C libft
+	@make -C libft > /dev/null
 
 libft/libft.a: libft
 
@@ -158,7 +158,7 @@ $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile
 	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 
 
 launch:
-	@make all
+	@make all > /dev/null
 	@valgrind --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
 # @valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
 
