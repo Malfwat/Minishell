@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 07:53:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 21:10:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 19:13:04 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 			return (false);
 		if (*dest)
 		{
-			free(*cmd);
-			*cmd = NULL;
+			// free(*cmd);
+			// *cmd = NULL;
 			return (true);
 		}
 		errno = 0;
