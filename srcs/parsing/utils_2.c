@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 18:52:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 20:31:25 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 void	print_heredoc_syntax_error(char *heredoc_delimiter)
 {
-	ft_putstr_fd("minishell: heredoc:", 2);
+	ft_putstr_fd("minishell: heredoc: ", 2);
 	ft_putstr_fd("here-document delimited by end-of-file (wanted ", 2);
 	ft_putchar_fd('`', 2);
 	if (heredoc_delimiter)
