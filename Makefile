@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/25 21:54:24 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/26 17:30:29 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,7 +92,7 @@ TERM_UTILS			=	term_params_handler.c	\
 
 TERM_UTILS_DIR		=	term_utils/
 
-CC					=	cc
+CC					=	@cc
 
 CFLAGS				+= -Wall -Werror -Wextra -MMD -MP -c -g3
 
@@ -129,6 +129,25 @@ DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 
+LGREEN				=	\033[1;32m
+LBLUE				=	\033[1;34m
+NC					=	\033[0m
+
+################################################################################
+#                                                                              #
+#                                                                              #
+#                                 FUNCTIONS                                    #
+#                                                                              #
+#                                                                              #
+################################################################################
+
+define makeprint
+	$(if $(filter $2, "Building object files"), \
+		@printf "=== $(LGREEN)$2$(NC) ===\n"
+	)
+	@printf "$(1)"
+	@sleep 0.5
+endef
 
 ################################################################################
 #                                                                              #
@@ -155,6 +174,7 @@ $(NAME):	libft/libft.a $(BUILD) $(OBJ)
 	$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
+	$(call makeprint, "$(LGREEN)$@$(NC)\r", "Building object files")
 	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 
 
 launch:
