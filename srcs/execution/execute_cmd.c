@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 20:41:53 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 19:59:55 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 {
 	if (!my_dup(blck))
 		return (free_exec_vars(exc_vrs), exit_ms(*ms_params, 2, "exec dup"));
-	execve(exc_vrs.argv[0], exc_vrs.argv, exc_vrs.envp);
+	execve(blck->cmd.args->cmd_w_path, exc_vrs.argv, exc_vrs.envp);
+	if (blck->cmd.args->cmd_w_path != exc_vrs.argv[0])
+		free(blck->cmd.args->cmd_w_path);
 	free_exec_vars(exc_vrs);
 	handle_execve_failure(*ms_params, blck->cmd.args->final_arg);
 }
@@ -33,6 +35,8 @@ void	puppet_child(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 		close(blck->io_tab[0]);
 	if (blck->io_tab[1] >= 0)
 		close(blck->io_tab[1]);
+	if (blck->cmd.args->cmd_w_path != exc_vrs.argv[0])
+		free(blck->cmd.args->cmd_w_path);
 	free_exec_vars(exc_vrs);
 	if (blck->pipe_next)
 		close(blck->pipe_next->io_tab[0]);
@@ -67,6 +71,8 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 		close(block->io_tab[0]);
 	if (block->io_tab[1] >= 0)
 		close(block->io_tab[1]);
+	if (block->cmd.args->cmd_w_path != exec_vars.argv[0])
+		free(block->cmd.args->cmd_w_path);
 	free_exec_vars(exec_vars);
 	if (block->cmd.pid == -1 || errno)
 	{

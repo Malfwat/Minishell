@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 15:02:17 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/26 19:21:07 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	**build_argv(t_args **head, char **path, t_env_var *envp)
 	rebuild_args(head, envp);
 	check_for_color(head);
 	get_cmd_path(path, &(*head)->final_arg, &str);
-	(*head)->final_arg = str;
+	(*head)->cmd_w_path = str;
 	tmp = *head;
 	while (tmp)
 	{

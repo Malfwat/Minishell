@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 21:01:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 20:15:44 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ void	cd(t_minishell *ms_params, char **tab, t_fd fd)
 	if (chdir(dir) == -1 || !previous_directory)
 	{
 		if (previous_directory)
+		{
 			ms_perror("minishell", "cd", strerror(errno));
+			ms_params->last_exit_code = 1;
+		}
 		errno = 0;
 		free(previous_directory);
-		ms_params->last_exit_code = 1;
 		return ;
 	}
 	free(ms_params->previous_directory);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/23 18:13:28 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 19:11:06 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_split_arg
 typedef struct s_args
 {
 	char			*final_arg;
+	char			*cmd_w_path;
 	t_split_arg		*s_args;
 	struct s_args	*prev;
 	struct s_args	*next;
