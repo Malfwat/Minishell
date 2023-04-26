@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/26 17:30:29 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/26 21:23:02 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,7 +92,7 @@ TERM_UTILS			=	term_params_handler.c	\
 
 TERM_UTILS_DIR		=	term_utils/
 
-CC					=	@cc
+CC					=	cc
 
 CFLAGS				+= -Wall -Werror -Wextra -MMD -MP -c -g3
 
@@ -114,6 +114,7 @@ SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	$(addprefix $(EXECUTION_DIR), $(EXECUTION))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
 SRCS				+=	main.c
+SRCS				+=	maxcvcvxcvin.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
 
@@ -129,9 +130,13 @@ DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 
-LGREEN				=	\033[1;32m
-LBLUE				=	\033[1;34m
+LGREY				=	\033[38;5;249m
+LGREEN				=	\033[38;5;28m
+LBLUE				=	\033[38;5;67m
 NC					=	\033[0m
+BLUE1				=	\033[38;5;72m
+GO_END_LINE			=	\033[K
+LPURPLE				=	\033[38;5;103m
 
 ################################################################################
 #                                                                              #
@@ -142,11 +147,7 @@ NC					=	\033[0m
 ################################################################################
 
 define makeprint
-	$(if $(filter $2, "Building object files"), \
-		@printf "=== $(LGREEN)$2$(NC) ===\n"
-	)
-	@printf "$(1)"
-	@sleep 0.5
+	echo -n "$(LGREY)$1>$(LPURPLE)$2$(NC)$(LGREY)[$(NC)$(LGREEN)$3$(LGREY)]$(NC)                                   \r"
 endef
 
 ################################################################################
@@ -160,7 +161,8 @@ endef
 all:	$(NAME)
 
 libft:
-	@make -C libft
+	@make -C libft > /dev/null
+	@echo "$(LGREEN)LIBFT COMPILATION                                        $(NC)"
 
 libft/libft.a: libft
 
@@ -168,17 +170,21 @@ suppr_script:
 	@echo '{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}\n{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}' > suppr.txt
 
 $(BUILD):
-	mkdir $(BUILD) $(DIRS)
-		
-$(NAME):	libft/libft.a $(BUILD) $(OBJ)
-	$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
+	@mkdir $(BUILD) $(DIRS)
+
+$(NAME):	libft/libft.a $(BUILD)  $(OBJ)
+	@echo "$(LGREEN)OBJECT FILES COMPILED                                    $(NC)"
+	@$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
+	@echo "$(LGREEN)MINISHELL COMPILED                                        $(NC)"
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
-	$(call makeprint, "$(LGREEN)$@$(NC)\r", "Building object files")
-	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ 
+	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null || $(call makeprint,"Compiling ", "$@" ,"KO")
+	@$(call makeprint,"Compiling ", "$@" ,"OK")
+	@sleep 0.05
 
 launch:
-	@make all
+	@make all > /dev/null
+	@make suppr_script
 	@valgrind --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
 # @valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
 
@@ -190,10 +196,9 @@ fclean:	clean
 	@rm -f script.txt
 	@make fclean -C libft > /dev/null
 	@rm -rf $(NAME)
-	@echo "================fcleaned==============="
-
+	
 re:	fclean all
-
+	
 .PHONY:	clean fclean all re libft
 
 -include $(DEPS)
