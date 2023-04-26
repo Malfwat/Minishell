@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/26 21:23:02 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/26 21:25:25 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -161,8 +161,7 @@ endef
 all:	$(NAME)
 
 libft:
-	@make -C libft > /dev/null
-	@echo "$(LGREEN)LIBFT COMPILATION                                        $(NC)"
+	@make -C libft
 
 libft/libft.a: libft
 
@@ -183,8 +182,7 @@ $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile
 	@sleep 0.05
 
 launch:
-	@make all > /dev/null
-	@make suppr_script
+	@make all
 	@valgrind --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
 # @valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
 
