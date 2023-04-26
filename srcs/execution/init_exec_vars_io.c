@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 19:16:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 15:02:17 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ bool	is_colorable(char *str)
 		return (true);
 	if (!ft_strcmp(str, "diff"))
 		return (true);
-	// if (!ft_strcmp(str, "git"))
-		// return (true);
 	if (!ft_strcmp(str, "ip"))
 		return (true);
 	return (false);
@@ -65,7 +63,7 @@ void	check_for_color(t_args **head)
 	}
 }
 
-char	**build_argv(t_args **head, char **path)
+char	**build_argv(t_args **head, char **path, t_env_var *envp)
 {
 	char	**tab;
 	int		len;
@@ -76,6 +74,7 @@ char	**build_argv(t_args **head, char **path)
 	if (errno)
 		return (NULL);
 	update_t_args(head);
+	rebuild_args(head, envp);
 	check_for_color(head);
 	get_cmd_path(path, &(*head)->final_arg, &str);
 	(*head)->final_arg = str;
@@ -158,8 +157,8 @@ t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block)
 	t_exec_vars	exec_vars;
 	// char		*tmp;
 
-	if (!rebuild_args(&block->cmd.args, ms_params.envp))
-		exit_ms(ms_params, 2, "exec_build");
+	// if (!rebuild_args(&block->cmd.args, ms_params.envp))
+		// exit_ms(ms_params, 2, "exec_build");
 	exec_vars.path = build_path(ms_params);
 	// if (!block->cmd.args)
 	// {
@@ -167,7 +166,7 @@ t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block)
 	// 	block->cmd.args->final_arg = ft_strdup("");
 	// }
 
-	exec_vars.argv = build_argv(&block->cmd.args, exec_vars.path);
+	exec_vars.argv = build_argv(&block->cmd.args, exec_vars.path, ms_params.envp);
 	exec_vars.envp = build_envp(ms_params.envp);
 	if (errno)
 	{
