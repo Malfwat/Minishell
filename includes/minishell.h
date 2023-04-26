@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 20:58:24 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 15:35:18 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			hd_manager(t_block *block);
 t_args		*new_cmd_arg(t_split_arg *arg);
 t_args		*last_args(t_args *head);
 void		ft_ls_t_args_addback(t_args **head, t_split_arg *arg);
-char		**build_argv(t_args **head, char **path);
+char		**build_argv(t_args **head, char **path, t_env_var *envp);
 
 // free_struct_0.c
 
@@ -86,6 +86,7 @@ bool interpret);
 // meta_char.c
 
 char		*interpret_dollars(t_split_arg *arg, t_env_var *envp);
+char    	*replace_dollars_var(char *res, t_env_var *envp, char *var);
 void		update_t_args(t_args **args);
 
 void		handler_func(int num);
