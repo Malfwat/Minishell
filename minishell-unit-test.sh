@@ -104,6 +104,10 @@ Test "echo '$USER"'$PATH'"'"
 Test "echo \$USER"'$PATH'""
 Test "echo "'$PATH'""
 Test "echo '"\$PATH"'"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && cat"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && export b="$a" && cat"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && export b='$a' && cat"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" || export b="$a" && cat"
 ############################################################################
 #                                                                          #
 #                                                                          #
