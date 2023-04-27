@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 04:32:45 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 17:50:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	fill_history(int fd, t_minishell *ms_params)
 		free(ms_params->prev_line);
 		ms_params->prev_line = ft_strdup(str);
 		if (!ms_params->prev_line)
-			return (free(str), -1);
+			return (free(str), close(fd), -1);
 		free(str);
 		get_next_line(fd, &str);
 	}
