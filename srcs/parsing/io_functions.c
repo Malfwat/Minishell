@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 20:10:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	heredoc(char *limiter)
 	return (test[0]);
 }
 
-int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
+int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env *envp)
 {
 	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
 	if (errno)
@@ -65,7 +65,7 @@ int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env_var *envp)
 	return (0);
 }
 
-int	output_manager(t_redirect *ptr, t_fd *fd, t_env_var *envp)
+int	output_manager(t_redirect *ptr, t_fd *fd, t_env *envp)
 {
 	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
 	if (errno)

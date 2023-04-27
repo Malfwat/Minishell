@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:36:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 00:43:01 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:59:45 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <env_function.h>
 #include <minishell.h>
 
-bool	is_in_order(t_env_var *lst)
+bool	is_in_order(t_env *lst)
 {
 	char	*tmp;
 
@@ -32,7 +32,7 @@ bool	is_in_order(t_env_var *lst)
 	return (true);
 }
 
-void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
+void	swap_env_node(t_env **lst, t_env *a, t_env *b)
 {
 	if (*lst == a)
 		*lst = b;
@@ -46,12 +46,12 @@ void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
 	a->prev = b;
 }
 
-t_env_var	*sort_env(t_env_var *lst)
+t_env	*sort_env(t_env *lst)
 {
-	t_env_var	*cpy;
-	t_env_var	*tmp;
+	t_env	*cpy;
+	t_env	*tmp;
 
-	cpy = cpy_t_env_var(lst);
+	cpy = cpy_t_env(lst);
 	if (!cpy)
 		return (NULL);
 	while (!is_in_order(cpy))
@@ -68,9 +68,9 @@ t_env_var	*sort_env(t_env_var *lst)
 	return (cpy);
 }
 
-t_env_var	*cpy_t_env_var(t_env_var *lst)
+t_env	*cpy_t_env(t_env *lst)
 {
-	t_env_var	*new_lst;
+	t_env	*new_lst;
 
 	new_lst = NULL;
 	while (lst)
@@ -84,10 +84,10 @@ t_env_var	*cpy_t_env_var(t_env_var *lst)
 
 bool	add_update_env_var(char *name, t_minishell *ms_prms, bool temp, char *s)
 {
-	t_env_var	*tmp;
-	char		*value;
+	t_env	*tmp;
+	char	*value;
 
-	value = get_env_var_value(s);
+	value = get_env_value(s);
 	tmp = find_env_var(ms_prms->envp, name);
 	if (!tmp)
 	{

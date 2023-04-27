@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_ms.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 21:10:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,20 @@ int		pass_whitespaces(char *str);
 
 // word.c
 
-bool	check_word_param(char *str, int *i, int *type, t_split_arg **arg);
+bool	check_word_param(char *str, int *i, int *type, t_s_arg **arg);
 
 // input_output.c
 
 int		ft_substr_io_param(char *src, char *dest);
-bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg);
+bool	check_io_param(char *str, int *i, int *type, t_s_arg **arg);
 
 // io_functions.c
 
 int		heredoc(char *limiter);
 int		input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
-t_env_var *envp);
+t_env *envp);
 bool	init_exec_io(t_block *block, t_minishell *ms_params);
-int		output_manager(t_redirect *ptr, t_fd *fd, t_env_var *envp);
+int		output_manager(t_redirect *ptr, t_fd *fd, t_env *envp);
 
 bool	is_delim(char *str);
 
