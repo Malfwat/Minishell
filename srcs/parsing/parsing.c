@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/25 01:39:31 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void	*get_next_param(char *str, int *i, int *type)
 	if (!str[*i])
 		return (NULL);
 	if ((!errno && check_parenthesis_param(str, i, (char **)&res, type)) \
-		|| (!errno && check_io_param(str, i, type, (t_split_arg **)&res)) \
+		|| (!errno && check_io_param(str, i, type, (t_s_arg **)&res)) \
 		|| (!errno && *type > ILLEGAL_HEREDOC \
-		&& check_word_param(str, i, type, (t_split_arg **)&res)))
+		&& check_word_param(str, i, type, (t_s_arg **)&res)))
 		return (res);
 	return (res);
 }

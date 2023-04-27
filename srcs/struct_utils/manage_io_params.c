@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:01:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 #include <parsing_ms.h>
 #include <ms_define.h>
 
-t_redirect	*new_redirect(t_split_arg *arg, int mode)
+t_redirect	*new_redirect(t_s_arg *arg, int mode)
 {
 	t_redirect	*new;
 
 	new = ft_calloc(1, sizeof(t_redirect));
 	if (!new)
-		return (free_t_split_arg(&arg), NULL);
+		return (free_t_s_arg(&arg), NULL);
 	if (!ft_strncmp(arg->str, "<<", 2))
 		new->hd_lim = arg;
 	else if (arg->str[0] == '<')
@@ -49,7 +49,7 @@ t_redirect	*last_redirect(t_redirect *head)
 	return (head);
 }
 
-void	ft_add_redirect(t_redirect **head, t_split_arg *arg, int mode)
+void	ft_add_redirect(t_redirect **head, t_s_arg *arg, int mode)
 {
 	t_redirect	*new;
 
@@ -62,7 +62,7 @@ void	ft_add_redirect(t_redirect **head, t_split_arg *arg, int mode)
 		last_redirect(*head)->next = new;
 }
 
-void	ft_add_io(t_block *block, t_split_arg *io)
+void	ft_add_io(t_block *block, t_s_arg *io)
 {
 	if (!ft_strncmp(io->str, "<<", 2))
 	{
@@ -78,7 +78,7 @@ void	ft_add_io(t_block *block, t_split_arg *io)
 		ft_add_redirect(&block->io_redirect, io, OUTPUT_MODE);
 }
 
-bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
+bool	check_io_param(char *str, int *i, int *type, t_s_arg **arg)
 {
 	char		quotes;
 	char		redirect[3];
@@ -103,15 +103,15 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 			(*i) += slice_next_part(&str[*i], arg, quotes);
 		}
 		if (!ft_strcmp(redirect, "<<") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_HEREDOC, false);
+			return (free_t_s_arg(arg), *type = ILLEGAL_HEREDOC, false);
 		else if (!ft_strcmp(redirect, "<") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_INPUT, false);
+			return (free_t_s_arg(arg), *type = ILLEGAL_INPUT, false);
 		else if (!ft_strcmp(redirect, ">") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_OUTPUT, false);
+			return (free_t_s_arg(arg), *type = ILLEGAL_OUTPUT, false);
 		else if (!ft_strcmp(redirect, ">>") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_AOUTPUT, false);
+			return (free_t_s_arg(arg), *type = ILLEGAL_AOUTPUT, false);
 		if (*arg && !errno)
 			return (*type = INPUT_OUTPUT, true);
 	}
-	return (free_t_split_arg(arg), false);
+	return (free_t_s_arg(arg), false);
 }

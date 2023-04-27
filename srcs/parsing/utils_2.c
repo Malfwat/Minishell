@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 20:31:25 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	syntax_error(int err, void *comment, int type, char *cmd_line)
 	}
 	else if (type == CMD_ARG || type == INPUT_OUTPUT)
 	{
-		comment = join_splitted_arg((t_split_arg *)comment, NULL, false);
+		comment = join_splitted_arg((t_s_arg *)comment, NULL, false);
 		if (!comment)
 			return ;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/26 19:11:06 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,20 @@ typedef struct s_env_var
 	bool				temp;
 	struct s_env_var	*prev;
 	struct s_env_var	*next;
-}	t_env_var;
+}	t_env;
 
 typedef struct s_split_arg
 {
 	char					scope;
 	char					*str;
 	struct s_split_arg		*next;
-}	t_split_arg;
+}	t_s_arg;
 
 typedef struct s_args
 {
 	char			*final_arg;
 	char			*cmd_w_path;
-	t_split_arg		*s_args;
+	t_s_arg		*s_args;
 	struct s_args	*prev;
 	struct s_args	*next;
 }	t_args;
@@ -69,8 +69,8 @@ typedef struct s_redirect
 {
 	bool				mode;
 	char				*joined_name;
-	t_split_arg			*file_name;
-	t_split_arg			*hd_lim;
+	t_s_arg			*file_name;
+	t_s_arg			*hd_lim;
 	t_fd				fd;
 	int					errno_value;
 	bool				append;
@@ -123,7 +123,7 @@ typedef struct s_minishell
 	char			*prev_line;
 	char			*previous_directory;
 	t_prompt		prompt_params;
-	t_env_var		*envp;
+	t_env		*envp;
 	t_pids			*children;
 	t_block			*head;
 	t_fd			history_fd;

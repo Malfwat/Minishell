@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:07:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 18:16:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ bool	is_delim(char *str)
 	return (false);
 }
 
-int	slice_next_part(char *src, t_split_arg **last_args, char quotes)
+int	slice_next_part(char *src, t_s_arg **last_args, char quotes)
 {
 	int			i;
 	char		*sliced;
-	t_split_arg	*new;
+	t_s_arg	*new;
 
 	i = -1;
 	while (src[++i])
@@ -74,7 +74,7 @@ void	free_next_param(void **ptr, int type)
 	if (type == PARENTHESIS || type == INCOMPLETE_PARENTHESIS)
 		free(*ptr);
 	else
-		free_t_split_arg((t_split_arg **)ptr);
+		free_t_s_arg((t_s_arg **)ptr);
 	*ptr = NULL;
 }
 
