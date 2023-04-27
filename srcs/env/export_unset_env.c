@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 00:43:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:58:56 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #include <stdlib.h>
 #include <minishell.h>
 
-void	print_export(t_env_var *lst, t_fd fd)
+void	print_export(t_env *lst, t_fd fd)
 {
-	t_env_var	*cpy;
-	char		**tab;
-	int			i;
+	t_env	*cpy;
+	char	**tab;
+	int		i;
 
 	cpy = sort_env(lst);
 	if (!cpy)
@@ -41,15 +41,15 @@ void	print_export(t_env_var *lst, t_fd fd)
 
 void	export(t_minishell *ms_params, char **tab, bool temp, t_fd fd)
 {
-	char		*name;
-	int			i;
+	char	*name;
+	int		i;
 
 	i = -1;
 	if (!*tab)
 		return (print_export(ms_params->envp, fd));
 	while (tab && tab[++i])
 	{
-		name = get_env_var_name(tab[i]);
+		name = get_env_name(tab[i]);
 		if (!name)
 			return ;
 		if (ft_strchr(name, '?'))
@@ -63,10 +63,10 @@ void	export(t_minishell *ms_params, char **tab, bool temp, t_fd fd)
 	}
 }
 
-void	unset(t_env_var **head, char **tab)
+void	unset(t_env **head, char **tab)
 {
-	t_env_var	*to_pop;
-	int			i;
+	t_env	*to_pop;
+	int		i;
 
 	i = -1;
 	while (tab[++i])
@@ -91,7 +91,7 @@ void	unset(t_env_var **head, char **tab)
 	}
 }
 
-void	env(t_env_var *lst, t_fd fd)
+void	env(t_env *lst, t_fd fd)
 {
 	char	**tab;
 	int		i;

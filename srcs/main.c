@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/25 18:56:43 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,11 @@ int	main(int ac, char **av, char **envp)
 
 // int	main(int ac, char **av, char **envp)
 // {
-// 	t_env_var	*env_lst;
+// 	t_env	*env_lst;
 
 // 	if (ac < 1)
 // 		return ((void)av, 0);
-// 	env_lst = get_env_var(envp);
+// 	env_lst = get_env(envp);
 // 	env(env_lst);
 	
 // 	// unset(&env_lst, find_env_var(env_lst, "TERM"));

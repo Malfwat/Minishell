@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_t_args(t_args *ptr)
 	{
 		tmp = ptr->next;
 		free(ptr->final_arg);
-		free_t_split_arg(&ptr->s_args);
+		free_t_s_arg(&ptr->s_args);
 		free(ptr);
 		ptr = tmp;
 	}
@@ -45,8 +45,8 @@ void	free_redirect(t_redirect *ptr)
 	while (ptr)
 	{
 		tmp = ptr->next;
-		free_t_split_arg(&ptr->file_name);
-		free_t_split_arg(&ptr->hd_lim);
+		free_t_s_arg(&ptr->file_name);
+		free_t_s_arg(&ptr->hd_lim);
 		free(ptr->joined_name);
 		free(ptr);
 		ptr = tmp;

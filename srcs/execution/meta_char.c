@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 00:44:08 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void	update_t_args(t_args **args)
 	}
 }
 
-char	*replace_dollars_var(char *res, t_env_var *envp, char *var)
+char	*replace_dollars_var(char *res, t_env *envp, char *var)
 {
-	t_env_var	*env_var;
+	t_env	*env_var;
 
 	env_var = find_env_var(envp, var);
 	if (!env_var)
@@ -57,7 +57,7 @@ char	*replace_dollars_var(char *res, t_env_var *envp, char *var)
 	return (res);
 }
 
-char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
+char	*interpret_dollars(t_s_arg *arg, t_env *envp)
 {
 	char		*tmp;
 	char		*res;

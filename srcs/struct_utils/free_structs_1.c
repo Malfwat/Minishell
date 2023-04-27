@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/18 02:01:23 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	free_ms_params(t_minishell ms_params)
 	ms_params.envp = NULL;
 }
 
-void	free_env_lst(t_env_var *envp_lst)
+void	free_env_lst(t_env *envp_lst)
 {
-	t_env_var	*tmp;
+	t_env	*tmp;
 
 	while (envp_lst)
 	{

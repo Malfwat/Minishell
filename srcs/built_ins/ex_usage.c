@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 23:09:02 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	ms_echo(bool nl, int nb, ...);
 
 int	main(int ac, char **av, char **envp)
 {
-	t_env_var	*env_lst;
+	t_env	*env_lst;
 
 	if (ac != 2)
 		return (0);
-	env_lst = get_env_var(envp);
+	env_lst = get_env(envp);
 	pwd();
 	cd(env_lst, av[1]);
 	pwd();

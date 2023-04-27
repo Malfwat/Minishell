@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 01:29:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool		create_pipe(t_block *blck);
 // execute_utils_1.c
 
 t_block		*find_next_block(t_block *block, bool ignore_sub);
-bool		rebuild_args(t_args **head, t_env_var *envp);
+bool		rebuild_args(t_args **head, t_env *envp);
 void		close_sub_fds(t_block *head);
 void		free_exec_vars(t_exec_vars exec_vars);
 
@@ -52,8 +52,8 @@ void		free_exec_vars(t_exec_vars exec_vars);
 
 char		**build_path(t_minishell ms_params);
 bool		init_exec_io(t_block *block, t_minishell *ms_params);
-char		**build_argv(t_args **head, char **path, t_env_var *envp);
-char		**build_envp(t_env_var	*envp);
+char		**build_argv(t_args **head, char **path, t_env *envp);
+char		**build_envp(t_env	*envp);
 t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block);
 
 void		handle_execve_failure(t_minishell ms_params, char *program_name);

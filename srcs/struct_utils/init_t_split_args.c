@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_t_split_args.c                                :+:      :+:    :+:   */
+/*   init_t_s_args.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:01:40 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 22:08:26 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 #include <stdlib.h>
 #include <minishell.h>
 
-void	free_t_split_arg(t_split_arg **arg)
+void	free_t_s_arg(t_s_arg **arg)
 {
-	t_split_arg	*ptr;
+	t_s_arg	*ptr;
 
 	while (*arg)
 	{
@@ -31,9 +31,9 @@ void	free_t_split_arg(t_split_arg **arg)
 	*arg = NULL;
 }
 
-void	ls_split_args_addback(t_split_arg **head, t_split_arg *new)
+void	ls_split_args_addback(t_s_arg **head, t_s_arg *new)
 {
-	t_split_arg	*tmp;
+	t_s_arg	*tmp;
 
 	if (!*head)
 	{
@@ -46,13 +46,13 @@ void	ls_split_args_addback(t_split_arg **head, t_split_arg *new)
 	tmp->next = new;
 }
 
-t_split_arg	*ls_split_args_new(char *data, char scope)
+t_s_arg	*ls_split_args_new(char *data, char scope)
 {
-	t_split_arg	*new;
+	t_s_arg	*new;
 
 	if (!data)
 		return (NULL);
-	new = ft_calloc(1, sizeof(t_split_arg));
+	new = ft_calloc(1, sizeof(t_s_arg));
 	if (!new)
 		return (NULL);
 	new->str = data;
@@ -60,7 +60,7 @@ t_split_arg	*ls_split_args_new(char *data, char scope)
 	return (new);
 }
 
-char	*join_splitted_arg(t_split_arg *arg, t_env_var *envp, bool interpret)
+char	*join_splitted_arg(t_s_arg *arg, t_env *envp, bool interpret)
 {
 	char	*res;
 	char	*tmp;

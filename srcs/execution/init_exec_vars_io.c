@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 01:30:45 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 02:59:27 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**build_path(t_minishell ms_params)
 	return (path);
 }
 
-char	**build_argv(t_args **head, char **path, t_env_var *envp)
+char	**build_argv(t_args **head, char **path, t_env *envp)
 {
 	char	**tab;
 	int		i;
@@ -53,11 +53,11 @@ char	**build_argv(t_args **head, char **path, t_env_var *envp)
 	return (tab);
 }
 
-char	**build_envp(t_env_var	*envp)
+char	**build_envp(t_env	*envp)
 {
-	char		**tab;
-	int			len;
-	t_env_var	*tmp;
+	char	**tab;
+	int		len;
+	t_env	*tmp;
 
 	tmp = envp;
 	len = 0;

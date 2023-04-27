@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:13:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 01:49:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 03:05:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,16 @@ void	put_in_list(t_args *prev, t_args *next, t_args *to_insert)
 	last_args(to_insert)->next = next;
 }
 
+static char	*update_res(char c, char *str, char *res, int i)
+{
+	if (i == 0 && c != '$')
+		res = ft_strjoin(res, str);
+	else
+		res = ft_strsjoin(3, res, "$", str);
+	return (res);
+}
 
-void	interpret_dollars_test(t_split_arg *arg, t_env_var *envp, char ***new)
+void	interpret_dollars_test(t_s_arg *arg, t_env *envp, char ***new)
 {
 	char		*tmp;
 	char		*res;
@@ -74,12 +82,7 @@ void	interpret_dollars_test(t_split_arg *arg, t_env_var *envp, char ***new)
 	{
 		tmp = res;
 		if ((i == 0 && arg->str[0] != '$') || (arg->scope == '\''))
-		{
-			if (!i && arg->str[0] != '$')	
-				res = ft_strjoin(res, tab[i]);
-			else
-				res = ft_strsjoin(3, res, "$", tab[i]);
-		}
+			res = update_res(arg->str[0], tab[i], res, i);
 		else
 			res = replace_dollars_var(res, envp, tab[i]);
 		free(tmp);
@@ -87,77 +90,60 @@ void	interpret_dollars_test(t_split_arg *arg, t_env_var *envp, char ***new)
 	if (arg->scope)
 	{
 		*new = ft_calloc(2, sizeof(char *));
-		(*new)[0] = res;
+		return ((*new)[0] = res, ft_strsfree(tab));
 	}
-	else
-	{
-		*new = ft_split(res, ' ');
-		free(res);
-	}
-	return (ft_strsfree(tab));
+	return (*new = ft_split(res, ' '), free(res), ft_strsfree(tab));
 }
 
+static void	insert_splitted_dollars_arg(t_args **args, char **res, char **tab)
+{
+	t_args		*end_of_lst;
+	t_args		*lst;
 
-char	*join_splitted_arg_test(t_args **args, t_env_var *envp, bool interpret)
+	((*args))->final_arg = *res;
+	lst = array_to_t_args(tab + 1);
+	end_of_lst = last_args(lst);
+	put_in_list((*args), (*args)->next, lst);
+	(*args) = end_of_lst;
+	*res = end_of_lst->final_arg;
+}
+
+void	join_splitted_arg_test(t_args **args, t_env *env, t_s_arg *arg, bool ch)
 {
 	char	**tab;
 	char	*res;
 	char	*tmp;
-	t_args	*tmp2;
-	t_args	*test;
-	char	*dollar_interpreted;
-	t_split_arg *arg = ((*args))->s_args;
 
 	res = NULL;
-	dollar_interpreted = NULL;
-	tab = NULL;
 	while (arg)
 	{
 		tmp = res;
-		if (interpret)
+		if (ch)
 		{
-			interpret_dollars_test(arg, envp, &tab);
-			// if (!dollar_interpreted/*  && !res */)
-				// dollar_interpreted = ;
-			// tab = ft_split(dollar_interpreted, ' ');
-			// if (!tab)
-				// break ;
-			if (!res)
-				res = "";
-			res = ft_strjoin(res, tab[0]);
+			interpret_dollars_test(arg, env, &tab);
+			res = ft_strjoin((char *[]){"", res}[(res != NULL)], tab[0]);
 			if (tab[0] && tab[1])
-			{
-				((*args))->final_arg = res;
-				test = array_to_t_args(tab + 1);
-				tmp2 = last_args(test);
-				put_in_list((*args), (*args)->next, test);
-				(*args) = tmp2;
-				res = tmp2->final_arg;
-			}
+				insert_splitted_dollars_arg(args, &res, tab);
 			ft_strsfree(tab);
-			tab = NULL;
-			free(dollar_interpreted);
 		}
 		else
 			res = ft_strjoin(res, arg->str);
 		free(tmp);
 		if (errno)
-			return (free(tab), free(res), NULL);
+			return (free(tab), free(res));
 		arg = arg->next;
 	}
 	(*args)->final_arg = res;
-	return (res);
 }
 
-bool	rebuild_args(t_args **head, t_env_var *envp)
+bool	rebuild_args(t_args **head, t_env *envp)
 {
 	t_args	*ptr;
 
 	ptr = *head;
 	while (ptr)
 	{
-		join_splitted_arg_test(&ptr, envp, true);
-		// ptr->final_arg = join_splitted_arg(ptr->s_args, envp, true);
+		join_splitted_arg_test(&ptr, envp, ptr->s_args, true);
 		if (errno)
 			return (false);
 		ptr = ptr->next;
