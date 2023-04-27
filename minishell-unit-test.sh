@@ -34,13 +34,13 @@ Test()
 	bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	valgrind --track-fds=yes --leak-check=full -s --log-file="vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
+	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
-	local VLG_OUTPUT=$(cat vlg.out)
-	grep -E "(ERROR.*1.*suppressed.*)" vlg.out
-	local OPEN_FDS="$(grep -E "Open file descriptor" vlg.out | wc -l)"
-	local PARENT_FDS=$(grep -E "<inherited from parent>" vlg.out | wc -l)
-	rm vlg.out
+	local VLG_OUTPUT=$(cat .vlg.out)
+	grep -E "(ERROR.*1.*suppressed.*)" .vlg.out
+	local OPEN_FDS="$(grep -E "Open file descriptor" .vlg.out | wc -l)"
+	local PARENT_FDS=$(grep -E "<inherited from parent>" .vlg.out | wc -l)
+	rm -f .vlg.out
 	cd ..
 	local OUTPUTS_DIFFS=$(diff --color=always -ru expected_output_dir original_output_dir)
 
@@ -104,6 +104,8 @@ Build_test_environment
 ############################################################################
 Test "echo test"
 Test "inexistant_command"
+Test "echo *"
+Test "echo libft/ft_strchr.*"
 Test "echo test < inexistant_input"
 Test "export bla='test' && echo \$bla"
 Test "(export bla='test' | echo \$bla) && echo \$bla"

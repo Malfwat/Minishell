@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 03:16:49 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:18:23 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 01:13:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,6 @@
 #include <signal.h>
 #include <history.h>
 #include <ncurses.h>
-
-int	ft1(int a, int b)
-{
-	rl_replace_line("echo test", 0);
-	return ((void)a, (void)b, 1);
-}
-
-void	init_keyhooks(void)
-{
-	// rl_bind_key(27, NULL);
-	rl_bind_keyseq("\\e[A", ft1);
-}
 
 void	print_usage(void)
 {

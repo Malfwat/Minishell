@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_structs_0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 00:07:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	free_t_args(t_args *ptr)
 	{
 		tmp = ptr->next;
 		free(ptr->final_arg);
+		free(ptr->cmd_w_path);
 		free_t_s_arg(&ptr->s_args);
 		free(ptr);
 		ptr = tmp;

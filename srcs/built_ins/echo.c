@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:20:41 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 23:13:10 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:12:01 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 #include <stdarg.h>
 #include <libft.h>
 #include <ms_define.h>
+#include <string.h>
 #include <minishell.h>
 #include <unistd.h>
 #include <errno.h>
+
+#include <stdio.h>
 
 bool	check_nl_arg(char *arg)
 {
@@ -57,6 +60,6 @@ void	ms_echo(char **tab, t_fd fd)
 	if (nl)
 		write(fd, "\n", 1);
 	if (errno)
-		ms_perror("minishell: echo", "write error", "no space left on device");
+		ms_perror("minishell: echo", "write error", strerror(errno));
 	errno = 0;
 }

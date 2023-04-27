@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 03:42:52 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 18:41:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static bool	must_return(char redirect[3], int *type, t_s_arg **arg)
 void	get_redirect(char redirect[3], char *str, int *i)
 {
 	(redirect)[0] = str[*i];
+	(redirect)[1] = 0;
 	if (str[*i] == str[*i + 1])
 		(redirect)[1] = str[(*i)++];
 	(redirect)[2] = 0;

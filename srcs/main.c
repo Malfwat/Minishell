@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 03:27:36 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 00:55:27 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,6 @@
 
 t_minishell	g_ms_params;
 
-bool	parse_user_input(t_minishell *ms_params, char *user_input)
-{
-	t_block		*head;
-
-	if (!*user_input)
-	{
-		free(user_input);
-		ms_params->last_exit_code = 0;
-		return (false);
-	}
-	head = new_block();
-	if (parse_cmds(&head, user_input) == false)
-	{
-		ms_params->last_exit_code = SET_EXIT_CODE(2);
-		return (flood_free(head), false);
-	}
-	if (errno)
-		exit_ms(*ms_params, 2, "parsing");
-	hd_manager(head);
-	if (errno)
-		exit_ms(*ms_params, 2, "io_manager");
-	ms_params->head = head;
-	return (true);
-}
-
 void	handler_func(int num)
 {
 	char		*ms_prompt_up;
@@ -78,6 +53,18 @@ void	handler_func(int num)
 	rl_redisplay();
 }
 
+bool	is_line_empty(t_minishell *ms_params, char *u_in)
+{
+	if (!*(u_in + pass_whitespaces(u_in)))
+	{
+		free(find_env_var(ms_params->envp, "?")->var_value);
+		find_env_var(ms_params->envp, "?")->var_value = ft_strdup("0");
+		ms_params->last_exit_code = 0;
+		return (true);
+	}
+	return (false);
+}
+
 bool	init_and_parse_input(t_minishell *ms_params, char **av, char **u_in)
 {
 	if (ms_params->flags & C_FLAG)
@@ -97,8 +84,9 @@ bool	init_and_parse_input(t_minishell *ms_params, char **av, char **u_in)
 			ft_putendl_fd("exit", 1);
 			exit_ms(*ms_params, 0, "readline");
 		}
+		if (is_line_empty(ms_params, *u_in))
+			return (free(*u_in), false);
 		ms_add_history(*u_in, ms_params);
-		*u_in += pass_whitespaces(*u_in);
 		if (!parse_user_input(ms_params, *u_in))
 			return (false);
 	}

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
+#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/27 03:44:06 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/28 00:57:42 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,16 +67,17 @@ ENV					=	export_unset_env.c	\
 				
 ENV_DIR				=	env/
 
-PARSING				=	input_output.c	\
-						io_functions.c	\
-						parenthesis.c	\
-						utils_0.c		\
-						utils_1.c		\
-						utils_2.c		\
-						check_cmd.c		\
-						parsing.c		\
-						wildcard_0.c	\
-						wildcard_1.c	\
+PARSING				=	input_output.c		\
+						io_functions.c		\
+						parenthesis.c		\
+						utils_0.c			\
+						utils_1.c			\
+						utils_2.c			\
+						check_cmd.c			\
+						parsing.c			\
+						parse_user_input.c	\
+						wildcard_0.c		\
+						wildcard_1.c		\
 						word.c
 
 PARSING_DIR			=	parsing/
@@ -185,7 +186,6 @@ $(NAME):	libft/libft.a $(BUILD)  $(OBJ)
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
 	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null || $(call makeprint,"Compiling ", "$@" ,"KO")
 	@$(call makeprint,"Compiling ", "$@" ,"OK")
-	@sleep 0.05
 
 launch: suppr_script
 	@make all

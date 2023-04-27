@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:45:24 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 00:58:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ bool		manage_wildcard(t_args **head, char *str);
 void		split_path_pattern(char *str, char **path, char **pattern);
 t_args		*wildcard(char *dir, char *pattern);
 bool		compare_wildcard(char *pattern, char *str);
+void		ft_add_t_args(t_args **head, char *str);
 
 // init_shell.c
 
@@ -142,5 +143,6 @@ void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars);
 
 void	my_close(t_fd a, t_fd b);
 void	print_usage(void);
+
 
 #endif /* MINISHELL_H */

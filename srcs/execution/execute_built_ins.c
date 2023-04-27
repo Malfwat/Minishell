@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 01:39:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 19:53:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <ms_define.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdio.h>
 
 bool	is_builtin(char *str)
 {
@@ -66,15 +67,15 @@ int	is_pipe(int fd)
 	if (fd < 0)
 		return (-1);
 	if (fstat(fd, &filestat) < 0)
-		return (-1);
+		return (errno = 0, -1);
 	return (S_ISFIFO(filestat.st_mode));
 }
 
 void	my_close(t_fd a, t_fd b)
 {
-	if (a >= 0)
+	if (a > 2)
 		close(a);
-	if (b >= 0)
+	if (b > 2)
 		close(b);
 }
 
@@ -89,10 +90,11 @@ void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
 			return ;
 		if (!pid)
 		{
+			free_children(&ms_params->children);
 			launch_builtins(ms_params, vars, block->io_tab);
 			my_close(block->io_tab[0], block->io_tab[1]);
 			if (block->pipe_next)
-				close(block->pipe_next->io_tab[0]);
+				my_close(block->pipe_next->io_tab[0], -2);
 			free_exec_vars(vars);
 			exit_ms(*ms_params, block->cmd.exit_value, "builtin fork");
 		}

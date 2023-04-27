@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 07:53:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:24:00 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 00:08:38 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 	i = 0;
 	if (ft_strchr(*cmd, '/') || is_builtin(*cmd) || !**cmd)
 	{
-		*dest = *cmd;
+		*dest = ft_strdup(*cmd);
 		return (true);
 	}
 	while (path && path[i])
@@ -48,6 +48,6 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 			return (true);
 		errno = 0;
 	}
-	*dest = *cmd;
+	*dest = ft_strdup(*cmd);
 	return (true);
 }
