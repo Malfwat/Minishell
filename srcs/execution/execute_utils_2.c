@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 03:07:36 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:10:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 23:45:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	close_sub_fds(t_block *head)
 {
 	while (head)
 	{
-		if (head->io_tab[1] != INIT_FD_VALUE)
+		if (head->io_tab[1] > 2)
 			close(head->io_tab[1]);
-		if (head->io_tab[0] != INIT_FD_VALUE)
+		if (head->io_tab[0] > 2)
 			close(head->io_tab[0]);
 		head = head->next;
 	}
@@ -52,6 +52,7 @@ t_block	*find_next_block(t_block *block, bool ignore_sub)
 
 void	free_exec_vars(t_exec_vars exec_vars)
 {
+	free(exec_vars.cd_implicit);
 	free(exec_vars.argv);
 	ft_strsfree(exec_vars.envp);
 	ft_strsfree(exec_vars.path);

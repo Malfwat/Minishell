@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 23:08:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 01:06:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ bool	ft_isnum(char *str)
 	int	i;
 
 	i = 0;
+	if (!*str)
+		return (false);
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	while (str[i])
@@ -37,10 +39,7 @@ void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 	int	exit_value;
 
 	length = 0;
-	if (fd[0] >= 0)
-		close(fd[0]);
-	if (fd[1] >= 0)
-		close(fd[1]);
+	my_close(fd[0], fd[1]);
 	ft_putstr_fd("exit\n", ms_params->stdin_fileno);
 	while (vars.argv[length + 1])
 		length++;

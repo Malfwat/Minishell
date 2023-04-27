@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 01:40:46 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 21:20:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void	execute_t_block_cmd(t_block *block, t_minishell *ms_params)
 {
 	errno = 0;
 	if (!init_exec_io(block, ms_params))
-		return ;
+		return (my_close(block->io_tab[0], block->io_tab[1]));
 	if (block->cmd.args)
 		launch_cmd(block, ms_params);
 	my_close(block->io_tab[0], block->io_tab[1]);
 	if (block->cmd.pid == -1 || errno)
 	{
 		if (block->pipe_next)
-			close(block->pipe_next->io_tab[0]);
+			my_close(block->pipe_next->io_tab[0], -2);
 		exit_ms(*ms_params, 2, "exec fork");
 	}
 	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
@@ -64,11 +64,11 @@ pid_t	create_subshell(t_block *block, t_minishell *ms_prm)
 		if (close(block->io_tab[0]) == -1)
 		{
 			if (block->io_tab[1] != INIT_FD_VALUE)
-				close(block->io_tab[1]);
+				my_close(block->io_tab[1], -2);
 			exit_ms(*ms_prm, 2, "subshell");
 		}
 	}
-	if (block->io_tab[1] != INIT_FD_VALUE)
+	if (block->io_tab[1] > 2)
 	{
 		if (close(block->io_tab[1]) == -1)
 			exit_ms(*ms_prm, 2, "subshell");
