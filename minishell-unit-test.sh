@@ -4,6 +4,7 @@
 TOTAL_TESTS=0
 TOTAL_EV_SUCCESS=0 # EV = EXIT_VALUE
 TOTAL_OV_SUCCESS=0 # OP = OUTPUT_VALUE
+TOTAL_VLG_SUCCESS=0 # VLG = VALGRIND
 
 Build_test_environment()
 {
@@ -33,8 +34,13 @@ Test()
 	bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	~/42-CURSUS/Minishell/minishell -c "$1" > output
+	valgrind --track-fds=yes --leak-check=full -s --log-file="vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
+	local VLG_OUTPUT=$(cat vlg.out)
+	grep -E "(ERROR.*1.*suppressed.*)" vlg.out
+	local OPEN_FDS="$(grep -E "Open file descriptor" vlg.out | wc -l)"
+	local PARENT_FDS=$(grep -E "<inherited from parent>" vlg.out | wc -l)
+	rm vlg.out
 	cd ..
 	local OUTPUTS_DIFFS=$(diff --color=always -ru expected_output_dir original_output_dir)
 
@@ -52,7 +58,7 @@ Test()
 	fi
 
 	# Check exit value
-	if [ "$PROGRAM_EXIT_VALUE" = "$EXPECTED_EXIT_VALUE" ]; then
+	if [ "$PROGRAM_EXIT_VALUE" == "$EXPECTED_EXIT_VALUE" ]; then
 		echo -e "Exit value: \033[92mOK\033[0m"
 		((TOTAL_EV_SUCCESS++))
 	else
@@ -60,7 +66,18 @@ Test()
 
 	fi
 
-	if [ "$TOTAL_EV_SUCCESS" != "$TOTAL_TESTS" ] || [ "$TOTAL_OV_SUCCESS" != "$TOTAL_TESTS" ]; then
+	# Check valgrind errors
+	if [ "$OPEN_FDS" == "0" ] || [ "$OPEN_FDS" == "$PARENT_FDS" ]; then
+		echo -e "Valgrind: \033[92mOK\033[0m"
+		((TOTAL_VLG_SUCCESS++))
+	else
+		echo -e "Valgrind: \033[91mKO\033[0m \n"
+		echo "$VLG_OUTPUT"
+	fi
+
+
+	if [ "$TOTAL_EV_SUCCESS" != "$TOTAL_TESTS" ] || [ "$TOTAL_OV_SUCCESS" != "$TOTAL_TESTS" ] \
+	|| [ "$TOTAL_VLG_SUCCESS" != "$TOTAL_TESTS" ]; then
 		exit
 	fi
 	# rm -rf expected_output_dir/* original_output_dir/*
@@ -72,6 +89,7 @@ Final_result()
 	echo -e "\033[38;5;208m==== RESULT ====\033[0m"
 	echo "correct exit values:$TOTAL_EV_SUCCESS/$TOTAL_TESTS"
 	echo "correct output values:$TOTAL_OV_SUCCESS/$TOTAL_TESTS"
+	echo "valgrind successes:$TOTAL_VLG_SUCCESS/$TOTAL_TESTS"
 }
 
 rm -rf .minishell_test_environment
