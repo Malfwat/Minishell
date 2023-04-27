@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 22:42:50 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 00:39:57 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,15 @@ char		**build_envp(t_env_var	*envp);
 char		*get_env_var_value(char *str);
 char		*get_env_var_name(char *str);
 void		update_env_var(t_env_var **head);
+
+// export_utils.c
+
+bool    	is_in_order(t_env_var *lst);
+void	    swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b);
+t_env_var	*sort_env(t_env_var *lst);
+t_env_var	*cpy_t_env_var(t_env_var *lst);
+bool	    add_update_env_var(char *name, t_minishell *ms_prms, \
+bool temp, char *s);
+
 
 #endif /* ENV_FUNCTION_C */

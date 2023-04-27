@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 14:46:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 01:29:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,19 @@ char		**build_envp(t_env_var	*envp);
 t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block);
 
 void		handle_execve_failure(t_minishell ms_params, char *program_name);
+
+// execution.c
+
+void    	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs);
+void    	puppet_child(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs);
+void    	launch_cmd(t_block *block, t_minishell *ms_params);
+
+// add_color.c
+
+void    	check_for_color(t_args **head);
+bool    	is_colorable(char *str);
+
+int         t_arg_lst_len(t_args *head);
+
 
 #endif /* EXEC_MS_H */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:15:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 17:32:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 00:43:52 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int	wait_children(t_minishell *ms_params)
 		free_children(&ms_params->children);
 		ms_params->last_exit_code = status;
 		free(find_env_var(ms_params->envp, "?")->var_value);
-		find_env_var(ms_params->envp, "?")->var_value = ft_itoa(extract_exit_code(ms_params->last_exit_code));
+		find_env_var(ms_params->envp, "?")->var_value \
+		= ft_itoa(extract_exit_code(ms_params->last_exit_code));
 	}
 	return (ms_params->last_exit_code);
 }
