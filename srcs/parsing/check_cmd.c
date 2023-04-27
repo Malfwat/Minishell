@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 07:53:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 19:13:04 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/27 03:24:00 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 	int		i;
 
 	i = 0;
-
 	if (ft_strchr(*cmd, '/') || is_builtin(*cmd) || !**cmd)
 	{
 		*dest = *cmd;
@@ -46,11 +45,7 @@ bool	get_cmd_path(char **path, char **cmd, char **dest)
 		if (!check_access_and_set_path(path[i++], *cmd, dest))
 			return (false);
 		if (*dest)
-		{
-			// free(*cmd);
-			// *cmd = NULL;
 			return (true);
-		}
 		errno = 0;
 	}
 	*dest = *cmd;

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 03:45:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void		free_t_args(t_args *ptr);
 void		free_ms_params(t_minishell ms_params);
 void		free_env_lst(t_env *envp_lst);
 void		free_prompt_params(t_prompt *lst);
-void		free_t_s_arg(t_s_arg **arg);
 
 // term_utils
 
@@ -142,5 +141,6 @@ bool	is_builtin(char *str);
 void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars);
 
 void	my_close(t_fd a, t_fd b);
+void	print_usage(void);
 
 #endif /* MINISHELL_H */

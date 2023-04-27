@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 03:24:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	print_syntax_error(int type, char *str)
 	else if (type == ILLEGAL_INPUT)
 		str = ft_strchr(str, '<') + 1;
 	str += pass_whitespaces(str);
-	c = *str;	
+	c = *str;
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd("syntax error near unexpected token ", 2);
 	ft_putchar_fd('`', 2);
@@ -56,7 +56,7 @@ void	syntax_error(int err, void *comment, int type, char *cmd_line)
 {
 	if (type == EXPECTING_ARGUMENT)
 	{
-		ms_perror("minishell", "syntax error",
+		ms_perror("minishell", "syntax error", \
 		"right hand operand cannot be empty");
 		return ;
 	}
@@ -96,4 +96,15 @@ bool	check_and_store_delimiter(char *str, int *storage)
 	else
 		return (false);
 	return (true);
+}
+
+bool	is_parenthesis_empty(char *str)
+{
+	int	i;
+
+	i = 1;
+	i += pass_whitespaces(&str[i]);
+	if (str[i] == ')' && !str[i + 1])
+		return (true);
+	return (false);
 }

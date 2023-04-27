@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/27 01:39:05 by malfwa           ###   ########.fr        #
+#    Updated: 2023/04/27 03:44:06 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,10 +25,11 @@ SRCS_DIR			=	srcs/
 EXECUTION_DIR		=	execution/
 
 EXECUTION			=	execute_cmd.c			\
-						execute_utils_0.c		\
 						execution.c				\
 						add_color.c				\
+						execute_utils_0.c		\
 						execute_utils_1.c		\
+						execute_utils_2.c		\
 						execute_built_ins.c		\
 						children_functions.c	\
 						init_exec_vars_io.c		\
@@ -83,6 +84,7 @@ PARSING_DIR			=	parsing/
 STRUCT_UTILS		=	init_t_block.c			\
 						init_t_args.c			\
 						init_t_split_args.c		\
+						init_redirect.c			\
 						free_structs_0.c		\
 						utils.c					\
 						free_structs_1.c		\
@@ -92,7 +94,8 @@ STRUCT_UTILS_DIR	=	struct_utils/
 
 TERM_UTILS			=	term_params_handler.c	\
 						exit_minishell.c		\
-						init_shell.c
+						init_shell_0.c			\
+						init_shell_1.c
 
 TERM_UTILS_DIR		=	term_utils/
 
