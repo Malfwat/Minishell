@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 20:15:44 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/04/27 00:05:43 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,39 @@
 #include <libft.h>
 #include <struct_ms.h>
 
-void	cd(t_minishell *ms_params, char **tab, t_fd fd)
+void	error_case(int *exit_code, char *previous_directory)
 {
-	char	*dir;
+	if (previous_directory)
+	{
+		ms_perror("minishell", "cd", strerror(errno));
+		*exit_code = 1;
+	}
+	errno = 0;
+	free(previous_directory);
+	return ;
+}
+
+void	change_dir(t_minishell **ms_params, char *dir)
+{
 	char	*tmp;
 	char	*cwd;
 	char	*previous_directory;
+
+	previous_directory = getcwd(NULL, 0);
+	if (chdir(dir) == -1 || !previous_directory)
+		return (error_case(&(*ms_params)->last_exit_code, previous_directory));
+	free((*ms_params)->previous_directory);
+	(*ms_params)->previous_directory = previous_directory;
+	cwd = getcwd(NULL, 0);
+	tmp = ft_strjoin("PWD=", cwd);
+	if (!errno)
+		export(*ms_params, (char *[]){tmp, NULL}, 0, 1);
+	return (free(tmp), free(cwd));
+}
+
+void	cd(t_minishell *ms_params, char **tab, t_fd fd)
+{
+	char	*dir;
 
 	if (tab[0] && tab[1])
 		return (ms_perror("minishell", "cd", "too many arguments"));
@@ -37,29 +64,6 @@ void	cd(t_minishell *ms_params, char **tab, t_fd fd)
 		ft_putendl_fd(ms_params->previous_directory, fd);
 	}
 	else
-		dir =  *tab;
-	previous_directory = getcwd(NULL, 0);
-	if (chdir(dir) == -1 || !previous_directory)
-	{
-		if (previous_directory)
-		{
-			ms_perror("minishell", "cd", strerror(errno));
-			ms_params->last_exit_code = 1;
-		}
-		errno = 0;
-		free(previous_directory);
-		return ;
-	}
-	free(ms_params->previous_directory);
-	ms_params->previous_directory = previous_directory;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return ;
-	tmp = ft_strjoin("PWD=", cwd);
-	if (!tmp)
-		return (free(cwd));
-	export(ms_params, (char *[]){tmp, NULL}, 0, 1);
-	free(cwd);
-	free(tmp);
-	return ;
+		dir = *tab;
+	change_dir(&ms_params, dir);
 }

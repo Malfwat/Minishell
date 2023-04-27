@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:13:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 16:36:08 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 01:49:15 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ char	*join_splitted_arg_test(t_args **args, t_env_var *envp, bool interpret)
 			res = ft_strjoin(res, arg->str);
 		free(tmp);
 		if (errno)
-			return (ft_strsfree(tab), free(res), NULL);
+			return (free(tab), free(res), NULL);
 		arg = arg->next;
 	}
 	(*args)->final_arg = res;

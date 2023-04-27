@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 19:01:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 23:08:44 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,7 @@ void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
 		return (exit_ms(*ms_params, 2, NULL));
 	}
 	else if (length != 1)
-	{
-		ms_perror("minishell", "exit", "too many arguments");
-		return ;
-	}
+		return (ms_perror("minishell", "exit", "too many arguments"));
 	exit_value = ft_atoi(vars.argv[1]);
-	free_exec_vars(vars);
-	return (exit_ms(*ms_params, exit_value, NULL));
+	return (free_exec_vars(vars), exit_ms(*ms_params, exit_value, NULL));
 }
