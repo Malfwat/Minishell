@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 03:06:28 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 17:52:55 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	exit_ms(t_minishell ms_params, int exitv, char *context)
 	{
 		restore_terminal_params(ms_params.saved_params, ms_params.stdin_fileno);
 		clear_history();
-		if (ms_params.history_fd)
+		if (ms_params.history_fd > 2)
 			close(ms_params.history_fd);
 		free(rl_line_buffer);
 	}
