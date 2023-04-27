@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ex_usage.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 20:39:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/26 23:09:02 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <struct_ms.h>
 
 void	ms_echo(bool nl, int nb, ...);
-
 
 int	main(int ac, char **av, char **envp)
 {

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/26 21:25:25 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/27 01:39:05 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,8 @@ EXECUTION_DIR		=	execution/
 
 EXECUTION			=	execute_cmd.c			\
 						execute_utils_0.c		\
+						execution.c				\
+						add_color.c				\
 						execute_utils_1.c		\
 						execute_built_ins.c		\
 						children_functions.c	\
@@ -58,6 +60,7 @@ BUILT_INS			=	cd.c	\
 BUILT_INS_DIR		=	built_ins/
 		
 ENV					=	export_unset_env.c	\
+						export_utils.c		\
 						init_env_var.c		\
 						manage_env_var.c
 				
@@ -81,6 +84,7 @@ STRUCT_UTILS		=	init_t_block.c			\
 						init_t_args.c			\
 						init_t_split_args.c		\
 						free_structs_0.c		\
+						utils.c					\
 						free_structs_1.c		\
 						manage_io_params.c
 
@@ -114,7 +118,6 @@ SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	$(addprefix $(EXECUTION_DIR), $(EXECUTION))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
 SRCS				+=	main.c
-SRCS				+=	maxcvcvxcvin.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
 
@@ -161,7 +164,7 @@ endef
 all:	$(NAME)
 
 libft:
-	@make -C libft
+	@make -C libft > /dev/null
 
 libft/libft.a: libft
 
@@ -181,7 +184,7 @@ $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile
 	@$(call makeprint,"Compiling ", "$@" ,"OK")
 	@sleep 0.05
 
-launch:
+launch: suppr_script
 	@make all
 	@valgrind --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
 # @valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
@@ -191,7 +194,7 @@ clean:
 	@echo "================cleaned================"
 
 fclean:	clean
-	@rm -f script.txt
+	@rm -f suppr.txt
 	@make fclean -C libft > /dev/null
 	@rm -rf $(NAME)
 	

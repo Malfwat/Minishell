@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/26 15:35:18 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 01:40:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,5 +140,7 @@ int			get_cursor_position(void);
 
 bool	is_builtin(char *str);
 void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars);
+
+void	my_close(t_fd a, t_fd b);
 
 #endif /* MINISHELL_H */

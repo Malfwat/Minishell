@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_char.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 21:20:34 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 00:44:08 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 		tmp = res;
 		if ((i == 0 && arg->str[0] != '$') || (arg->scope == '\''))
 		{
-			if (!i && arg->str[0] != '$')	
+			if (!i && arg->str[0] != '$')
 				res = ft_strjoin(res, tab[i]);
 			else
 				res = ft_strsjoin(3, res, "$", tab[i]);
