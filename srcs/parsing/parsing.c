@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:08:32 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 03:24:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@
 #include <libft.h>
 #include <errno.h>
 #include <stdio.h>
-
-
-
-
 
 bool	is_valid_param(void *param, int type, t_block *block)
 {

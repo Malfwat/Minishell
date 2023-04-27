@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 03:14:54 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,25 @@ t_exec_vars exc_vrs);
 bool		my_dup(t_block *block);
 t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block);
 t_block		*find_next_executable_block(t_block *block);
+void	free_exec_vars(t_exec_vars exec_vars);
 bool		create_pipe(t_block *blck);
 
 // execute_utils_1.c
 
 t_block		*find_next_block(t_block *block, bool ignore_sub);
+void    	join_splitted_arg_test(t_args **args, \
+t_env *env, t_s_arg *arg, bool ch);
 bool		rebuild_args(t_args **head, t_env *envp);
 void		close_sub_fds(t_block *head);
 void		free_exec_vars(t_exec_vars exec_vars);
+
+// execute_utils_2.c
+
+void	close_sub_fds(t_block *head);
+t_args	*array_to_t_args(char **tab);
+bool	rebuild_args(t_args **head, t_env *envp);
+void	free_exec_vars(t_exec_vars exec_vars);
+
 
 // init_exec_vars_io.c
 
