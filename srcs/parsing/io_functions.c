@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 21:11:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 
 int	heredoc(char *limiter)
 {
-	int		test[2];
+	int		tube[2];
 	char	*str;
 	char	*tmp;
 
-	if (pipe(test) == -1)
+	if (pipe(tube) == -1)
 		return (-1);
 	get_next_line(0, &str);
 	tmp = ft_strjoin(limiter, "\n");
 	while (str && ft_strcmp(str, tmp) && !errno)
 	{
-		write(test[1], str, ft_strlen(str));
+		write(tube[1], str, ft_strlen(str));
 		free(str);
 		get_next_line(0, &str);
 	}
@@ -39,8 +39,8 @@ int	heredoc(char *limiter)
 		print_heredoc_syntax_error(limiter);
 	free(str);
 	free(tmp);
-	close(test[1]);
-	return (test[0]);
+	my_close(tube[1], -2);
+	return (tube[0]);
 }
 
 int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env *envp)
@@ -50,14 +50,15 @@ int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env *envp)
 		return (-1);
 	if (ptr->joined_name)
 		ptr->fd = open(ptr->joined_name, O_RDONLY);
+	if (*fd > 2)
+	{
+		close(*fd);
+		*fd = INIT_FD_VALUE;
+	}
 	if (ptr->fd != -1)
 	{
 		if (block->input_source == FILE_INPUT)
-		{
-			if (*fd != INIT_FD_VALUE)
-				close(*fd);
 			*fd = ptr->fd;
-		}
 	}
 	ptr->errno_value = errno;
 	if (errno)
@@ -74,10 +75,13 @@ int	output_manager(t_redirect *ptr, t_fd *fd, t_env *envp)
 		ptr->fd = open(ptr->joined_name, O_WRONLY | O_CREAT | O_APPEND, 00644);
 	else
 		ptr->fd = open(ptr->joined_name, O_WRONLY | O_TRUNC | O_CREAT, 00644);
+	if (*fd > 2)
+	{
+		close(*fd);
+		*fd = INIT_FD_VALUE;
+	}
 	if (ptr->fd != -1)
 	{
-		if (*fd != INIT_FD_VALUE)
-			close(*fd);
 		*fd = ptr->fd;
 	}
 	ptr->errno_value = errno;
@@ -90,13 +94,13 @@ void	change_input_fd(t_block *block, t_fd *fd)
 {
 	if (block->input_source == HEREDOC)
 	{
-		if (block->io_tab[0] != INIT_FD_VALUE)
+		if (block->io_tab[0] > 2)
 			close(block->io_tab[0]);
 		block->io_tab[0] = *fd;
 	}
 	else
 	{
-		close(*fd);
+		my_close(*fd, -2);
 		*fd = INIT_FD_VALUE;
 	}
 }

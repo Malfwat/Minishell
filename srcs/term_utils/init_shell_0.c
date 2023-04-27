@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:17:13 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 01:14:27 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 	if ((ms_params->flags & C_FLAG) == 0
 		&& (!isatty(0) || !isatty(1) || !isatty(2)))
 		return (perror("minishell"), false);
-	// init_keyhooks();
 	if ((ms_params->flags & C_FLAG) == 0)
 	{
 		tgetent(0, getenv("TERM"));

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 17:52:55 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/28 00:28:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	handle_execve_failure(t_minishell ms_params, char *program_name)
 	int	exit_value;
 
 	exit_value = 2;
-	if (errno != ENOENT)
+	if (errno != ENOENT && errno)
 	{
 		if (errno == EACCES)
 			exit_value = 126;
@@ -69,7 +69,7 @@ void	exit_ms(t_minishell ms_params, int exitv, char *context)
 			close(ms_params.history_fd);
 		free(rl_line_buffer);
 	}
-	close(ms_params.stdin_fileno);
+	my_close(ms_params.stdin_fileno, -2);
 	free_ms_params(ms_params);
 	if (errno)
 		ms_perror("minishell7", context, strerror(errno));

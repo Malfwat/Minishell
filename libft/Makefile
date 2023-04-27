@@ -74,6 +74,7 @@ SRCS =	get_next_line/get_next_line.c \
 	ft_putnbr_fd.c \
 	ft_strlcpy.c \
 	ft_split.c \
+	ft_is_directory.c \
 	ft_strjoin.c \
 	ft_strsjoin.c \
 	ft_strlcat.c

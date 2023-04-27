@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:59:27 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/27 23:57:28 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,15 @@ char	**build_argv(t_args **head, char **path, t_env *envp)
 {
 	char	**tab;
 	int		i;
-	char	*str;
 	t_args	*tmp;
 
 	i = 0;
 	if (errno)
 		return (NULL);
-	update_t_args(head);
 	rebuild_args(head, envp);
+	update_t_args(head);
 	check_for_color(head);
-	get_cmd_path(path, &(*head)->final_arg, &str);
-	(*head)->cmd_w_path = str;
+	get_cmd_path(path, &(*head)->final_arg, &(*head)->cmd_w_path);
 	tab = ft_calloc(t_arg_lst_len(*head) + 1, sizeof(char *));
 	if (!tab)
 		return (0);
@@ -112,6 +110,7 @@ t_exec_vars	init_exec_vars(t_minishell ms_params, t_block *block)
 {
 	t_exec_vars	exec_vars;
 
+	exec_vars.cd_implicit = NULL;
 	exec_vars.path = build_path(ms_params);
 	exec_vars.argv = build_argv \
 	(&block->cmd.args, exec_vars.path, ms_params.envp);

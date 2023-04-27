@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 17:50:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/27 19:58:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	fill_history(int fd, t_minishell *ms_params)
 		free(ms_params->prev_line);
 		ms_params->prev_line = ft_strdup(str);
 		if (!ms_params->prev_line)
-			return (free(str), close(fd), -1);
+			return (free(str), my_close(fd, -2), -1);
 		free(str);
 		get_next_line(fd, &str);
 	}
