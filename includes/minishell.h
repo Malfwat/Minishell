@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 04:41:13 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 07:11:56 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void		ft_add_t_args(t_args **head, char *str);
 // init_shell.c
 
 void		ensure_prompt_position(void);
-void		init_prompt(t_minishell *ms_params, char **user_input);
+t_fd		init_prompt(t_minishell *ms_params);
 bool		init_minishell(t_minishell *ms_params, int ac, char **av, char **envp);
 int			get_cursor_position(void);
 

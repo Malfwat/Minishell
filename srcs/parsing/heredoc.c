@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 04:50:40 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 07:22:50 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int	heredoc(char *limiter, t_minishell *ms_params)
 		heredoc_child(limiter, ms_params, ms_params->heredoc_pipe);
 	waitpid(ms_params->heredoc_pid, &status, 0);
 	ms_params->heredoc_pid = 0;
-	signal(SIGINT, &handler_func);
 	if (WIFSIGNALED(status))
 		return (ms_params->heredoc_pid = -3, \
 		my_close(ms_params->heredoc_pipe[0], ms_params->heredoc_pipe[1]), -1);
