@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 00:58:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/28 04:41:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdbool.h>
 # include <ms_define.h>
 # include <errno.h>
+# include <signal.h>
 
 // init_t_block.c
 
@@ -38,7 +39,7 @@ void		ft_add_io(t_block *block, t_s_arg *io);
 t_redirect	*new_redirect(t_s_arg *arg, int mode);
 t_redirect	*last_redirect(t_redirect *head);
 void		ft_add_redirect(t_redirect **head, t_s_arg *arg, int mode);
-int			hd_manager(t_block *block);
+// int			hd_manager(t_block *block);
 
 // manage_cmd_args.c
 
@@ -89,6 +90,8 @@ char    	*replace_dollars_var(char *res, t_env *envp, char *var);
 void		update_t_args(t_args **args);
 
 void		handler_func(int num);
+void		handler_close(int num, siginfo_t *info, void *context);
+void	    handler_heredoc(int num);
 
 //   init_t_args.c
 
@@ -119,8 +122,8 @@ bool		is_parenthesis_empty(char *str);
 int			input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
 t_env *envp);
 int			output_manager(t_redirect *ptr, t_fd *fd, t_env *envp);
-int			hd_manager(t_block *block);
-int			heredoc(char *limiter);
+int			hd_manager(t_block *block, t_minishell *ms_params);
+// int			heredoc(char *limiter, t_fd fd);
 
 // wildcard
 

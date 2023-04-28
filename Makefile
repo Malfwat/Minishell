@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/28 00:57:42 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/28 04:11:52 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,7 @@ PARSING				=	input_output.c		\
 						utils_2.c			\
 						check_cmd.c			\
 						parsing.c			\
+						heredoc.c			\
 						parse_user_input.c	\
 						wildcard_0.c		\
 						wildcard_1.c		\

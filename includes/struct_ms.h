@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/28 01:16:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/28 04:34:03 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ typedef struct s_exec_vars
 typedef struct s_minishell
 {
 	int						last_exit_code;
+	pid_t					heredoc_pid;
+	t_fd					heredoc_pipe[2];
 	char					*prev_line;
 	char					*previous_directory;
 	t_prompt				prompt_params;
@@ -132,5 +134,12 @@ typedef struct s_minishell
 	t_flags					flags;
 	struct termios			saved_params;
 }							t_minishell;
+
+typedef struct	s_heredoc_vars
+{
+	t_minishell	*ms_params;
+	char		*str;
+	char		*tmp;
+}	t_hd_vars;
 
 #endif
