@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 01:14:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/28 08:22:53 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@
 #include <env_function.h>
 #include <ms_define.h>
 #include <struct_ms.h>
+#include <sys/types.h>
 #include <signal.h>
+#include <stdlib.h>
 #include <history.h>
 #include <ncurses.h>
+#include <unistd.h>
 
 bool	init_termois_struct(void)
 {
@@ -76,8 +79,23 @@ void	ensure_prompt_position(void)
 		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
 }
 
-void	init_prompt(t_minishell *ms_params, char **user_input)
+void	handler_readline(int num, siginfo_t *info, void *context)
 {
+	t_minishell	*ms_params;
+
+	(void)num;
+	(void)info;
+	ms_params = (t_minishell *)context;
+	my_close(ms_params->readline_pipe[1], -2);
+	exit_ms(*ms_params, 0, "handler readline");
+}
+
+t_fd	init_prompt(t_minishell *ms_params)
+{
+
+	int					status;
+	char				*tmp;
+	
 	char		*ms_prompt_up;
 	char		*ms_prompt;
 	int			last_exit_code;
@@ -93,10 +111,30 @@ void	init_prompt(t_minishell *ms_params, char **user_input)
 	free_prompt_params(&ms_params->prompt_params);
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt2");
-	*user_input = readline(ms_prompt);
+	if (pipe(ms_params->readline_pipe) == -1)
+		exit_ms(*ms_params, 0, "prompt2");
+	sigemptyset(&ms_params->sa_rdl.sa_mask);
+	ms_params->sa_rdl.sa_flags = SA_SIGINFO;
+	ms_params->sa_rdl.sa_sigaction = &handler_readline;
+	sigaction(SIGINT, &ms_params->sa_rdl, (void *)ms_params);
+	ms_params->readline_pid = fork();
+	if (!ms_params->readline_pid)
+	{
+		my_close(ms_params->readline_pipe[0], -2);
+		tmp = readline(ms_prompt);
+		write(ms_params->readline_pipe[1], tmp, ft_strlen(tmp));
+		my_close(ms_params->readline_pipe[1], -2);
+		free(tmp);
+		exit_ms(*ms_params, 0, "fork_readline");
+	}
+	waitpid(ms_params->readline_pid, &status, 0);
+	if (WIFSIGNALED(status))
+		return (my_close(ms_params->readline_pipe[1], ms_params->readline_pipe[0]), -1);
 	errno = 0;
+	my_close(ms_params->readline_pipe[0], -2);
 	free(ms_prompt);
 	ms_params->last_exit_code = 0;
+	return (ms_params->readline_pipe[1]);
 }
 
 bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
@@ -114,7 +152,7 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 		tgetent(0, getenv("TERM"));
 		save_terminal_params(ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
-		signal(SIGINT, &handler_func);
+		// signal(SIGINT, &handler_func);
 		ms_params->history_fd = get_my_history(ms_params);
 		if (ms_params->history_fd == -1)
 			return (false);
