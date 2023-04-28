@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_ms.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 01:17:09 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/28 03:34:28 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ bool	check_io_param(char *str, int *i, int *type, t_s_arg **arg);
 
 // io_functions.c
 
-int		heredoc(char *limiter);
+// int		heredoc(char *limiter);
 int		input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
 t_env *envp);
 bool	init_exec_io(t_block *block, t_minishell *ms_params);

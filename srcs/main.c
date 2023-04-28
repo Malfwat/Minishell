@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/28 00:55:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/28 04:51:21 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@
 
 t_minishell	g_ms_params;
 
+void	handler_heredoc(int num)
+{
+	(void)num;
+	if (g_ms_params.heredoc_pid > 0)
+		kill(g_ms_params.heredoc_pid, SIGKILL);
+}
+
 void	handler_func(int num)
 {
 	char		*ms_prompt_up;
@@ -43,6 +50,8 @@ void	handler_func(int num)
 	(void)num;
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
 		exit_ms(g_ms_params, 0, "promp2t");
+	if (g_ms_params.heredoc_pid)
+		kill(g_ms_params.heredoc_pid, SIGTERM);
 	write(1, "\n", 1);
 	ms_prompt_up = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	ft_putstr_fd(ms_prompt_up, 1);
