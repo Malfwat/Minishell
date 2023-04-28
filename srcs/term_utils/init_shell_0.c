@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 08:22:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 17:06:29 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,13 @@ void	handler_readline(int num, siginfo_t *info, void *context)
 	(void)info;
 	ms_params = (t_minishell *)context;
 	my_close(ms_params->readline_pipe[1], -2);
-	exit_ms(*ms_params, 0, "handler readline");
+	ms_params->
+	exit_ms(*ms_params, -2, "handler readline");
+}
+
+void	do_nothing(int num)
+{
+	(void)num;
 }
 
 t_fd	init_prompt(t_minishell *ms_params)
@@ -95,7 +101,7 @@ t_fd	init_prompt(t_minishell *ms_params)
 
 	int					status;
 	char				*tmp;
-	
+	t_fd		tube[2];
 	char		*ms_prompt_up;
 	char		*ms_prompt;
 	int			last_exit_code;
@@ -111,30 +117,35 @@ t_fd	init_prompt(t_minishell *ms_params)
 	free_prompt_params(&ms_params->prompt_params);
 	if (errno)
 		exit_ms(*ms_params, 0, "prompt2");
-	if (pipe(ms_params->readline_pipe) == -1)
+	if (pipe(tube))
 		exit_ms(*ms_params, 0, "prompt2");
-	sigemptyset(&ms_params->sa_rdl.sa_mask);
-	ms_params->sa_rdl.sa_flags = SA_SIGINFO;
-	ms_params->sa_rdl.sa_sigaction = &handler_readline;
-	sigaction(SIGINT, &ms_params->sa_rdl, (void *)ms_params);
+	ms_params->readline_pipe[0] = tube[0];
+	ms_params->readline_pipe[1] = tube[1];
 	ms_params->readline_pid = fork();
 	if (!ms_params->readline_pid)
 	{
-		my_close(ms_params->readline_pipe[0], -2);
+		ms_params->sa_rdl.sa_flags = SA_SIGINFO;
+		ms_params->sa_rdl.sa_sigaction = &handler_readline;
+		sigemptyset(&ms_params->sa_rdl.sa_mask);
+		sigaction(SIGINT, &ms_params->sa_rdl, (void *)ms_params);
+		my_close(tube[0], -2);
 		tmp = readline(ms_prompt);
-		write(ms_params->readline_pipe[1], tmp, ft_strlen(tmp));
-		my_close(ms_params->readline_pipe[1], -2);
+		if (tmp)
+			write(tube[1], tmp, ft_strlen(tmp));
+		my_close(tube[1], -2);
 		free(tmp);
-		exit_ms(*ms_params, 0, "fork_readline");
+		// exit_ms(*ms_params, 0, "fork_readline");
+		exit(0);
 	}
+	signal(SIGINT, &do_nothing);
 	waitpid(ms_params->readline_pid, &status, 0);
-	if (WIFSIGNALED(status))
-		return (my_close(ms_params->readline_pipe[1], ms_params->readline_pipe[0]), -1);
+	if (extract_exit_code(status) != 0)
+		return (my_close(tube[1], tube[0]), -1);
 	errno = 0;
-	my_close(ms_params->readline_pipe[0], -2);
+	my_close(tube[0], -2);
 	free(ms_prompt);
 	ms_params->last_exit_code = 0;
-	return (ms_params->readline_pipe[1]);
+	return (tube[1]);
 }
 
 bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)

@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/28 07:16:37 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/04/28 16:26:04 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	handler_heredoc(int num)
 {
 	(void)num;
 	if (g_ms_params.heredoc_pid > 0)
-		kill(g_ms_params.heredoc_pid, SIGKILL);
+		kill(g_ms_params.heredoc_pid, SIGINT);
 }
 
 // void	handler_func(int num)
@@ -137,6 +137,8 @@ int	main(int ac, char **av, char **envp)
 		if (!init_and_parse_input(&g_ms_params, av, &input_fd))
 			continue ;
 		get_next_line(input_fd, &user_input);
+		if (!user_input)
+			exit_ms(g_ms_params, 0, "user_input");
 		while (user_input)
 		{
 			if (is_valid_cmd_line(&g_ms_params, user_input))
