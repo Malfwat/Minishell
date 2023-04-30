@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/04/28 00:57:42 by hateisse         ###   ########.fr        #
+#    Updated: 2023/04/30 22:27:06 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -182,8 +182,10 @@ $(NAME):	libft/libft.a $(BUILD)  $(OBJ)
 	@echo "$(LGREEN)OBJECT FILES COMPILED                                    $(NC)"
 	@$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
 	@echo "$(LGREEN)MINISHELL COMPILED                                        $(NC)"
+	@tput cnorm
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
+	@tput civis
 	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null || $(call makeprint,"Compiling ", "$@" ,"KO")
 	@$(call makeprint,"Compiling ", "$@" ,"OK")
 
