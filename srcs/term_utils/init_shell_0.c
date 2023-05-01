@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 18:15:26 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 20:39:45 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <history.h>
+#include <fcntl.h>
+#include <sys/types.h>
 #include <ncurses.h>
 #include <unistd.h>
 
@@ -108,10 +110,10 @@ t_fd	init_prompt(void)
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
 		exit_ms(0, "prompt1");
 	ensure_prompt_position();
-	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	// ft_putstr_fd(ms_prompt_up, 1);
 	// free(ms_prompt_up);
 	// g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_FOOTER);
+	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	free_prompt_params(&g_ms_params.prompt_params);
 	if (errno || pipe(g_ms_params.readline_pipe))
 		exit_ms(0, "prompt2");
@@ -121,15 +123,28 @@ t_fd	init_prompt(void)
 		signal(SIGINT, handler_readline);
 		my_close(g_ms_params.readline_pipe[0], -2);
 		tmp = readline(g_ms_params.ms_prompt);
-		if (tmp)
-			write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
-		else
+		while (1)
 		{
-			write(g_ms_params.stdin_fileno, "exit\n", 5);
-			my_close(g_ms_params.readline_pipe[1], -2);
-			exit_ms(1, "fork_readline");	
+			if (tmp)
+				write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
+			else
+			{
+				write(g_ms_params.stdin_fileno, "exit\n", 5);
+				my_close(g_ms_params.readline_pipe[1], -2);
+				exit_ms(1, "fork_readline");	
+			}
+			if (tmp[ft_strlen(tmp) - 1] == '\\')
+			{
+				write(g_ms_params.readline_pipe[1], "\b", 1);
+				free(tmp);
+				tmp = readline("> ");
+			}
+			else
+			{
+				free(tmp);
+				break ;
+			}
 		}
-		free(tmp);
 		my_close(g_ms_params.readline_pipe[1], -2);
 		free(g_ms_params.ms_prompt);
 		exit_ms(0, "fork_readline");
@@ -138,6 +153,7 @@ t_fd	init_prompt(void)
 	exit_value = extract_exit_code(status);
 	if (exit_value == 1)
 	{
+		free(g_ms_params.ms_prompt);
 		my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]);
 		exit_ms(0, "init prompt");
 	}
