@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/01 18:40:13 by malfwa           ###   ########.fr        #
+#    Updated: 2023/05/01 19:37:34 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -146,6 +146,8 @@ BLUE1				=	\033[38;5;72m
 GO_END_LINE			=	\033[K
 LPURPLE				=	\033[38;5;103m
 
+SCRIPT_SUPPR		=	suppr.txt
+
 ################################################################################
 #                                                                              #
 #                                                                              #
@@ -174,10 +176,10 @@ libft:
 libft/libft.a: libft
 
 suppr_script:
-	@echo '{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}' > suppr.txt
-	@echo '{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}' >> suppr.txt
-	@echo '{\nleak tgetent_sp\nMemcheck:Leak\n...\nfun:tgetent_sp\n}' >> suppr.txt
-	@echo '{\nleak tgetstr_sp\nMemcheck:Leak\n...\nfun:tgetstr_sp\n}' >> suppr.txt
+	@echo '{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}' > $(SCRIPT_SUPPR)
+	@echo '{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}' >> $(SCRIPT_SUPPR)
+	@echo '{\nleak tgetent_sp\nMemcheck:Leak\n...\nfun:tgetent_sp\n}' >> $(SCRIPT_SUPPR)
+	@echo '{\nleak tgetstr_sp\nMemcheck:Leak\n...\nfun:tgetstr_sp\n}' >> $(SCRIPT_SUPPR)
 
 $(BUILD):
 	@mkdir $(BUILD) $(DIRS)
@@ -193,8 +195,7 @@ $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile
 
 launch: suppr_script
 	@make all
-	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --track-fds=yes --suppressions=suppr.txt ./minishell
-# @valgrind --track-origins=yes --leak-check=full --track-fds=yes --suppressions=suppr.txt ./minishell
+	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --track-fds=yes --suppressions=$(SCRIPT_SUPPR) ./minishell
 
 clean:
 	@rm -rf $(BUILD)
