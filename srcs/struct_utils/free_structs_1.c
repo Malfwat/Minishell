@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 18:29:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_prompt_params(t_prompt *lst)
 void	free_ms_params(t_minishell ms_params)
 {
 	free(ms_params.prev_line);
+	free(ms_params.previous_directory);
 	free_prompt_params(&ms_params.prompt_params);
 	free_env_lst(ms_params.envp);
 	ms_params.envp = NULL;

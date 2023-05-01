@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 08:54:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 18:31:16 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ bool	init_exec_io(t_block *block)
 	while (tmp && !errno)
 	{
 		if (tmp->mode == INPUT_MODE)
-			ret = input_manager(tmp, &block->io_tab[0], block, g_ms_params.envp);
+			ret = input_manager(tmp, &block->io_tab[0], \
+			block, g_ms_params.envp);
 		else if (tmp->mode == OUTPUT_MODE)
 			ret = output_manager(tmp, &block->io_tab[1], g_ms_params.envp);
 		tmp = tmp->next;
