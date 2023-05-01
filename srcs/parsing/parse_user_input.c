@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 00:54:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/01 08:40:41 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 19:09:49 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ bool	parse_user_input(char *user_input)
 	}
 	if (errno)
 		exit_ms(2, "parsing");
+	g_ms_params.head = head;
 	hd_manager(head);
 	if (g_ms_params.heredoc_pid == -3)
 	{
@@ -39,6 +40,5 @@ bool	parse_user_input(char *user_input)
 	g_ms_params.heredoc_pid = 0;
 	if (errno)
 		exit_ms(2, "io_manager");
-	g_ms_params.head = head;
 	return (true);
 }
