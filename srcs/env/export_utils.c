@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:36:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:59:45 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 09:03:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,17 @@ t_env	*cpy_t_env(t_env *lst)
 	return (new_lst);
 }
 
-bool	add_update_env_var(char *name, t_minishell *ms_prms, bool temp, char *s)
+bool	add_update_env_var(char *name, bool temp, char *s)
 {
 	t_env	*tmp;
 	char	*value;
 
 	value = get_env_value(s);
-	tmp = find_env_var(ms_prms->envp, name);
+	tmp = find_env_var(g_ms_params.envp, name);
 	if (!tmp)
 	{
-		if (!add_env_var(&ms_prms->envp, name, value, temp))
-			return (free_env_lst(ms_prms->envp), false);
+		if (!add_env_var(&g_ms_params.envp, name, value, temp))
+			return (free_env_lst(g_ms_params.envp), false);
 	}
 	else
 	{

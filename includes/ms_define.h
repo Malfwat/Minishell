@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/28 01:19:01 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 04:41:11 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_DEFINE_H
 # define MS_DEFINE_H
+
+# include <struct_ms.h>
+
+extern t_minishell	g_ms_params;
 
 # define INIT_FD_VALUE -2
 

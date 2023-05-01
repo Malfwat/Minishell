@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 17:06:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 09:31:18 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,15 @@ void	ensure_prompt_position(void)
 		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
 }
 
-void	handler_readline(int num, siginfo_t *info, void *context)
+void	handler_readline(int num)
 {
-	t_minishell	*ms_params;
-
 	(void)num;
-	(void)info;
-	ms_params = (t_minishell *)context;
-	my_close(ms_params->readline_pipe[1], -2);
-	ms_params->
-	exit_ms(*ms_params, -2, "handler readline");
+	my_close(g_ms_params.readline_pipe[1], -2);
+	errno = 0;
+	write(g_ms_params.stdin_fileno, "\n", 1);
+	free(g_ms_params.ms_prompt);
+	g_ms_params.ms_prompt = NULL;
+	exit_ms(-2, "handler readline");
 }
 
 void	do_nothing(int num)
@@ -96,80 +95,82 @@ void	do_nothing(int num)
 	(void)num;
 }
 
-t_fd	init_prompt(t_minishell *ms_params)
+t_fd	init_prompt(void)
 {
 
 	int					status;
+	int					exit_value;
 	char				*tmp;
-	t_fd		tube[2];
-	char		*ms_prompt_up;
-	char		*ms_prompt;
+	// char		*ms_prompt_up;
 	int			last_exit_code;
 
-	last_exit_code = ms_params->last_exit_code;
-	if (!refresh_prompt_param(&ms_params->prompt_params, last_exit_code))
-		exit_ms(*ms_params, 0, "prompt1");
+	last_exit_code = g_ms_params.last_exit_code;
+	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
+		exit_ms(0, "prompt1");
 	ensure_prompt_position();
-	ms_prompt_up = build_prompt(&ms_params->prompt_params, P_HEADER);
-	ft_putstr_fd(ms_prompt_up, 1);
-	free(ms_prompt_up);
-	ms_prompt = build_prompt(&ms_params->prompt_params, P_FOOTER);
-	free_prompt_params(&ms_params->prompt_params);
-	if (errno)
-		exit_ms(*ms_params, 0, "prompt2");
-	if (pipe(tube))
-		exit_ms(*ms_params, 0, "prompt2");
-	ms_params->readline_pipe[0] = tube[0];
-	ms_params->readline_pipe[1] = tube[1];
-	ms_params->readline_pid = fork();
-	if (!ms_params->readline_pid)
+	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
+	// ft_putstr_fd(ms_prompt_up, 1);
+	// free(ms_prompt_up);
+	// g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_FOOTER);
+	free_prompt_params(&g_ms_params.prompt_params);
+	if (errno || pipe(g_ms_params.readline_pipe))
+		exit_ms(0, "prompt2");
+	g_ms_params.readline_pid = fork();
+	if (!g_ms_params.readline_pid)
 	{
-		ms_params->sa_rdl.sa_flags = SA_SIGINFO;
-		ms_params->sa_rdl.sa_sigaction = &handler_readline;
-		sigemptyset(&ms_params->sa_rdl.sa_mask);
-		sigaction(SIGINT, &ms_params->sa_rdl, (void *)ms_params);
-		my_close(tube[0], -2);
-		tmp = readline(ms_prompt);
+		signal(SIGINT, handler_readline);
+		my_close(g_ms_params.readline_pipe[0], -2);
+		tmp = readline(g_ms_params.ms_prompt);
 		if (tmp)
-			write(tube[1], tmp, ft_strlen(tmp));
-		my_close(tube[1], -2);
+			write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
+		else
+		{
+			write(g_ms_params.stdin_fileno, "exit\n", 5);
+			my_close(g_ms_params.readline_pipe[1], -2);
+			exit_ms(1, "fork_readline");	
+		}
 		free(tmp);
-		// exit_ms(*ms_params, 0, "fork_readline");
-		exit(0);
+		my_close(g_ms_params.readline_pipe[1], -2);
+		free(g_ms_params.ms_prompt);
+		exit_ms(0, "fork_readline");
 	}
-	signal(SIGINT, &do_nothing);
-	waitpid(ms_params->readline_pid, &status, 0);
-	if (extract_exit_code(status) != 0)
-		return (my_close(tube[1], tube[0]), -1);
+	waitpid(g_ms_params.readline_pid, &status, 0);
+	exit_value = extract_exit_code(status);
+	if (exit_value == 1)
+		exit_ms(0, "init prompt");
+	if (exit_value != 0 || errno)
+		return (g_ms_params.last_exit_code = 130, my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]), -1);
 	errno = 0;
-	my_close(tube[0], -2);
-	free(ms_prompt);
-	ms_params->last_exit_code = 0;
-	return (tube[1]);
+	my_close(g_ms_params.readline_pipe[1], -2);
+	free(g_ms_params.ms_prompt);
+	g_ms_params.ms_prompt = NULL;
+	g_ms_params.last_exit_code = 0;
+	return (g_ms_params.readline_pipe[0]);
 }
 
 bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 {
-	ft_memset(ms_params, 0, sizeof(t_minishell));
+	(void)ms_params;
+	ft_memset(&g_ms_params, 0, sizeof(t_minishell));
 	if (ac == 3 && !ft_strcmp(av[1], "-c"))
-		ms_params->flags |= C_FLAG;
-	if (ac > 1 && (ms_params->flags & C_FLAG) == 0)
+		g_ms_params.flags |= C_FLAG;
+	if (ac > 1 && (g_ms_params.flags & C_FLAG) == 0)
 		return (print_usage(), false);
-	if ((ms_params->flags & C_FLAG) == 0
+	if ((g_ms_params.flags & C_FLAG) == 0
 		&& (!isatty(0) || !isatty(1) || !isatty(2)))
 		return (perror("minishell"), false);
-	if ((ms_params->flags & C_FLAG) == 0)
+	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
 		tgetent(0, getenv("TERM"));
-		save_terminal_params(ms_params);
+		save_terminal_params(&g_ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
-		// signal(SIGINT, &handler_func);
-		ms_params->history_fd = get_my_history(ms_params);
-		if (ms_params->history_fd == -1)
+		signal(SIGINT, &do_nothing);
+		g_ms_params.history_fd = get_my_history();
+		if (g_ms_params.history_fd == -1)
 			return (false);
 	}
-	ms_params->envp = get_env(envp);
-	ms_params->previous_directory = getcwd(NULL, 0);
+	g_ms_params.envp = get_env(envp);
+	g_ms_params.previous_directory = getcwd(NULL, 0);
 	if (errno)
 		return (perror("minishell"), false);
 	return (true);
