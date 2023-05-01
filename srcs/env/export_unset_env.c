@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:58:56 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 09:05:21 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ void	print_export(t_env *lst, t_fd fd)
 	}
 }
 
-void	export(t_minishell *ms_params, char **tab, bool temp, t_fd fd)
+void	export(char **tab, bool temp, t_fd fd)
 {
 	char	*name;
 	int		i;
 
 	i = -1;
 	if (!*tab)
-		return (print_export(ms_params->envp, fd));
+		return (print_export(g_ms_params.envp, fd));
 	while (tab && tab[++i])
 	{
 		name = get_env_name(tab[i]);
@@ -55,10 +55,10 @@ void	export(t_minishell *ms_params, char **tab, bool temp, t_fd fd)
 		if (ft_strchr(name, '?'))
 		{
 			ms_perror("minishell: export", tab[i], "not a valid identifier");
-			ms_params->last_exit_code = 1;
+			g_ms_params.last_exit_code = 1;
 			continue ;
 		}
-		if (!add_update_env_var(name, ms_params, temp, tab[i]))
+		if (!add_update_env_var(name, temp, tab[i]))
 			return ;
 	}
 }
