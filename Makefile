@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/01 18:23:31 by malfwa           ###   ########.fr        #
+#    Updated: 2023/05/01 18:40:13 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -174,7 +174,10 @@ libft:
 libft/libft.a: libft
 
 suppr_script:
-	@echo '{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}\n{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}\n{\nleak tgetent_sp\nMemcheck:Leak\n...\nfun:tgetent_sp\n}\n{\nleak tgetstr_sp\nMemcheck:Leak\n...\nfun:tgetstr_sp\n}' > suppr.txt
+	@echo '{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}' > suppr.txt
+	@echo '{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}' >> suppr.txt
+	@echo '{\nleak tgetent_sp\nMemcheck:Leak\n...\nfun:tgetent_sp\n}' >> suppr.txt
+	@echo '{\nleak tgetstr_sp\nMemcheck:Leak\n...\nfun:tgetstr_sp\n}' >> suppr.txt
 
 $(BUILD):
 	@mkdir $(BUILD) $(DIRS)
