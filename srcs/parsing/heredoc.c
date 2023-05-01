@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:16:00 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 19:06:04 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	handler_hd_close(int num)
 {
 	(void)num;
 	my_close(g_ms_params.heredoc_pipe[0], g_ms_params.heredoc_pipe[1]);
-	my_close(g_ms_params.input_fd, -2);
 	free(g_ms_params.hd_vars.limiter);
 	free(g_ms_params.hd_vars.str);
 	exit_ms(2, "handler_close");

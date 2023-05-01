@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/01 09:13:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 19:03:52 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,24 +115,33 @@ bool	init_and_parse_input(char **av)
 void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 {
 	char	*following_part;
+	int		len;
 	char	*tmp;
 
 	get_next_line(fd, user_input);
-	while (*user_input && (*user_input)[ft_strlen(*user_input) - 1] == '\n' \
-		&& (*user_input)[ft_strlen(*user_input) - 2] == '\\')
+	len = 0;
+	if (*user_input)
+		len = ft_strlen(*user_input);
+	while (*user_input && len >= 2 && (*user_input)[len - 1] == '\n' \
+		&& (*user_input)[len - 2] == '\\')
 	{
-		(*user_input)[ft_strlen(*user_input) - 1] = 0;
-		(*user_input)[ft_strlen(*user_input) - 1] = 0;
+		(*user_input)[len - 1] = 0;
+		len = ft_strlen(*user_input);
+		(*user_input)[len - 1] = 0;
 		if (fd == g_ms_params.stdin_fileno)
 			write(g_ms_params.stdin_fileno, "> ", 2);
 		get_next_line(fd, &following_part);
+		if (!following_part)
+			write(g_ms_params.stdin_fileno, "\n", 1);
 		tmp = *user_input;
 		*user_input = ft_strjoin(*user_input, following_part);
+		if (*user_input)
+			len = ft_strlen(*user_input);
 		free(tmp);
 		free(following_part);
 	}
-	if (!conserve_nl && *user_input && (*user_input)[ft_strlen(*user_input) - 1] == '\n')
-		(*user_input)[ft_strlen(*user_input) - 1] = 0;
+	if (!conserve_nl && *user_input && (*user_input)[len - 1] == '\n')
+		(*user_input)[len - 1] = 0;
 }
 
 int	main(int ac, char **av, char **envp)
