@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 20:39:45 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/02 01:47:23 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,22 +97,97 @@ void	do_nothing(int num)
 	(void)num;
 }
 
+char	*check_for_quotes(char *str)
+{
+	char	*single_quote;
+	char	*double_quote;
+	char	*tmp;
+
+	if (!str || !*str)
+		return (NULL);
+	single_quote = ft_strchr(str, '\'');
+	double_quote = ft_strchr(str, '\"');
+	if (single_quote && (single_quote < double_quote || !double_quote))
+	{
+		tmp = ft_strchr(single_quote + 1, *single_quote);
+		if (tmp && tmp[1])
+			return (check_for_quotes(tmp + 1));
+		return (single_quote);
+	}
+	else if (double_quote && (single_quote > double_quote || !single_quote) )
+	{
+		tmp = ft_strchr(double_quote + 1, *double_quote);
+		if (tmp && tmp[1])
+			return (check_for_quotes(tmp + 1));
+		return (double_quote);
+	}
+	return (NULL);
+}
+
+void	update_quotes(char *str, char **quotes)
+{
+	char	*tmp;
+	
+	if (!*quotes)
+	{
+		*quotes = check_for_quotes(str);
+		return ;
+	}
+	tmp = ft_strchr(str, **quotes);
+	if (tmp)
+	{
+		*quotes = check_for_quotes(tmp + 1);
+	}
+}
+
+void	ms_readline(char *tmp, char *quotes)
+{
+	char	c[2];
+	
+	if (tmp)
+		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
+	else
+	{
+		write(g_ms_params.stdin_fileno, "exit\n", 5);
+		my_close(g_ms_params.readline_pipe[1], -2);
+		exit_ms(1, "fork_readline");
+	}
+	if (!quotes || !*quotes)
+	{
+		free(tmp);
+		return ;
+	}
+	if (ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\')
+		write(g_ms_params.readline_pipe[1], "\b", 1);
+	c[0] = *quotes;
+	c[1] = 0;
+	free(tmp);
+	tmp = readline("> ");
+	if (!tmp)
+	{
+		ms_perror("minishell", "unexpected EOF while looking for matching", c);
+		ms_perror("minishell", "syntax error", "unexpected end of file");
+		my_close(g_ms_params.readline_pipe[1], -2);
+		return (exit_ms(2, "fork_readline"));
+	}
+	quotes = (char *)&c[0];
+	update_quotes(tmp, &quotes);
+	return (ms_readline(tmp, quotes));
+}
+
 t_fd	init_prompt(void)
 {
 
 	int					status;
 	int					exit_value;
 	char				*tmp;
-	// char		*ms_prompt_up;
+	char				*quotes;
 	int			last_exit_code;
 
 	last_exit_code = g_ms_params.last_exit_code;
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
 		exit_ms(0, "prompt1");
 	ensure_prompt_position();
-	// ft_putstr_fd(ms_prompt_up, 1);
-	// free(ms_prompt_up);
-	// g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_FOOTER);
 	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	free_prompt_params(&g_ms_params.prompt_params);
 	if (errno || pipe(g_ms_params.readline_pipe))
@@ -120,48 +195,34 @@ t_fd	init_prompt(void)
 	g_ms_params.readline_pid = fork();
 	if (!g_ms_params.readline_pid)
 	{
+		quotes = NULL;
 		signal(SIGINT, handler_readline);
 		my_close(g_ms_params.readline_pipe[0], -2);
 		tmp = readline(g_ms_params.ms_prompt);
-		while (1)
+		if (tmp)
 		{
-			if (tmp)
-				write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
-			else
-			{
-				write(g_ms_params.stdin_fileno, "exit\n", 5);
-				my_close(g_ms_params.readline_pipe[1], -2);
-				exit_ms(1, "fork_readline");	
-			}
-			if (tmp[ft_strlen(tmp) - 1] == '\\')
-			{
-				write(g_ms_params.readline_pipe[1], "\b", 1);
-				free(tmp);
-				tmp = readline("> ");
-			}
-			else
-			{
-				free(tmp);
-				break ;
-			}
+			quotes = check_for_quotes(tmp);
+			if (quotes && quotes[1])
+				update_quotes(quotes + 1, &quotes);
 		}
-		my_close(g_ms_params.readline_pipe[1], -2);
 		free(g_ms_params.ms_prompt);
+		g_ms_params.ms_prompt = NULL;
+		ms_readline(tmp, quotes);
+		my_close(g_ms_params.readline_pipe[1], -2);
 		exit_ms(0, "fork_readline");
 	}
 	waitpid(g_ms_params.readline_pid, &status, 0);
 	exit_value = extract_exit_code(status);
+	free(g_ms_params.ms_prompt);
 	if (exit_value == 1)
 	{
-		free(g_ms_params.ms_prompt);
 		my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]);
 		exit_ms(0, "init prompt");
 	}
 	if (exit_value != 0 || errno)
-		return (g_ms_params.last_exit_code = 130, my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]), -1);
+		return (g_ms_params.last_exit_code = exit_value, my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]), -1);
 	errno = 0;
 	my_close(g_ms_params.readline_pipe[1], -2);
-	free(g_ms_params.ms_prompt);
 	g_ms_params.ms_prompt = NULL;
 	g_ms_params.last_exit_code = 0;
 	return (g_ms_params.readline_pipe[0]);
