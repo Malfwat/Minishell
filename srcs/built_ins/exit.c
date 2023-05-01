@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 01:06:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 09:05:58 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,25 +33,25 @@ bool	ft_isnum(char *str)
 	return (true);
 }
 
-void	ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
+void	ms_exit_builtin(t_exec_vars vars, t_fd fd[2])
 {
 	int	length;
 	int	exit_value;
 
 	length = 0;
 	my_close(fd[0], fd[1]);
-	ft_putstr_fd("exit\n", ms_params->stdin_fileno);
+	ft_putstr_fd("exit\n", g_ms_params.stdin_fileno);
 	while (vars.argv[length + 1])
 		length++;
 	if (!length)
-		return (exit_ms(*ms_params, 0, NULL));
+		return (exit_ms(0, NULL));
 	else if (!ft_isnum(vars.argv[1]))
 	{
 		ms_perror("minishell: exit", vars.argv[1], "numeric argument required");
-		return (exit_ms(*ms_params, 2, NULL));
+		return (exit_ms(2, NULL));
 	}
 	else if (length != 1)
 		return (ms_perror("minishell", "exit", "too many arguments"));
 	exit_value = ft_atoi(vars.argv[1]);
-	return (free_exec_vars(vars), exit_ms(*ms_params, exit_value, NULL));
+	return (free_exec_vars(vars), exit_ms(exit_value, NULL));
 }
