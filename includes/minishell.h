@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:13:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 20:13:52 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void		update_t_args(t_args **args);
 
 void		handler_func(int num);
 void		handler_hd_close(int num);
-void	    handler_heredoc(int num);
 
 //   init_t_args.c
 
