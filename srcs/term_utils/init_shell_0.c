@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:31:18 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 18:15:26 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,10 @@ t_fd	init_prompt(void)
 	waitpid(g_ms_params.readline_pid, &status, 0);
 	exit_value = extract_exit_code(status);
 	if (exit_value == 1)
+	{
+		my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]);
 		exit_ms(0, "init prompt");
+	}
 	if (exit_value != 0 || errno)
 		return (g_ms_params.last_exit_code = 130, my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]), -1);
 	errno = 0;
