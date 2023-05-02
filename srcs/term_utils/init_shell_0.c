@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/02 02:23:18 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/02 23:14:02 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ void	ms_readline(char *tmp, char *quotes)
 {
 	char	c[2];
 	
+	ft_bzero(c, 2);
 	if (tmp)
 		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
 	else
@@ -152,15 +153,12 @@ void	ms_readline(char *tmp, char *quotes)
 		my_close(g_ms_params.readline_pipe[1], -2);
 		exit_ms(1, "ms_readline");
 	}
-	if (!quotes || !*quotes)
-	{
-		free(tmp);
-		return ;
-	}
+	if ((!quotes || !*quotes) && tmp[ft_strlen(tmp) - 1] != '\\')
+		return (free(tmp));
 	if (ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\')
 		write(g_ms_params.readline_pipe[1], "\b", 1);
-	c[0] = *quotes;
-	c[1] = 0;
+	if (quotes)
+		c[0] = *quotes;
 	free(tmp);
 	tmp = readline("> ");
 	if (!tmp)
