@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/02 02:04:32 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/02 02:23:18 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,8 @@ t_fd	init_prompt(void)
 		readline_child();
 	waitpid(g_ms_params.readline_pid, &status, 0);
 	exit_value = extract_exit_code(status);
+	free(find_env_var(g_ms_params.envp, "?")->var_value);
+	find_env_var(g_ms_params.envp, "?")->var_value = ft_itoa(exit_value);
 	if (exit_value || errno)
 	{
 		g_ms_params.last_exit_code = status;

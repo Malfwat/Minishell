@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 20:27:55 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/02 02:38:11 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,19 @@
 
 void	handler_hd_close(int num)
 {
+	t_fd	tmp;
 	t_fd	dev_null;
 
 	dev_null = open("/dev/null", O_RDWR);
-	perror("open");
 	(void)num;
 	my_close(g_ms_params.heredoc_pipe[0], g_ms_params.heredoc_pipe[1]);
 	free(g_ms_params.hd_vars.limiter);
 	free(g_ms_params.hd_vars.str);
+	tmp = dup(g_ms_params.stdin_fileno);
 	dup2(dev_null, g_ms_params.stdin_fileno);
 	close(dev_null);
 	gnl_force_finish(1, g_ms_params.stdin_fileno);
+	g_ms_params.stdin_fileno = tmp;
 	exit_ms(2, "handler_close");
 }
 
