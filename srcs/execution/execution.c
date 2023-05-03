@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 01:04:05 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 00:27:16 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 10:09:12 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,19 @@
 #include <sys/wait.h>
 #include <env_function.h>
 
-void	child_worker(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
+void	child_worker(t_block *blck, t_exec_vars exc_vrs)
 {
+	signal(SIGINT, SIG_DFL);
+	my_close(g_ms_params.input_fd, -2);
 	if (!my_dup(blck))
-		return (free_exec_vars(exc_vrs), exit_ms(*ms_params, 2, "exec dup"));
+		return (free_exec_vars(exc_vrs), exit_ms(2, "exec dup"));
 	if (ft_strchr(blck->cmd.args->cmd_w_path, '/'))
 		execve(blck->cmd.args->cmd_w_path, exc_vrs.argv, exc_vrs.envp);
 	free_exec_vars(exc_vrs);
-	handle_execve_failure(*ms_params, blck->cmd.args->final_arg);
+	handle_execve_failure(blck->cmd.args->final_arg);
 }
 
-void	puppet_child(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
+void	puppet_child(t_block *blck, t_exec_vars exc_vrs)
 {
 	int	*exit_value;
 
@@ -39,12 +41,14 @@ void	puppet_child(t_block *blck, t_minishell *ms_params, t_exec_vars exc_vrs)
 	blck->cmd.pid = fork();
 	if (!blck->cmd.pid)
 	{
+		signal(SIGINT, SIG_DFL);
+		my_close(g_ms_params.input_fd, -2);
 		my_close(blck->io_tab[0], blck->io_tab[1]);
-		free_children(&ms_params->children);
+		free_children(&g_ms_params.children);
 		if (blck->pipe_next)
 			my_close(blck->pipe_next->io_tab[0], -2);
 		free_exec_vars(exc_vrs);
-		exit_ms(*ms_params, *exit_value, "puppet_child");
+		exit_ms(*exit_value, "puppet_child");
 	}
 }
 
@@ -67,20 +71,20 @@ bool	cd_implicit(char ***argv, t_exec_vars *vars)
 	return (true);
 }
 
-void	launch_cmd(t_block *block, t_minishell *ms_params)
+void	launch_cmd(t_block *block)
 {
 	t_exec_vars	vars;
 
-	vars = init_exec_vars(*ms_params, block);
+	vars = init_exec_vars(block);
 	if (is_builtin(vars.argv[0]) || cd_implicit(&vars.argv, &vars))
-		exec_builtin(block, ms_params, vars);
+		exec_builtin(block, vars);
 	else
 		block->cmd.pid = fork();
 	if (errno)
 		return ;
 	if (block->cmd.pid == 0 && !is_builtin(vars.argv[0]) && !errno)
-		child_worker(block, ms_params, vars);
+		child_worker(block, vars);
 	else if (is_builtin(vars.argv[0]) && !errno)
-		puppet_child(block, ms_params, vars);
+		puppet_child(block, vars);
 	free_exec_vars(vars);
 }

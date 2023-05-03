@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 19:53:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 10:08:19 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,25 @@ bool	is_builtin(char *str)
 	return (false);
 }
 
-void	launch_builtins(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2])
+void	launch_builtins(t_exec_vars vars, t_fd fd[2])
 {
 	char	*str;
 
 	str = vars.argv[0];
 	if (!ft_strcmp(str, "env"))
-		env(ms_params->envp, fd[1]);
+		env(g_ms_params.envp, fd[1]);
 	else if (!ft_strcmp(str, "pwd"))
 		pwd(fd[1]);
 	else if (!ft_strcmp(str, "unset"))
-		unset(&ms_params->envp, &vars.argv[1]);
+		unset(&g_ms_params.envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "export"))
-		export(ms_params, &vars.argv[1], 0, fd[1]);
+		export(&vars.argv[1], 0, fd[1]);
 	else if (!ft_strcmp(str, "cd"))
-		cd(ms_params, &vars.argv[1], fd[1]);
+		cd(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "echo"))
 		ms_echo(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "exit"))
-		ms_exit_builtin(ms_params, vars, fd);
+		ms_exit_builtin(vars, fd);
 }
 
 int	is_pipe(int fd)
@@ -79,7 +79,7 @@ void	my_close(t_fd a, t_fd b)
 		close(b);
 }
 
-void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
+void	exec_builtin(t_block *block, t_exec_vars vars)
 {
 	pid_t	pid;
 
@@ -90,20 +90,22 @@ void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars)
 			return ;
 		if (!pid)
 		{
-			free_children(&ms_params->children);
-			launch_builtins(ms_params, vars, block->io_tab);
+			signal(SIGINT, SIG_DFL);
+			my_close(g_ms_params.input_fd, -2);
+			free_children(&g_ms_params.children);
+			launch_builtins(vars, block->io_tab);
 			my_close(block->io_tab[0], block->io_tab[1]);
 			if (block->pipe_next)
 				my_close(block->pipe_next->io_tab[0], -2);
 			free_exec_vars(vars);
-			exit_ms(*ms_params, block->cmd.exit_value, "builtin fork");
+			exit_ms(block->cmd.exit_value, "builtin fork");
 		}
 		block->cmd.pid = pid;
 	}
 	else
-		launch_builtins(ms_params, vars, block->io_tab);
-	block->cmd.exit_value = ms_params->last_exit_code;
-	free(find_env_var(ms_params->envp, "?")->var_value);
-	find_env_var(ms_params->envp, "?")->var_value \
+		launch_builtins(vars, block->io_tab);
+	block->cmd.exit_value = g_ms_params.last_exit_code;
+	free(find_env_var(g_ms_params.envp, "?")->var_value);
+	find_env_var(g_ms_params.envp, "?")->var_value \
 	= ft_itoa(extract_exit_code(block->cmd.exit_value));
 }

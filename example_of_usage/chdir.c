@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chdir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 16:32:50 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/25 19:55:55 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:27:57 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	pwd(void)
 
 int	main(void)
 {
-	chdir("..");
+	pwd();
+	// chdir("..");
 	// char *str = "/bin/ls";
 	// char *cmd[2];
 	// cmd[0] = str;

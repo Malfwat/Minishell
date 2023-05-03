@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 00:58:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/03 07:11:11 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdbool.h>
 # include <ms_define.h>
 # include <errno.h>
+# include <signal.h>
 
 // init_t_block.c
 
@@ -28,8 +29,8 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 // built_in/
 
 void		pwd(t_fd fd);
-void		cd(t_minishell *ms_params, char **tab, t_fd);
-void		ms_exit_builtin(t_minishell *ms_params, t_exec_vars vars, t_fd fd[2]);
+void		cd(char **tab, t_fd);
+void		ms_exit_builtin(t_exec_vars vars, t_fd fd[2]);
 void		ms_echo(char **tab, t_fd fd);
 
 // manage_io_params.c
@@ -38,7 +39,7 @@ void		ft_add_io(t_block *block, t_s_arg *io);
 t_redirect	*new_redirect(t_s_arg *arg, int mode);
 t_redirect	*last_redirect(t_redirect *head);
 void		ft_add_redirect(t_redirect **head, t_s_arg *arg, int mode);
-int			hd_manager(t_block *block);
+// int			hd_manager(t_block *block);
 
 // manage_cmd_args.c
 
@@ -56,7 +57,7 @@ void		free_t_args(t_args *ptr);
 
 // free_struct_1.c
 
-void		free_ms_params(t_minishell ms_params);
+void		free_ms_params();
 void		free_env_lst(t_env *envp_lst);
 void		free_prompt_params(t_prompt *lst);
 
@@ -66,7 +67,7 @@ bool		toggle_control_character(int control_character, int mode);
 bool		save_terminal_params(t_minishell *ms_params);
 bool		restore_terminal_params(struct termios saved_term, \
 t_fd stdin_fileno);
-void		exit_ms(t_minishell ms_params, int exitv, char *context);
+void		exit_ms(int exitv, char *context);
 void		ms_perror(char *program, char *subname, char *error);
 
 // exec 
@@ -74,8 +75,7 @@ void		ms_perror(char *program, char *subname, char *error);
 void		free_children(t_pids **children);
 bool		store_pid(pid_t pid, t_pids **nursery);
 void		infanticides(t_pids *preys);
-int			wait_children(t_minishell *ms_params);
-int			execute_commands(t_block *block, t_minishell *ms_params);
+int			execute_commands(t_block *block);
 
 int			extract_exit_code(int status);
 
@@ -89,6 +89,7 @@ char    	*replace_dollars_var(char *res, t_env *envp, char *var);
 void		update_t_args(t_args **args);
 
 void		handler_func(int num);
+void		handler_hd_close(int num);
 
 //   init_t_args.c
 
@@ -120,7 +121,7 @@ int			input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
 t_env *envp);
 int			output_manager(t_redirect *ptr, t_fd *fd, t_env *envp);
 int			hd_manager(t_block *block);
-int			heredoc(char *limiter);
+// int			heredoc(char *limiter, t_fd fd);
 
 // wildcard
 
@@ -133,16 +134,18 @@ void		ft_add_t_args(t_args **head, char *str);
 // init_shell.c
 
 void		ensure_prompt_position(void);
-void		init_prompt(t_minishell *ms_params, char **user_input);
+t_fd		init_prompt(void);
 bool		init_minishell(t_minishell *ms_params, int ac, char **av, char **envp);
 int			get_cursor_position(void);
 
 
 bool	is_builtin(char *str);
-void	exec_builtin(t_block *block, t_minishell *ms_params, t_exec_vars vars);
+void	exec_builtin(t_block *block, t_exec_vars vars);
 
 void	my_close(t_fd a, t_fd b);
 void	print_usage(void);
+void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl);
+void	update_quotes(char *str, char **quotes);
 
 
 #endif /* MINISHELL_H */
