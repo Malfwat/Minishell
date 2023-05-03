@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 07:42:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 22:06:33 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <history.h>
 #include <fcntl.h>
+#include <exec_ms.h>
 #include <sys/types.h>
 #include <ncurses.h>
 #include <unistd.h>
@@ -84,8 +85,8 @@ void	ensure_prompt_position(void)
 void	handler_readline(int num)
 {
 	(void)num;
-	my_close(g_ms_params.readline_pipe[1], -2);
 	errno = 0;
+	my_close(g_ms_params.readline_pipe[1], -2);
 	write(g_ms_params.stdin_fileno, "\n", 1);
 	free(g_ms_params.ms_prompt);
 	g_ms_params.ms_prompt = NULL;
@@ -97,73 +98,55 @@ void	do_nothing(int num)
 	(void)num;
 }
 
-char	*check_for_quotes(char *str, char *quotes)
+char	*check_for_quotes(char *str, char *quote)
 {
-	char	*single_quote;
-	char	*double_quote;
-	char	*tmp;
+	char	*closing_quote;
+	char	*quote_found;
 
 	if (!str || !*str)
-		return (quotes);
-	single_quote = ft_strchr(str, '\'');
-	if (quotes && single_quote && *single_quote == *quotes)
+		return (quote);
+	quote_found = ft_strchr_set(str, "'\"");
+	if (quote && quote_found && *quote_found == *quote)
+		return (check_for_quotes(quote + 1, NULL));
+	else if (quote_found && !quote)
 	{
-		quotes[0] = 0;
-		if (single_quote[1])
-			return (check_for_quotes(single_quote + 1, quotes));
-		return (NULL);
+		closing_quote = ft_strchr(quote_found + 1, *quote_found);
+		if (closing_quote)
+			return (check_for_quotes(closing_quote + 1, NULL));
+		return (quote_found);
 	}
-	double_quote = ft_strchr(str, '\"');
-	if (quotes && double_quote && *double_quote == *quotes)
-	{
-		quotes[0] = 0;
-		if (double_quote[1])
-			return (check_for_quotes(double_quote + 1, quotes));
-		return (NULL);
-	}
-	if (single_quote && (single_quote < double_quote || !double_quote))
-	{
-		tmp = ft_strchr(single_quote + 1, *single_quote);
-		if (tmp && tmp[1])
-			return (check_for_quotes(tmp + 1, quotes));
-		return (single_quote);
-	}
-	else if (double_quote && (single_quote > double_quote || !single_quote))
-	{
-		tmp = ft_strchr(double_quote + 1, *double_quote);
-		if (tmp && tmp[1])
-			return (check_for_quotes(tmp + 1, quotes));
-		return (double_quote);
-	}
-	return (quotes);
+	return (quote);
 }
 
 void	update_quotes(char *str, char **quotes)
 {
-	char	*tmp;
+	// char	*tmp;
 	
-	if (!*quotes || !**quotes)
-	{
+	// if (!*quotes || !**quotes)
+	// {
+	// 	*quotes = check_for_quotes(str, *quotes);
+	// 	return ;
+	// }
+	// tmp = ft_strchr(str, **quotes);
+	// if (tmp)
+	// {
 		*quotes = check_for_quotes(str, *quotes);
-		return ;
-	}
-	tmp = ft_strchr(str, **quotes);
-	if (tmp)
-	{
-		*quotes = check_for_quotes(tmp, *quotes);
-	}
+	// }
 }
 
-void	ms_readline(char *tmp, char *quotes)
+void	ms_readline(char *tmp, char *quote)
 {
 	char	c[2];
+	bool	erase_backslash;
 	
 	ft_bzero(c, 2);
+	erase_backslash = 0;
 	if (tmp)
 	{
-		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp) \
-		- ((ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\')));
-		if ((!*tmp && quotes) || (tmp && tmp[ft_strlen(tmp) - 1] == '"'))
+		if ((ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\') && !quote)
+			erase_backslash = 1;
+		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp) - erase_backslash);
+		if (quote)
 			write(g_ms_params.readline_pipe[1], "\n", 1);
 	}
 	else
@@ -172,12 +155,14 @@ void	ms_readline(char *tmp, char *quotes)
 		my_close(g_ms_params.readline_pipe[1], -2);
 		return (errno = 0, exit_ms(1, "ms_readline"));
 	}
-	if ((!quotes || !*quotes) && tmp[ft_strlen(tmp) - 1] != '\\')
+	if (!quote && tmp[ft_strlen(tmp) - 1] != '\\')
 		return (free(tmp));
-	if (quotes)
-		c[0] = *quotes;
+	if (quote)
+		c[0] = *quote;
 	free(tmp);
 	tmp = readline("> ");
+	if (errno == EINTR)
+		errno = 0;
 	if (!tmp)
 	{
 		ms_perror("minishell", "unexpected EOF while looking for matching", c);
@@ -185,9 +170,9 @@ void	ms_readline(char *tmp, char *quotes)
 		my_close(g_ms_params.readline_pipe[1], -2);
 		return (errno = 0, exit_ms(2, "ms_readline"));
 	}
-	quotes = (char *)&c[0];
-	update_quotes(tmp, &quotes);
-	return (ms_readline(tmp, quotes));
+	quote = (char *)&c[0];
+	update_quotes(tmp, &quote);
+	return (ms_readline(tmp, quote));
 }
 
 void	readline_child(void)
@@ -195,16 +180,21 @@ void	readline_child(void)
 	char				*tmp;
 	char				*quotes;
 	
+	my_close(g_ms_params.readline_pipe[0], -2);
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, \
 		g_ms_params.last_exit_code))
+	{
+		my_close(g_ms_params.readline_pipe[1], -2);
 		exit_ms(0, "prompt1");
+	}
 	ensure_prompt_position();
 	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	free_prompt_params(&g_ms_params.prompt_params);
 	quotes = NULL;
 	signal(SIGINT, handler_readline);
-	my_close(g_ms_params.readline_pipe[0], -2);
 	tmp = readline(g_ms_params.ms_prompt);
+	if (errno == EINTR)
+		errno = 0;
 	if (tmp)
 	{
 		quotes = check_for_quotes(tmp, quotes);
@@ -223,15 +213,13 @@ t_fd	init_prompt(void)
 	int					status;
 	int					exit_value;
 
-	if (errno || pipe(g_ms_params.readline_pipe))
-		exit_ms(0, "prompt2");
+	if (pipe(g_ms_params.readline_pipe))
+		exit_ms(0, "prompt pipe");
 	g_ms_params.readline_pid = fork();
 	if (!g_ms_params.readline_pid)
 		readline_child();
 	waitpid(g_ms_params.readline_pid, &status, 0);
 	exit_value = extract_exit_code(status);
-	free(find_env_var(g_ms_params.envp, "?")->var_value);
-	find_env_var(g_ms_params.envp, "?")->var_value = ft_itoa(exit_value);
 	if (exit_value || errno)
 	{
 		g_ms_params.last_exit_code = status;

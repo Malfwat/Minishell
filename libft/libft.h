@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 05:28:13 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 23:25:31 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/03 20:45:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int		ft_strcasecmp(const char *s1, const char *s2);
 size_t	ft_strlen(const char *s);
 int		ft_strslen(char **strs);
 char	*ft_strchr(const char *s, int c);
+char	*ft_strchr_set(const char *s, char *set);
 char	*ft_strnchr(const char *s, size_t count, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strchrnul(const char *s, int c);

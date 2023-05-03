@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/03 17:35:55 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/03 21:50:53 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ EXECUTION			=	execute_cmd.c			\
 						execute_utils_1.c		\
 						execute_utils_2.c		\
 						execute_built_ins.c		\
+						set_env_exit_var.c		\
 						children_functions.c	\
 						init_exec_vars_io.c		\
 						meta_char.c	

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:02:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 22:00:17 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ void	wait_before_next_pipe_line(t_block *block)
 	if (block->cmd.pid && waitpid(block->cmd.pid, \
 	&block->cmd.exit_value, 0) == -1)
 		exit_ms(2, "waitpid");
+	set_env_exit_var(block->cmd.exit_value);
 	g_ms_params.last_exit_code = block->cmd.exit_value;
-	free(find_env_var(g_ms_params.envp, "?")->var_value);
-	find_env_var(g_ms_params.envp, "?")->var_value \
-	= ft_itoa(block->cmd.exit_value);
 }
 
 void	execute_t_block_cmd(t_block *block)

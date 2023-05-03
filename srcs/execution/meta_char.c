@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_char.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:55:44 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 21:47:26 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,19 @@ void	update_t_args(t_args **args)
 char	*replace_dollars_var(char *res, t_env *envp, char *var)
 {
 	t_env	*env_var;
+	char	*dollar_var;
+	char	*tmp;
 
-	env_var = find_env_var(envp, var);
+	tmp = ft_strchrnul(var, '\'');
+	dollar_var = ft_substr(var, 0, tmp - var);
+	env_var = find_env_var(envp, dollar_var);
 	if (!env_var)
 		res = ft_strjoin(res, "");
 	else
-		res = ft_strjoin(res, env_var->var_value);
+	{
+		res = ft_strsjoin(3, res, env_var->var_value, tmp);
+	}
+	free(dollar_var);
 	return (res);
 }
 
