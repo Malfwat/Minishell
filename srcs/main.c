@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/03 07:43:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 22:10:42 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ bool	is_line_empty(char *u_in)
 {
 	if (!*(u_in + pass_whitespaces(u_in)))
 	{
-		free(find_env_var(g_ms_params.envp, "?")->var_value);
-		find_env_var(g_ms_params.envp, "?")->var_value = ft_strdup("0");
+		set_env_exit_var(0);
 		g_ms_params.last_exit_code = 0;
 		return (true);
 	}
@@ -84,14 +83,16 @@ void	flag_case(char **av)
 	free_children(&g_ms_params.children);
 	flood_free(g_ms_params.head);
 	g_ms_params.head = (t_block *){0};
-	if (g_ms_params.flags & C_FLAG)
-		exit_ms(extract_exit_code(g_ms_params.last_exit_code), "main_exit(-c)");
+	exit_ms(extract_exit_code(g_ms_params.last_exit_code), "main_exit(-c)");
 }
 
 bool	is_valid_cmd_line(char *u_in)
 {
 	if (!u_in || is_line_empty(u_in))
+	{
+		set_env_exit_var(0);
 		return (free(u_in), false);
+	}
 	ms_add_history(u_in);
 	if (!parse_user_input(u_in))
 		return (false);
@@ -102,11 +103,11 @@ bool	init_and_parse_input(char **av)
 {
 
 	if (g_ms_params.flags & C_FLAG)
-		return (flag_case(av), true);
+		flag_case(av);
 	else
 	{
 		g_ms_params.input_fd = init_prompt();
-		if (g_ms_params.input_fd < 3)
+		if (g_ms_params.input_fd == -1)
 			return (false);	
 	}
 	return (true);
@@ -127,14 +128,10 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 		len = ft_strlen(*user_input);
 	quotes = NULL;
 	update_quotes(*user_input, &quotes);
-	while (*user_input && ((len >= 2 && (*user_input)[len - 1] == '\n' \
-		&& (*user_input)[len - 2] == '\\') || quotes))
+	// while (*user_input && ((len >= 2 && (*user_input)[len - 1] == '\n' \
+		// && (*user_input)[len - 2] == '\\') || quotes))
+	while (*user_input && quotes)
 	{
-		if (len > 2 && (*user_input)[len - 2] == '\\')
-		{
-			(*user_input)[len - 1] = 0;
-			(*user_input)[len - 2] = 0;
-		}
 		len = ft_strlen(*user_input);
 		if (quotes)
 			c[0] = *quotes;
@@ -147,9 +144,11 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 		if (*user_input)
 			len = ft_strlen(*user_input);
 		quotes = c;
-		update_quotes(*user_input, &quotes);
+		update_quotes(following_part, &quotes);
 		free(following_part);
 	}
+	if (errno)
+		exit_ms(2, "ms_gnl");
 	if (*user_input)
 		len = ft_strlen(*user_input);
 	if (!conserve_nl && *user_input && (*user_input)[len - 1] == '\n')
@@ -184,6 +183,8 @@ int	main(int ac, char **av, char **envp)
 				break ;
 		}
 		close(g_ms_params.input_fd);
+		if (errno)
+			exit_ms(2, "");
 	}
 	return (1);
 }

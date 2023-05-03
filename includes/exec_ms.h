@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_ms.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 08:49:09 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 21:56:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ void		check_for_color(t_args **head);
 bool		is_colorable(char *str);
 
 int			t_arg_lst_len(t_args *head);
+void		set_env_exit_var(int value);
 
 #endif /* EXEC_MS_H */

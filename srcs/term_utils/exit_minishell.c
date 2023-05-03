@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/02 02:38:16 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 22:19:25 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ void	ms_perror(char *program, char *subname, char *error)
 	}
 	if (subname)
 	{
-		ft_putstr_fd(subname, 2);
+		while (*subname)
+		{
+			if (*subname == '\n')
+				ft_putstr_fd("\\n", 2);
+			else
+				ft_putchar_fd(*subname, 2);
+			subname++;
+		}
 		ft_putstr_fd(": ", 2);
 	}
 	ft_putendl_fd(error, 2);
