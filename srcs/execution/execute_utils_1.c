@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:13:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:15:09 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 17:49:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	interpret_dollars_test(t_s_arg *arg, t_env *envp, char ***new)
 	tab = ft_split(arg->str, '$');
 	if (!tab)
 		return ;
+	else if (!*tab)
+		return (*new = ft_split(arg->str, ' '), ft_strsfree(tab));
 	i = -1;
 	res = NULL;
 	while (tab[++i] && !errno)
