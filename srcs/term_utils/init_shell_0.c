@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 06:06:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 07:42:53 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	*check_for_quotes(char *str, char *quotes)
 	if (!str || !*str)
 		return (quotes);
 	single_quote = ft_strchr(str, '\'');
-	if (single_quote && *single_quote == *quotes)
+	if (quotes && single_quote && *single_quote == *quotes)
 	{
 		quotes[0] = 0;
 		if (single_quote[1])
@@ -114,7 +114,7 @@ char	*check_for_quotes(char *str, char *quotes)
 		return (NULL);
 	}
 	double_quote = ft_strchr(str, '\"');
-	if (double_quote && *double_quote == *quotes)
+	if (quotes && double_quote && *double_quote == *quotes)
 	{
 		quotes[0] = 0;
 		if (double_quote[1])
@@ -161,20 +161,19 @@ void	ms_readline(char *tmp, char *quotes)
 	ft_bzero(c, 2);
 	if (tmp)
 	{
-		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
-		if (!*tmp && quotes)
+		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp) \
+		- ((ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\')));
+		if ((!*tmp && quotes) || (tmp && tmp[ft_strlen(tmp) - 1] == '"'))
 			write(g_ms_params.readline_pipe[1], "\n", 1);
 	}
 	else
 	{
 		write(g_ms_params.stdin_fileno, "exit\n", 5);
 		my_close(g_ms_params.readline_pipe[1], -2);
-		exit_ms(1, "ms_readline");
+		return (errno = 0, exit_ms(1, "ms_readline"));
 	}
 	if ((!quotes || !*quotes) && tmp[ft_strlen(tmp) - 1] != '\\')
 		return (free(tmp));
-	if (ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\')
-		write(g_ms_params.readline_pipe[1], "\b", 1);
 	if (quotes)
 		c[0] = *quotes;
 	free(tmp);
