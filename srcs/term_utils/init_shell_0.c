@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 04:53:41 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 06:06:49 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,46 +97,60 @@ void	do_nothing(int num)
 	(void)num;
 }
 
-char	*check_for_quotes(char *str)
+char	*check_for_quotes(char *str, char *quotes)
 {
 	char	*single_quote;
 	char	*double_quote;
 	char	*tmp;
 
 	if (!str || !*str)
-		return (NULL);
+		return (quotes);
 	single_quote = ft_strchr(str, '\'');
+	if (single_quote && *single_quote == *quotes)
+	{
+		quotes[0] = 0;
+		if (single_quote[1])
+			return (check_for_quotes(single_quote + 1, quotes));
+		return (NULL);
+	}
 	double_quote = ft_strchr(str, '\"');
+	if (double_quote && *double_quote == *quotes)
+	{
+		quotes[0] = 0;
+		if (double_quote[1])
+			return (check_for_quotes(double_quote + 1, quotes));
+		return (NULL);
+	}
 	if (single_quote && (single_quote < double_quote || !double_quote))
 	{
 		tmp = ft_strchr(single_quote + 1, *single_quote);
 		if (tmp && tmp[1])
-			return (check_for_quotes(tmp + 1));
+			return (check_for_quotes(tmp + 1, quotes));
 		return (single_quote);
 	}
-	else if (double_quote && (single_quote > double_quote || !single_quote) )
+	else if (double_quote && (single_quote > double_quote || !single_quote))
 	{
 		tmp = ft_strchr(double_quote + 1, *double_quote);
 		if (tmp && tmp[1])
-			return (check_for_quotes(tmp + 1));
+			return (check_for_quotes(tmp + 1, quotes));
 		return (double_quote);
 	}
-	return (NULL);
+	return (quotes);
 }
 
 void	update_quotes(char *str, char **quotes)
 {
 	char	*tmp;
 	
-	if (!*quotes)
+	if (!*quotes || !**quotes)
 	{
-		*quotes = check_for_quotes(str);
+		*quotes = check_for_quotes(str, *quotes);
 		return ;
 	}
 	tmp = ft_strchr(str, **quotes);
 	if (tmp)
 	{
-		*quotes = check_for_quotes(tmp + 1);
+		*quotes = check_for_quotes(tmp, *quotes);
 	}
 }
 
@@ -146,7 +160,11 @@ void	ms_readline(char *tmp, char *quotes)
 	
 	ft_bzero(c, 2);
 	if (tmp)
+	{
 		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp));
+		if (!*tmp && quotes)
+			write(g_ms_params.readline_pipe[1], "\n", 1);
+	}
 	else
 	{
 		write(g_ms_params.stdin_fileno, "exit\n", 5);
@@ -190,7 +208,7 @@ void	readline_child(void)
 	tmp = readline(g_ms_params.ms_prompt);
 	if (tmp)
 	{
-		quotes = check_for_quotes(tmp);
+		quotes = check_for_quotes(tmp, quotes);
 		if (quotes && quotes[1])
 			update_quotes(quotes + 1, &quotes);
 	}
