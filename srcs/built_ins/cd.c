@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 00:05:43 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/01 09:08:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	error_case(int *exit_code, char *previous_directory)
 	return ;
 }
 
-void	change_dir(t_minishell **ms_params, char *dir)
+void	change_dir(char *dir)
 {
 	char	*tmp;
 	char	*cwd;
@@ -38,17 +38,17 @@ void	change_dir(t_minishell **ms_params, char *dir)
 
 	previous_directory = getcwd(NULL, 0);
 	if (chdir(dir) == -1 || !previous_directory)
-		return (error_case(&(*ms_params)->last_exit_code, previous_directory));
-	free((*ms_params)->previous_directory);
-	(*ms_params)->previous_directory = previous_directory;
+		return (error_case(&g_ms_params.last_exit_code, previous_directory));
+	free(g_ms_params.previous_directory);
+	g_ms_params.previous_directory = previous_directory;
 	cwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", cwd);
 	if (!errno)
-		export(*ms_params, (char *[]){tmp, NULL}, 0, 1);
+		export((char *[]){tmp, NULL}, 0, 1);
 	return (free(tmp), free(cwd));
 }
 
-void	cd(t_minishell *ms_params, char **tab, t_fd fd)
+void	cd(char **tab, t_fd fd)
 {
 	char	*dir;
 
@@ -58,12 +58,12 @@ void	cd(t_minishell *ms_params, char **tab, t_fd fd)
 		dir = getenv("HOME");
 	else if (!ft_strcmp(*tab, "-"))
 	{
-		dir = ms_params->previous_directory;
+		dir = g_ms_params.previous_directory;
 		if (fd == INIT_FD_VALUE)
 			fd = 1;
-		ft_putendl_fd(ms_params->previous_directory, fd);
+		ft_putendl_fd(g_ms_params.previous_directory, fd);
 	}
 	else
 		dir = *tab;
-	change_dir(&ms_params, dir);
+	change_dir(dir);
 }

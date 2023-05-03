@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/28 01:16:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 09:28:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stdbool.h>
 # include <sys/types.h>
+# include <signal.h>
 # include <termios.h>
 # include <unistd.h>
 
@@ -118,10 +119,22 @@ typedef struct s_exec_vars
 	char					*cd_implicit;
 }							t_exec_vars;
 
+typedef struct	s_heredoc_vars
+{
+	char		*str;
+	char		*limiter;
+}	t_hd_vars;
+
 typedef struct s_minishell
 {
 	int						last_exit_code;
+	pid_t					heredoc_pid;
+	pid_t					readline_pid;
+	t_fd					heredoc_pipe[2];
+	t_fd					readline_pipe[2];
+	t_fd					input_fd;
 	char					*prev_line;
+	char					*ms_prompt;
 	char					*previous_directory;
 	t_prompt				prompt_params;
 	t_env					*envp;
@@ -130,7 +143,9 @@ typedef struct s_minishell
 	t_fd					history_fd;
 	t_fd					stdin_fileno;
 	t_flags					flags;
+	t_hd_vars				hd_vars;
 	struct termios			saved_params;
 }							t_minishell;
 
 #endif
+
