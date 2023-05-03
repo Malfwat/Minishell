@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/02 23:14:02 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 04:53:41 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	ms_readline(char *tmp, char *quotes)
 		ms_perror("minishell", "unexpected EOF while looking for matching", c);
 		ms_perror("minishell", "syntax error", "unexpected end of file");
 		my_close(g_ms_params.readline_pipe[1], -2);
-		return (exit_ms(2, "ms_readline"));
+		return (errno = 0, exit_ms(2, "ms_readline"));
 	}
 	quotes = (char *)&c[0];
 	update_quotes(tmp, &quotes);
