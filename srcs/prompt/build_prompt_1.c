@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_prompt_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/01 09:27:18 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,11 @@ char	*build_prompt(t_prompt *params, bool side)
 	char			*prompt;
 
 	errno = 0;
+	(void)side;
 	pargs = NULL;
-	if (side == P_HEADER)
+	// if (side == P_HEADER)
 		build_upper_prompt(params, &pargs);
-	else if (side == P_FOOTER)
+	// else if (side == P_FOOTER)
 		build_prompt_user(&pargs, params);
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 03:07:36 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 23:45:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/03 05:16:26 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,3 +74,4 @@ t_args	*array_to_t_args(char **tab)
 	}
 	return (new);
 }
+
