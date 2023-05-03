@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/02 02:38:11 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 06:37:49 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,58 @@ void	handler_hd_close(int num)
 	exit_ms(2, "handler_close");
 }
 
+void	ms_hd_gnl(t_fd fd, char **user_input)
+{
+	char	*following_part;
+	int		len;
+	char	*tmp;
+
+	get_next_line(fd, user_input);
+	len = 0;
+	if (*user_input)
+	{
+		len = ft_strlen(*user_input);
+		
+	}
+	while (*user_input && len >= 2 && (*user_input)[len - 1] == '\n' \
+		&& (*user_input)[len - 2] == '\\')
+	{
+		(*user_input)[len - 1] = 0;
+		len = ft_strlen(*user_input);
+		(*user_input)[len - 1] = 0;
+		write(g_ms_params.stdin_fileno, "> ", 2);
+		get_next_line(fd, &following_part);
+		if (!following_part)
+		{
+			*user_input = ft_strjoin(*user_input, "\n");
+			write(g_ms_params.stdin_fileno, "\n", 1);
+		}
+		else
+		{
+			tmp = *user_input;
+			*user_input = ft_strjoin(*user_input, following_part);
+			free(tmp);
+		}
+		if (*user_input)
+			len = ft_strlen(*user_input);
+		free(following_part);
+	}
+}
+
 void	heredoc_child(char *limiter, int *tube)
 {
 	t_fd	dev_null;
 	
 	my_close(g_ms_params.input_fd, -2);
 	signal(SIGINT, handler_hd_close);
-	ms_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str, true);
+	ms_hd_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str);
 	g_ms_params.hd_vars.limiter = ft_strjoin(limiter, "\n");
 	while (g_ms_params.hd_vars.str && ft_strcmp(g_ms_params.hd_vars.str, g_ms_params.hd_vars.limiter) && !errno)
 	{
 		write(tube[1], g_ms_params.hd_vars.str, ft_strlen(g_ms_params.hd_vars.str));
 		free(g_ms_params.hd_vars.str);
 		write(g_ms_params.stdin_fileno, "> ", 2);
-		ms_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str, true);
+		ms_hd_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str);
 	}
 	if (!g_ms_params.hd_vars.str)
 		print_heredoc_syntax_error(limiter);
