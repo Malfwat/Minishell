@@ -103,6 +103,11 @@ Build_test_environment
 #                                                                          #
 ############################################################################
 Test "echo test"
+Test "echo $"
+Test "echo $?"
+Test "echo \"'$TERM'\""
+Test "echo '\"$TERM\"'"
+Test "echo $ PATH"
 Test "inexistant_command"
 Test "echo *"
 Test "echo libft/ft_strchr.*"
