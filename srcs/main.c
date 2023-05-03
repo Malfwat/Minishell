@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/01 20:07:00 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 07:43:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,39 +116,42 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 {
 	char	*following_part;
 	int		len;
+	char	c[2];
 	char	*tmp;
+	char	*quotes;
 
+	ft_bzero(c, 2);
 	get_next_line(fd, user_input);
 	len = 0;
 	if (*user_input)
-	{
 		len = ft_strlen(*user_input);
-		
-	}
-	while (*user_input && len >= 2 && (*user_input)[len - 1] == '\n' \
-		&& (*user_input)[len - 2] == '\\')
+	quotes = NULL;
+	update_quotes(*user_input, &quotes);
+	while (*user_input && ((len >= 2 && (*user_input)[len - 1] == '\n' \
+		&& (*user_input)[len - 2] == '\\') || quotes))
 	{
-		(*user_input)[len - 1] = 0;
+		if (len > 2 && (*user_input)[len - 2] == '\\')
+		{
+			(*user_input)[len - 1] = 0;
+			(*user_input)[len - 2] = 0;
+		}
 		len = ft_strlen(*user_input);
-		(*user_input)[len - 1] = 0;
-		if (fd == g_ms_params.stdin_fileno)
-			write(g_ms_params.stdin_fileno, "> ", 2);
+		if (quotes)
+			c[0] = *quotes;
 		get_next_line(fd, &following_part);
 		if (!following_part)
-		{
-			*user_input = ft_strjoin(*user_input, "\n");
-			write(g_ms_params.stdin_fileno, "\n", 1);
-		}
-		else
-		{
-			tmp = *user_input;
-			*user_input = ft_strjoin(*user_input, following_part);
-			free(tmp);
-		}
+			break ;
+		tmp = *user_input;
+		*user_input = ft_strjoin(*user_input, following_part);
+		free(tmp);
 		if (*user_input)
 			len = ft_strlen(*user_input);
+		quotes = c;
+		update_quotes(*user_input, &quotes);
 		free(following_part);
 	}
+	if (*user_input)
+		len = ft_strlen(*user_input);
 	if (!conserve_nl && *user_input && (*user_input)[len - 1] == '\n')
 		(*user_input)[len - 1] = 0;
 }

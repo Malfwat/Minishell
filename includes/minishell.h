@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 20:13:52 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 07:11:11 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ void	exec_builtin(t_block *block, t_exec_vars vars);
 void	my_close(t_fd a, t_fd b);
 void	print_usage(void);
 void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl);
+void	update_quotes(char *str, char **quotes);
 
 
 #endif /* MINISHELL_H */
