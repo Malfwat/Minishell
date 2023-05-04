@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 08:34:30 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 23:13:16 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ void	ms_add_history(char *str)
 		exit_ms(1, "history");
 	free(g_ms_params.prev_line);
 	g_ms_params.prev_line = prev_line;
+	add_history(str);
+	if (fd == -1)
+		return ;
 	write(fd, str, ft_strlen(str));
 	write(fd, "\n", 1);
-	add_history(str);
 }

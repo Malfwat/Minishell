@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:08:01 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/04 02:31:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	error_case(int *exit_code, char *previous_directory)
 	return ;
 }
 
-void	change_dir(char *dir)
+bool	change_dir(char *dir)
 {
 	char	*tmp;
 	char	*cwd;
@@ -38,24 +38,30 @@ void	change_dir(char *dir)
 
 	previous_directory = getcwd(NULL, 0);
 	if (chdir(dir) == -1 || !previous_directory)
-		return (error_case(&g_ms_params.last_exit_code, previous_directory));
+		return (error_case(&g_ms_params.last_exit_code, previous_directory), false);
 	free(g_ms_params.previous_directory);
 	g_ms_params.previous_directory = previous_directory;
 	cwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", cwd);
 	if (!errno)
 		export((char *[]){tmp, NULL}, 0, 1);
-	return (free(tmp), free(cwd));
+	return (free(tmp), free(cwd), true);
 }
 
-void	cd(char **tab, t_fd fd)
+bool	cd(char **tab, t_fd fd)
 {
 	char	*dir;
+	t_env	*home;
 
 	if (tab[0] && tab[1])
-		return (ms_perror("minishell", "cd", "too many arguments"));
+		return (ms_perror("minishell", "cd", "too many arguments"), false);
 	if (!*tab)
-		dir = getenv("HOME");
+	{
+		home = find_env_var(g_ms_params.envp, "HOME");
+		if (!home)
+			return (ms_perror("minishell", "cd", "HOME not set"), false);
+		dir = home->var_value;
+	}
 	else if (!ft_strcmp(*tab, "-"))
 	{
 		dir = g_ms_params.previous_directory;
@@ -65,5 +71,5 @@ void	cd(char **tab, t_fd fd)
 	}
 	else
 		dir = *tab;
-	change_dir(dir);
+	return (change_dir(dir));
 }

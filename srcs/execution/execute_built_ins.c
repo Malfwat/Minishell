@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/03 22:12:07 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/04 02:06:51 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,27 @@ bool	is_builtin(char *str)
 void	launch_builtins(t_exec_vars vars, t_fd fd[2])
 {
 	char	*str;
+	int		exit_value;
 
 	str = vars.argv[0];
+	exit_value = 0;
 	if (!ft_strcmp(str, "env"))
-		env(g_ms_params.envp, fd[1]);
+		exit_value = env(g_ms_params.envp, fd[1]);
 	else if (!ft_strcmp(str, "pwd"))
-		pwd(fd[1]);
+		exit_value = pwd(fd[1]);
 	else if (!ft_strcmp(str, "unset"))
-		unset(&g_ms_params.envp, &vars.argv[1]);
+		exit_value = unset(&g_ms_params.envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "export"))
-		export(&vars.argv[1], 0, fd[1]);
+		exit_value = export(&vars.argv[1], 0, fd[1]);
 	else if (!ft_strcmp(str, "cd"))
-		cd(&vars.argv[1], fd[1]);
+		exit_value = cd(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "echo"))
-		ms_echo(&vars.argv[1], fd[1]);
+		exit_value = ms_echo(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "exit"))
-		ms_exit_builtin(vars, fd);
+		exit_value = ms_exit_builtin(vars, fd);
+	else
+		return ;
+	g_ms_params.last_exit_code = !exit_value;
 }
 
 int	is_pipe(int fd)
@@ -83,7 +88,8 @@ void	exec_builtin(t_block *block, t_exec_vars vars)
 {
 	pid_t	pid;
 
-	if (is_pipe(block->io_tab[0]) > 0 || is_pipe(block->io_tab[1]) > 0)
+	if ((is_pipe(block->io_tab[0]) > 0 || is_pipe(block->io_tab[1]) > 0) \
+		&& ft_strcmp(block->cmd.args->final_arg, "exit"))
 	{
 		pid = fork();
 		if (pid == -1)

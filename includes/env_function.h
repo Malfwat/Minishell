@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_function.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 08:58:26 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/04 01:24:24 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ bool	add_env_var(t_env **head, char *name, char *value, bool temp);
 
 // export_unset.c
 
-void	export(char **tab, bool temp, t_fd fd);
-void	unset(t_env **head, char **tab);
-void	env(t_env *lst, t_fd fd);
+bool	export(char **tab, bool temp, t_fd fd);
+bool	unset(t_env **head, char **tab);
+bool	env(t_env *lst, t_fd fd);
 
 // manage_env_var.c
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 18:31:16 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 23:44:07 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@
 char	**build_path(void)
 {
 	char	**path;
+	t_env	*path_env_var;
 
-	path = ft_split(find_env_var(g_ms_params.envp, "PATH")->var_value, ':');
+	path = NULL;
+	path_env_var = find_env_var(g_ms_params.envp, "PATH");
+	if (path_env_var)
+		path = ft_split(path_env_var->var_value, ':');
 	if (errno)
 		exit_ms(2, "exec_build");
 	return (path);

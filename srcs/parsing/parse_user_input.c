@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_user_input.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 00:54:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/01 19:09:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 22:55:25 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <minishell.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <stdio.h>
 #include <parsing_ms.h>
 
 bool	parse_user_input(char *user_input)
@@ -22,6 +23,8 @@ bool	parse_user_input(char *user_input)
 	t_block		*head;
 
 	head = new_block();
+	if (!*user_input)
+		return (true);
 	if (parse_cmds(&head, user_input) == false)
 	{
 		g_ms_params.last_exit_code = SET_EXIT_CODE(2);

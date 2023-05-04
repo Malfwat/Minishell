@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 07:11:11 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/04 00:09:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 
 // built_in/
 
-void		pwd(t_fd fd);
-void		cd(char **tab, t_fd);
-void		ms_exit_builtin(t_exec_vars vars, t_fd fd[2]);
-void		ms_echo(char **tab, t_fd fd);
+bool		pwd(t_fd fd);
+bool		cd(char **tab, t_fd);
+bool		ms_exit_builtin(t_exec_vars vars, t_fd fd[2]);
+bool		ms_echo(char **tab, t_fd fd);
 
 // manage_io_params.c
 
