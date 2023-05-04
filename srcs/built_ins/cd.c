@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 02:31:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 00:15:13 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ bool	change_dir(char *dir)
 	cwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", cwd);
 	if (!errno)
+	{
 		export((char *[]){tmp, NULL}, 0, 1);
+		change_env_var_value("OLDPWD", ft_strdup(previous_directory));
+	}
 	return (free(tmp), free(cwd), true);
 }
 
@@ -65,6 +68,8 @@ bool	cd(char **tab, t_fd fd)
 	else if (!ft_strcmp(*tab, "-"))
 	{
 		dir = g_ms_params.previous_directory;
+		if (!dir)
+			return (ms_perror("minishell", "cd", "OLDPWD not set"), false);
 		if (fd == INIT_FD_VALUE)
 			fd = 1;
 		ft_putendl_fd(g_ms_params.previous_directory, fd);

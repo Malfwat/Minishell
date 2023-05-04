@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 00:57:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 00:15:06 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,11 @@ bool	unset(t_env **head, char **tab)
 		to_pop = find_env_var(*head, tab[i]);
 		if (!to_pop)
 			continue ;
+		if (to_pop == find_env_var(g_ms_params.envp, "OLDPWD"))
+		{
+			free(g_ms_params.previous_directory);
+			g_ms_params.previous_directory = NULL;
+		}
 		if (to_pop->prev)
 			to_pop->prev->next = to_pop->next;
 		if (to_pop->next)
