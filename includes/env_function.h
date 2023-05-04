@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_function.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 01:24:24 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 00:13:58 by amouflet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ void	swap_env_node(t_env **lst, t_env *a, t_env *b);
 t_env	*sort_env(t_env *lst);
 t_env	*cpy_t_env(t_env *lst);
 bool	add_update_env_var(char *name, bool temp, char *s);
+void	change_env_var_value(char *name, char *value);
 
 #endif /* ENV_FUNCTION_C */
