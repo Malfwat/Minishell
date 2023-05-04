@@ -30,6 +30,7 @@ SRCS =	get_next_line/get_next_line.c \
 	ft_strchr_set.c \
 	ft_strchr.c \
 	ft_strchrnul.c \
+	ft_strchrnul_set.c \
 	ft_strschr_here.c \
 	ft_strs_expand.c \
 	ft_intchr.c \
