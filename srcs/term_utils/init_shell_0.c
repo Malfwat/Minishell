@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 22:06:33 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/04 02:06:18 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,13 +247,12 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 		return (perror("minishell"), false);
 	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
-		tgetent(0, getenv("TERM"));
+		if (tgetent(0, getenv("TERM")) == -1)
+			return (ms_perror("minishell", "tgetent", "couldn't load termcaps"), false);
 		save_terminal_params(&g_ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
 		signal(SIGINT, &do_nothing);
 		g_ms_params.history_fd = get_my_history();
-		if (g_ms_params.history_fd == -1)
-			return (false);
 	}
 	g_ms_params.envp = get_env(envp);
 	g_ms_params.previous_directory = getcwd(NULL, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 06:37:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/04 02:25:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	ms_hd_gnl(t_fd fd, char **user_input)
 void	heredoc_child(char *limiter, int *tube)
 {
 	t_fd	dev_null;
+	t_fd	tmp;
 	
 	my_close(g_ms_params.input_fd, -2);
 	signal(SIGINT, handler_hd_close);
@@ -99,9 +100,11 @@ void	heredoc_child(char *limiter, int *tube)
 	free(g_ms_params.hd_vars.limiter);
 	my_close(tube[1], tube[0]);
 	dev_null = open("/dev/null", O_RDWR);
-	dup2(dev_null, 0);
+	tmp = dup(g_ms_params.stdin_fileno);
+	dup2(dev_null, g_ms_params.stdin_fileno);
 	close(dev_null);
-	gnl_force_finish(1, 0);
+	gnl_force_finish(1, g_ms_params.stdin_fileno);
+	g_ms_params.stdin_fileno = tmp;
 	exit_ms(0, "heredoc");
 }
 

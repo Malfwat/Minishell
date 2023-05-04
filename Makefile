@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/03 21:50:53 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/04 02:27:11 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -198,7 +198,7 @@ $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile
 
 launch: suppr_script
 	@make all
-	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all --track-fds=yes --suppressions=$(SCRIPT_SUPPR) ./minishell
+	@valgrind --leak-check=full --track-origins=yes --quiet --show-leak-kinds=all --track-fds=yes --suppressions=$(SCRIPT_SUPPR) ./minishell
 
 clean:
 	@rm -rf $(BUILD)

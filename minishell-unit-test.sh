@@ -31,10 +31,10 @@ Test()
 {
 	((TOTAL_TESTS++))
 	cd expected_output_dir
-	bash --posix -c "$1" > output
+	env -i bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
+	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" env -i ~/42-CURSUS/Minishell/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	local VLG_OUTPUT=$(cat .vlg.out)
 	grep -E "(ERROR.*1.*suppressed.*)" .vlg.out
@@ -105,6 +105,10 @@ Build_test_environment
 Test "echo test"
 Test "echo $"
 Test "echo $?"
+Test "echo test >/dev/full"
+Test "echo test >/dev/null"
+Test "cat /dev/full"
+Test "cat /dev/null"
 Test "echo \"'$TERM'\""
 Test "echo '\"$TERM\"'"
 Test "echo $ PATH"
