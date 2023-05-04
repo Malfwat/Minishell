@@ -31,10 +31,10 @@ Test()
 {
 	((TOTAL_TESTS++))
 	cd expected_output_dir
-	env -i bash --posix -c "$1" > output
+	bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" env -i ~/42-CURSUS/Minishell/minishell -c "$1" > output
+	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	local VLG_OUTPUT=$(cat .vlg.out)
 	grep -E "(ERROR.*1.*suppressed.*)" .vlg.out
@@ -107,7 +107,7 @@ Test "echo $"
 Test "echo $?"
 Test "echo test >/dev/full"
 Test "echo test >/dev/null"
-Test "cat /dev/full"
+Test "ls > /dev/full"
 Test "cat /dev/null"
 Test "echo \"'$TERM'\""
 Test "echo '\"$TERM\"'"
@@ -137,6 +137,82 @@ Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && cat"
 Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && export b="$a" && cat"
 Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && export b='$a' && cat"
 Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" || export b="$a" && cat"
+
+Test "export bla='test' && echo \$b*a"
+Test "*"
+Test "cd *"
+Test "**"
+Test " *"
+Test "* "
+Test "* t5"
+Test "* * *"
+Test "ls **"
+Test "ls ** "
+Test "ls * *"
+Test " ls * * "
+Test "echo test"
+Test "echo $"
+Test "echo $?"
+Test "echo test >/dev/full"
+Test "echo test >/dev/null"
+Test "ls > /dev/full"
+Test "cat /dev/null"
+Test "echo \"'$TERM'\""
+Test "echo '\"$TERM\"'"
+Test "echo $ *PATH"
+Test "inexistant_command*"
+Test "echo *"
+Test "echo libft/*f*_st*chr.**"
+Test "echo test < inexistant*input"
+Test "export bla='test' && echo \$b*a"
+Test "(export bla='test' | echo \$bla) && echo \$bla"
+Test "head < /dev/null"
+Test "cd /dev/nul*"
+Test "echo /dev/f*ll"
+Test "cat /dev/null | head | grep a"
+Test "(echo test | (cat | cat | echo test | ls | export EEE=lol) | export EEE='123' | echo \$EEE)"
+Test ""
+Test "''"
+Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt* ; ls) ; ls"
+Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt* ; mkdir) ; mkdir ok"
+Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt*)"
+Test "echo '\$USER"\$PATH"'"
+Test "echo '$USER"'$PATH'"'"
+Test "echo \$USER"'$PATH'""
+Test "echo "'$PATH'""
+Test "echo '"\$PATH"'"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && cat"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && export b="$a" && cat"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" && export b='$a' && cat"
+Test "export a=\"i_pipe_1 i_pipe_2 i_pipe_3\" || export b="$a" && cat"
+
+############################################################################
+#                                                                          #
+#                                                                          #
+#                              ENV VARS TESTS                              #
+#                                                                          #
+#                                                                          #
+############################################################################
+
+Test "unset HOME"
+Test "unset PWD"
+Test "unset USER"
+Test "unset HOME USER"
+Test "unset HOME PWD"
+Test "unset PATH"
+Test "unset PATH PWD"
+Test "unset PATH PWD USER HOME"
+Test "unset PATH ; echo test"
+Test "unset PATH ; cd test"
+Test "unset PATH ; ls"
+Test "unset PATH ; echo test"
+Test "(cd .. ; unset PWD ; pwd)"
+Test "unset HOME ; cd"
+Test "unset PWD HOME OLDPWD ; cd -"
+Test "unset PWD HOME OLDPWD ; cd .."
+Test "unset PWD HOME OLDPWD ; cd"
+Test "unset PWD HOME OLDPWD ; cd *"
+
 ############################################################################
 #                                                                          #
 #                                                                          #
