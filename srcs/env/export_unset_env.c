@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:05:21 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/04 00:57:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <minishell.h>
 
-void	print_export(t_env *lst, t_fd fd)
+bool	print_export(t_env *lst, t_fd fd)
 {
 	t_env	*cpy;
 	char	**tab;
@@ -25,8 +25,10 @@ void	print_export(t_env *lst, t_fd fd)
 
 	cpy = sort_env(lst);
 	if (!cpy)
-		return ;
+		return (false);
 	tab = build_envp(cpy);
+	if (!tab)
+		return (free_env_lst(cpy), false);
 	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
@@ -37,33 +39,39 @@ void	print_export(t_env *lst, t_fd fd)
 		ft_putstr_fd("export ", fd);
 		ft_putendl_fd(tab[i], fd);
 	}
+	ft_strsfree(tab);
+	free_env_lst(cpy);
+	return (true);
 }
 
-void	export(char **tab, bool temp, t_fd fd)
+bool	export(char **tab, bool temp, t_fd fd)
 {
 	char	*name;
 	int		i;
+	bool	exit_value;
 
 	i = -1;
+	exit_value = true;
 	if (!*tab)
 		return (print_export(g_ms_params.envp, fd));
 	while (tab && tab[++i])
 	{
 		name = get_env_name(tab[i]);
 		if (!name)
-			return ;
+			return (false);
 		if (ft_strchr(name, '?'))
 		{
 			ms_perror("minishell: export", tab[i], "not a valid identifier");
-			g_ms_params.last_exit_code = 1;
-			continue ;
+			free(name);
+			exit_value = false;
 		}
-		if (!add_update_env_var(name, temp, tab[i]))
-			return ;
+		else if (!add_update_env_var(name, temp, tab[i]))
+			return (false);
 	}
+	return (exit_value);
 }
 
-void	unset(t_env **head, char **tab)
+bool	unset(t_env **head, char **tab)
 {
 	t_env	*to_pop;
 	int		i;
@@ -71,11 +79,6 @@ void	unset(t_env **head, char **tab)
 	i = -1;
 	while (tab[++i])
 	{
-		if (ft_strchr(tab[i], '?'))
-		{
-			ms_perror("minishell: unset", tab[i], "not a valid identifier");
-			continue ;
-		}
 		to_pop = find_env_var(*head, tab[i]);
 		if (!to_pop)
 			continue ;
@@ -89,14 +92,17 @@ void	unset(t_env **head, char **tab)
 		free(to_pop->var_value);
 		free(to_pop);
 	}
+	return (true);
 }
 
-void	env(t_env *lst, t_fd fd)
+bool	env(t_env *lst, t_fd fd)
 {
 	char	**tab;
 	int		i;
 
 	tab = build_envp(lst);
+	if (errno)
+		return (false);
 	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
@@ -107,4 +113,5 @@ void	env(t_env *lst, t_fd fd)
 		ft_putendl_fd(tab[i], fd);
 	}
 	ft_strsfree(tab);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:20:41 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 19:12:01 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/04 01:10:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	check_nl_arg(char *arg)
 	return (true);
 }
 
-void	ms_echo(char **tab, t_fd fd)
+bool	ms_echo(char **tab, t_fd fd)
 {
 	int		i;
 	bool	nl;
@@ -46,7 +46,7 @@ void	ms_echo(char **tab, t_fd fd)
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
 	if (!tab)
-		return ((void)write(fd, "\n\n", 2));
+		return (write(fd, "\n\n", 2), true);
 	while (tab[i] && check_nl_arg(tab[i]))
 		i++;
 	if (i != 0)
@@ -60,6 +60,9 @@ void	ms_echo(char **tab, t_fd fd)
 	if (nl)
 		write(fd, "\n", 1);
 	if (errno)
+	{
 		ms_perror("minishell: echo", "write error", strerror(errno));
-	errno = 0;
+		return (errno = 0, false);
+	}
+	return (true);
 }
