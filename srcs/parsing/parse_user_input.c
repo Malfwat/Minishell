@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parse_user_input.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 00:54:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 01:25:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <ms_define.h>
 #include <minishell.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include <stdio.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 
 bool	parse_user_input(char *user_input)
 {

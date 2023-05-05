@@ -6,11 +6,11 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:45:02 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 23:27:19 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:17:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <prompt.h>
+#include <ms_prompt.h>
 #include <libft.h>
 #include <ms_define.h>
 

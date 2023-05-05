@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_char.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 00:50:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <minishell.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 #include <libft.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 
 void	update_t_args(t_args **args)
 {

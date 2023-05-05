@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 18:41:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <errno.h>
 #include <minishell.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 #include <ms_define.h>
 
 void	ft_add_redirect(t_redirect **head, t_s_arg *arg, int mode)

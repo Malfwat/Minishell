@@ -6,12 +6,12 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 03:42:35 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:46:00 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <ms_define.h>

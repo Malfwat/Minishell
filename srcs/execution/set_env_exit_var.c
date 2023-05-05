@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   set_env_exit_var.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 21:50:58 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 00:12:16 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ms_define.h>
-#include <struct_ms.h>
-#include <env_function.h>
+#include <ms_struct.h>
+#include <ms_env_function.h>
 #include <libft.h>
 
 void	set_env_exit_var(int value)

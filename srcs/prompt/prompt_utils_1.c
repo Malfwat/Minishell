@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:07:16 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/25 18:32:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:17:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <prompt.h>
+#include <ms_prompt.h>
 
 void	ft_memset_uni(char *dest, char *c, int len)
 {
