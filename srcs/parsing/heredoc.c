@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:19:12 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 22:43:24 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@ void	heredoc_child(char *limiter, int *tube)
 	
 	my_close(g_ms_params.input_fd, -2);
 	signal(SIGINT, handler_hd_close);
+	write(g_ms_params.stdin_fileno, "heredoc> ", 9);
 	ms_hd_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str);
 	g_ms_params.hd_vars.limiter = ft_strjoin(limiter, "\n");
 	while (g_ms_params.hd_vars.str && ft_strcmp(g_ms_params.hd_vars.str, g_ms_params.hd_vars.limiter) && !errno)
 	{
 		write(tube[1], g_ms_params.hd_vars.str, ft_strlen(g_ms_params.hd_vars.str));
 		free(g_ms_params.hd_vars.str);
-		write(g_ms_params.stdin_fileno, "> ", 2);
+		write(g_ms_params.stdin_fileno, "heredoc> ", 9);
 		ms_hd_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str);
 	}
 	if (!g_ms_params.hd_vars.str)
@@ -98,7 +99,6 @@ int	heredoc(char *limiter)
 
 	if (pipe(g_ms_params.heredoc_pipe) == -1)
 		return (-1);
-	write(g_ms_params.stdin_fileno, "> ", 2);
 	g_ms_params.heredoc_pid = fork();
 	if (!g_ms_params.heredoc_pid)
 		heredoc_child(limiter, g_ms_params.heredoc_pipe);
