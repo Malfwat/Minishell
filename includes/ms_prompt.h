@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.h                                           :+:      :+:    :+:   */
+/*   ms_prompt.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:35:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 23:45:06 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:21:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <errno.h>
 # include <minishell.h>
-# include <parsing_ms.h>
+# include <ms_parsing.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>

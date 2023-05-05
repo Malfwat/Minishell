@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 23:13:16 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:23:23 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <readline/history.h>
 #include <fcntl.h>
 #include <minishell.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <ms_define.h>
 
 int	fill_history(int fd)

@@ -6,13 +6,13 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 02:53:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-#include <env_function.h>
-#include <struct_ms.h>
+#include <ms_env_function.h>
+#include <ms_struct.h>
 
 void	ms_echo(bool nl, int nb, ...);
 

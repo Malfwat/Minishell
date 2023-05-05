@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 02:06:18 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:23:04 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <termcap.h>
-#include <prompt.h>
-#include <env_function.h>
+#include <ms_prompt.h>
+#include <ms_env_function.h>
 #include <ms_define.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <ms_signal.h>
 #include <stdlib.h>
-#include <history.h>
+#include <ms_history.h>
 #include <fcntl.h>
-#include <exec_ms.h>
+#include <ms_exec.h>
 #include <sys/types.h>
 #include <ncurses.h>
 #include <unistd.h>
@@ -82,22 +83,6 @@ void	ensure_prompt_position(void)
 		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
 }
 
-void	handler_readline(int num)
-{
-	(void)num;
-	errno = 0;
-	my_close(g_ms_params.readline_pipe[1], -2);
-	write(g_ms_params.stdin_fileno, "\n", 1);
-	free(g_ms_params.ms_prompt);
-	g_ms_params.ms_prompt = NULL;
-	exit_ms(130, "handler readline");
-}
-
-void	do_nothing(int num)
-{
-	(void)num;
-}
-
 char	*check_for_quotes(char *str, char *quote)
 {
 	char	*closing_quote;
@@ -120,18 +105,7 @@ char	*check_for_quotes(char *str, char *quote)
 
 void	update_quotes(char *str, char **quotes)
 {
-	// char	*tmp;
-	
-	// if (!*quotes || !**quotes)
-	// {
-	// 	*quotes = check_for_quotes(str, *quotes);
-	// 	return ;
-	// }
-	// tmp = ft_strchr(str, **quotes);
-	// if (tmp)
-	// {
-		*quotes = check_for_quotes(str, *quotes);
-	// }
+	*quotes = check_for_quotes(str, *quotes);
 }
 
 void	ms_readline(char *tmp, char *quote)

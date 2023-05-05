@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 01:57:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_DEFINE_H
 # define MS_DEFINE_H
 
-# include <struct_ms.h>
+# include <ms_struct.h>
 
 extern t_minishell	g_ms_params;
 

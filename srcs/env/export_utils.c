@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:36:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 02:46:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:56:10 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <libft.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 #include <minishell.h>
 
 bool	is_in_order(t_env *lst)
@@ -104,6 +104,8 @@ bool	add_update_env_var(char *name, bool env_scope, char *s)
 	{
 		free(name);
 		free(tmp->var_value);
+		if (env_scope == PUBLIC_VAR)
+			tmp->env_scope = PUBLIC_VAR;
 		tmp->var_value = value;
 	}
 	return (true);

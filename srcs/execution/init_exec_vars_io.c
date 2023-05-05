@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 02:37:27 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <exec_ms.h>
-#include <env_function.h>
+#include <ms_exec.h>
+#include <ms_env_function.h>
 #include <stdio.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 
 char	**build_path(void)
 {

@@ -6,18 +6,18 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 04:14:37 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 #include <libft.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <ms_define.h>
 #include <minishell.h>
 #include <stdio.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 
 int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env *envp)
 {

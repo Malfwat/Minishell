@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 02:25:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:19:12 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,15 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <ms_define.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 #include <minishell.h>
 #include <stdlib.h>
-#include <libft.h>
-#include <struct_ms.h>
 #include <fcntl.h>
+#include <libft.h>
+#include <ms_struct.h>
 #include <stdio.h>
 
-void	handler_hd_close(int num)
-{
-	t_fd	tmp;
-	t_fd	dev_null;
 
-	dev_null = open("/dev/null", O_RDWR);
-	(void)num;
-	my_close(g_ms_params.heredoc_pipe[0], g_ms_params.heredoc_pipe[1]);
-	free(g_ms_params.hd_vars.limiter);
-	free(g_ms_params.hd_vars.str);
-	tmp = dup(g_ms_params.stdin_fileno);
-	dup2(dev_null, g_ms_params.stdin_fileno);
-	close(dev_null);
-	gnl_force_finish(1, g_ms_params.stdin_fileno);
-	g_ms_params.stdin_fileno = tmp;
-	exit_ms(2, "handler_close");
-}
 
 void	ms_hd_gnl(t_fd fd, char **user_input)
 {

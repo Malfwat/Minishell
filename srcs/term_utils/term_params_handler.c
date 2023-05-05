@@ -6,12 +6,12 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:37:26 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/18 21:09:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <termios.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdio.h>
 
 bool	restore_terminal_params(struct termios saved_params, t_fd stdin_fileno)

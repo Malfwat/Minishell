@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 06:14:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 03:24:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdbool.h>
 #include <libft.h>
 #include <minishell.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 #include <stdlib.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 
 void	print_heredoc_syntax_error(char *heredoc_delimiter)
 {

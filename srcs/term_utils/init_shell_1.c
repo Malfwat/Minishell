@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 03:16:49 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/28 01:13:06 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:21:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
 #include <termcap.h>
-#include <prompt.h>
-#include <env_function.h>
+#include <ms_prompt.h>
+#include <ms_env_function.h>
 #include <ms_define.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <signal.h>
-#include <history.h>
+#include <ms_history.h>
 #include <ncurses.h>
 
 void	print_usage(void)

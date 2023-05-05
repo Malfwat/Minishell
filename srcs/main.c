@@ -3,59 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/03 23:03:58 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:21:51 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <ms_define.h>
-#include <signal_ms.h>
-#include <parsing_ms.h>
-#include <prompt.h>
-#include <env_function.h>
+#include <ms_signal.h>
+#include <ms_parsing.h>
+#include <ms_prompt.h>
+#include <ms_env_function.h>
 #include <libft.h>
 #include <sys/stat.h>
-#include <history.h>
+#include <ms_history.h>
 #include <string.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <exec_ms.h>
+#include <ms_exec.h>
 #include <ncurses.h>
 #include <term.h>
 
 t_minishell	g_ms_params;
-
-
-
-// void	handler_func(int num)
-// {
-// 	char		*ms_prompt_up;
-// 	int			last_exit_code;
-
-// 	if (g_ms_params.children)
-// 		return ;
-// 	last_exit_code = 130;
-// 	errno = 0;
-// 	(void)num;
-// 	if (!refresh_prompt_param(&g_ms_params.prompt_params, last_exit_code))
-// 		exit_ms(g_ms_params, 0, "promp2t");
-// 	if (g_ms_params.heredoc_pid)
-// 		kill(g_ms_params.heredoc_pid, SIGTERM);
-// 	write(1, "\n", 1);
-// 	ms_prompt_up = build_prompt(&g_ms_params.prompt_params, P_HEADER);
-// 	ft_putstr_fd(ms_prompt_up, 1);
-// 	free(ms_prompt_up);
-// 	free_prompt_params(&g_ms_params.prompt_params);
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// 	rl_redisplay();
-// }
 
 bool	is_line_empty(char *u_in)
 {
@@ -128,8 +102,6 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 		len = ft_strlen(*user_input);
 	quotes = NULL;
 	update_quotes(*user_input, &quotes);
-	// while (*user_input && ((len >= 2 && (*user_input)[len - 1] == '\n' \
-		// && (*user_input)[len - 2] == '\\') || quotes))
 	while (*user_input && quotes)
 	{
 		len = ft_strlen(*user_input);

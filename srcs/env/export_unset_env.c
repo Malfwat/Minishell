@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 02:36:22 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:53:42 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdio.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 #include <libft.h>
 #include <stdlib.h>
 #include <minishell.h>
@@ -21,13 +21,11 @@ bool	print_export(t_env *lst, t_fd fd)
 {
 	t_env	*cpy;
 	t_env	*tmp;
-	int		i;
 
 	cpy = sort_env(lst);
 	if (!cpy)
 		return (false);
 	tmp = cpy;
-	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
 	while (cpy)
@@ -45,6 +43,24 @@ bool	print_export(t_env *lst, t_fd fd)
 	return (true);
 }
 
+bool	change_scope(char *str)
+{
+	char	*name;
+	t_env	*env_var;
+
+	name = get_env_name(str);
+	if (name)
+	{
+		env_var = find_env_var(g_ms_params.envp, name);
+		free(name);
+	}
+	else
+		env_var = find_env_var(g_ms_params.envp, str);
+	if (env_var)
+		env_var->env_scope = PUBLIC_VAR;
+	return (true);
+}
+
 bool	export(char **tab, bool env_scope, t_fd fd)
 {
 	char	*name;
@@ -58,9 +74,11 @@ bool	export(char **tab, bool env_scope, t_fd fd)
 	while (tab && tab[++i])
 	{
 		name = get_env_name(tab[i]);
-		if (!name)
+		if (errno)
 			return (false);
-		if (ft_strchr(name, '?'))
+		if (!name)
+			change_scope(tab[i]);
+		else if (ft_strchr(name, '?'))
 		{
 			ms_perror("minishell: export", tab[i], "not a valid identifier");
 			free(name);
@@ -103,9 +121,6 @@ bool	unset(t_env **head, char **tab)
 
 bool	env(t_env *lst, t_fd fd)
 {
-	int		i;
-
-	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
 	while (lst)

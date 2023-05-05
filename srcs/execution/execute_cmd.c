@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   execute_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 01:12:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <exec_ms.h>
+#include <ms_exec.h>
 #include <minishell.h>
 #include <sys/wait.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 
 void	wait_before_doing_next_pipe_line(t_block *block)
 {

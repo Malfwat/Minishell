@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 23:31:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 22:45:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <dirent.h>
 #include <sys/types.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdio.h>
 #include <errno.h>
 #include <libft.h>

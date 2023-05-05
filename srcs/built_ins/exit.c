@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 02:26:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:18:03 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <minishell.h>
 #include <ms_define.h>
-#include <struct_ms.h>
-#include <exec_ms.h>
+#include <ms_struct.h>
+#include <ms_exec.h>
 
 bool	ft_isnum(char *str)
 {
