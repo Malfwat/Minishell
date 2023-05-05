@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 21:39:15 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 23:10:02 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 void	rdl_backslash(char **last_read, char **quote)
 {
 	char	*tmp;
+	int		len;
 	char	*new_read;
 
 	if (!*last_read || *quote)
@@ -150,12 +151,13 @@ void	rdl_backslash(char **last_read, char **quote)
 	if (ft_strlen(*last_read) >= 1 && (*last_read)[ft_strlen(*last_read) - 1] != '\\')
 		return ;
 	tmp = *last_read;
-	new_read = readline("> ");
 	last_read[ft_strlen(*last_read) - 1] = 0;
+	len = ft_strlen(*last_read);
+	new_read = readline("test> ");
 	*last_read = ft_strjoin(*last_read, new_read);
-	free(tmp);
 	free(new_read);
-	update_quotes(*last_read, quote);
+	free(tmp);
+	update_quotes(&(*last_read)[len], quote);
 }
 
 void	ms_readline(char *tmp, char *quote)
@@ -190,6 +192,7 @@ void	readline_child(void)
 	char				*tmp;
 	char				*quotes;
 	
+	signal(SIGINT, handler_readline);
 	my_close(g_ms_params.readline_pipe[0], -2);
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, \
 		g_ms_params.last_exit_code))
@@ -201,16 +204,12 @@ void	readline_child(void)
 	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	free_prompt_params(&g_ms_params.prompt_params);
 	quotes = NULL;
-	signal(SIGINT, handler_readline);
 	tmp = readline(g_ms_params.ms_prompt);
 	if (errno == EINTR)
 		errno = 0;
-	if (tmp)
-	{
-		quotes = check_for_quotes(tmp, quotes);
-		if (quotes && quotes[1])
-			update_quotes(quotes + 1, &quotes);
-	}
+	quotes = check_for_quotes(tmp, quotes);
+	// if (quotes && quotes[1])
+		// update_quotes(quotes + 1, &quotes);
 	free(g_ms_params.ms_prompt);
 	g_ms_params.ms_prompt = NULL;
 	ms_readline(tmp, quotes);
