@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 23:44:07 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 02:37:27 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ char	**build_envp(t_env	*envp)
 	len = 0;
 	while (envp)
 	{
+		if (envp->env_scope == PUBLIC_VAR)
+			len++;
 		envp = envp->next;
-		len++;
 	}
 	tab = ft_calloc((len + 1), sizeof(char *));
 	if (!tab)
@@ -74,9 +75,12 @@ char	**build_envp(t_env	*envp)
 	len = 0;
 	while (tmp)
 	{
-		tab[len] = ft_strsjoin(3, tmp->var_name, "=", tmp->var_value);
-		if (!tab[len++])
-			return (ft_strsfree(tab), NULL);
+		if (tmp->env_scope == PUBLIC_VAR)
+		{
+			tab[len] = ft_strsjoin(3, tmp->var_name, "=", tmp->var_value);
+			if (!tab[len++])
+				return (ft_strsfree(tab), NULL);
+		}
 		tmp = tmp->next;
 	}
 	return (tab);
@@ -102,9 +106,10 @@ bool	init_exec_io(t_block *block)
 		exit_ms(2, "exec init");
 	else if (ret == -2)
 	{
-		block->cmd.exit_value = SET_EXIT_CODE(1);
+		block->cmd.exit_value = 1 << 8; 
 		g_ms_params.last_exit_code = block->cmd.exit_value;
 		perror("minishell1");
+		set_env_exit_var(extract_exit_code(block->cmd.exit_value));
 		errno = 0;
 		return (false);
 	}

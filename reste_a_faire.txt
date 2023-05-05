@@ -1,1 +1,2 @@
 gerer les potentiels errno dans tous les builtins
+getenv
