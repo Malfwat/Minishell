@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 06:21:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 07:33:36 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 		update_quotes(following_part, &quotes);
 		free(following_part);
 	}
+	printf("==%s==\n", *user_input);
 	if (errno)
 		exit_ms(2, "ms_gnl");
 	if (*user_input)

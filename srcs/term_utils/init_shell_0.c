@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:23:04 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 08:04:34 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,27 @@ void	update_quotes(char *str, char **quotes)
 	*quotes = check_for_quotes(str, *quotes);
 }
 
-void	ms_readline(char *tmp, char *quote)
+void	error_ms_readline(const char *quote)
 {
-	char	c[2];
-	bool	erase_backslash;
+	ms_perror("minishell", "unexpected EOF while looking for matching", \
+	(char *)quote);
+	ms_perror("minishell", "syntax error", "unexpected end of file");
+	my_close(g_ms_params.readline_pipe[1], -2);
+	errno = 0;
+	exit_ms(2, "ms_readline");
+}
+
+
+void	rdl_write_in_pipe(char	*str, char *quote)
+{
+	bool	erase_slash;
 	
-	ft_bzero(c, 2);
-	erase_backslash = 0;
-	if (tmp)
+	erase_slash = 0;
+	if (str)
 	{
-		if ((ft_strlen(tmp) > 1 && tmp[ft_strlen(tmp) - 1] == '\\') && !quote)
-			erase_backslash = 1;
-		write(g_ms_params.readline_pipe[1], tmp, ft_strlen(tmp) - erase_backslash);
+		if ((ft_strlen(str) > 1 && str[ft_strlen(str) - 1] == '\\') && !quote)
+			erase_slash = 1;
+		write(g_ms_params.readline_pipe[1], str, ft_strlen(str) - erase_slash);
 		if (quote)
 			write(g_ms_params.readline_pipe[1], "\n", 1);
 	}
@@ -129,21 +138,29 @@ void	ms_readline(char *tmp, char *quote)
 		my_close(g_ms_params.readline_pipe[1], -2);
 		return (errno = 0, exit_ms(1, "ms_readline"));
 	}
+}
+
+void	ms_readline(char *tmp, char *quote)
+{
+	char	c[2];
+
+	ft_bzero(c, 2);
+	rdl_write_in_pipe(tmp, quote);
 	if (!quote && tmp[ft_strlen(tmp) - 1] != '\\')
 		return (free(tmp));
 	if (quote)
 		c[0] = *quote;
 	free(tmp);
-	tmp = readline("> ");
+	if (quote && *quote == '\'')
+		tmp = readline("quote> ");
+	else if (quote && *quote == '"')
+		tmp = readline("dquote> ");
+	else
+		tmp = readline("> ");
 	if (errno == EINTR)
 		errno = 0;
 	if (!tmp)
-	{
-		ms_perror("minishell", "unexpected EOF while looking for matching", c);
-		ms_perror("minishell", "syntax error", "unexpected end of file");
-		my_close(g_ms_params.readline_pipe[1], -2);
-		return (errno = 0, exit_ms(2, "ms_readline"));
-	}
+		error_ms_readline(c);
 	quote = (char *)&c[0];
 	update_quotes(tmp, &quote);
 	return (ms_readline(tmp, quote));
