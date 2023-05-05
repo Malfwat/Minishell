@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 08:04:34 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 19:47:19 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 	bool	erase_slash;
 	
 	erase_slash = 0;
-	if (str)
+	if (str && *str)
 	{
 		if ((ft_strlen(str) > 1 && str[ft_strlen(str) - 1] == '\\') && !quote)
 			erase_slash = 1;
@@ -140,17 +140,36 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 	}
 }
 
+bool	rdl_backslash(char **last_read, char **quote)
+{
+	char	*tmp;
+
+	if (!*last_read || *quote)
+		return (false);
+	if (ft_strlen(*last_read) >= 1 && (*last_read)[ft_strlen(*last_read) - 1] != '\\')
+		return (false);
+	tmp = *last_read;
+	*last_read = ft_strjoin(*last_read, readline("> "));
+	free(tmp);
+	update_quotes(*last_read, quote);
+	return (true);
+	// return (rdl_backslash(last_read, quote));
+}
+
 void	ms_readline(char *tmp, char *quote)
 {
 	char	c[2];
 
 	ft_bzero(c, 2);
+	rdl_backslash(&tmp, &quote);
+		// return (ms_readline(tmp, quote));
 	rdl_write_in_pipe(tmp, quote);
-	if (!quote && tmp[ft_strlen(tmp) - 1] != '\\')
+	if (!quote && tmp && ft_strlen(tmp) >= 1 && tmp[ft_strlen(tmp) - 1] != '\\')
 		return (free(tmp));
 	if (quote)
 		c[0] = *quote;
 	free(tmp);
+	quote = (char *)&c[0];
 	if (quote && *quote == '\'')
 		tmp = readline("quote> ");
 	else if (quote && *quote == '"')
@@ -161,7 +180,6 @@ void	ms_readline(char *tmp, char *quote)
 		errno = 0;
 	if (!tmp)
 		error_ms_readline(c);
-	quote = (char *)&c[0];
 	update_quotes(tmp, &quote);
 	return (ms_readline(tmp, quote));
 }
