@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 23:10:02 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 23:40:17 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ensure_prompt_position(void)
 		ft_putstr_fd("\033[47m\033[30m%\033[0m\n", STDOUT_FILENO);
 }
 
-char	*check_for_quotes(char *str, char *quote)
+char	check_for_quotes(char *str, char quote)
 {
 	char	*closing_quote;
 	char	*quote_found;
@@ -91,27 +91,27 @@ char	*check_for_quotes(char *str, char *quote)
 	if (!str || !*str)
 		return (quote);
 	quote_found = ft_strchr_set(str, "'\"");
-	if (quote && quote_found && *quote_found == *quote)
-		return (check_for_quotes(quote_found + 1, NULL));
+	if (quote && quote_found && *quote_found == quote)
+		return (check_for_quotes(quote_found + 1, 0));
 	else if (quote_found && !quote)
 	{
 		closing_quote = ft_strchr(quote_found + 1, *quote_found);
 		if (closing_quote)
-			return (check_for_quotes(closing_quote + 1, NULL));
-		return (quote_found);
+			return (check_for_quotes(closing_quote + 1, 0));
+		return (*quote_found);
 	}
 	return (quote);
 }
 
-void	update_quotes(char *str, char **quotes)
+void	update_quotes(char *str, char *quotes)
 {
 	*quotes = check_for_quotes(str, *quotes);
 }
 
-void	error_ms_readline(const char *quote)
+void	error_ms_readline(const char quote)
 {
 	ms_perror("minishell", "unexpected EOF while looking for matching", \
-	(char *)quote);
+	(char []){quote, 0});
 	ms_perror("minishell", "syntax error", "unexpected end of file");
 	my_close(g_ms_params.readline_pipe[1], -2);
 	errno = 0;
@@ -119,7 +119,7 @@ void	error_ms_readline(const char *quote)
 }
 
 
-void	rdl_write_in_pipe(char	*str, char *quote)
+void	rdl_write_in_pipe(char	*str, char quote)
 {
 	bool	erase_slash;
 	
@@ -132,7 +132,7 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 		if (quote)
 			write(g_ms_params.readline_pipe[1], "\n", 1);
 	}
-	else if (!str && (!quote || !*quote))
+	else if (!str && !quote)
 	{
 		write(g_ms_params.stdin_fileno, "exit\n", 5);
 		my_close(g_ms_params.readline_pipe[1], -2);
@@ -140,19 +140,19 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 	}
 }
 
-void	rdl_backslash(char **last_read, char **quote)
+void	rdl_backslash(char **last_read, char *quote)
 {
 	char	*tmp;
 	int		len;
 	char	*new_read;
 
-	if (!*last_read || *quote)
+	if (!*last_read || !**last_read || *quote)
 		return ;
 	if (ft_strlen(*last_read) >= 1 && (*last_read)[ft_strlen(*last_read) - 1] != '\\')
 		return ;
 	tmp = *last_read;
+	len = ft_strlen(*last_read) - 1;
 	last_read[ft_strlen(*last_read) - 1] = 0;
-	len = ft_strlen(*last_read);
 	new_read = readline("test> ");
 	*last_read = ft_strjoin(*last_read, new_read);
 	free(new_read);
@@ -160,29 +160,24 @@ void	rdl_backslash(char **last_read, char **quote)
 	update_quotes(&(*last_read)[len], quote);
 }
 
-void	ms_readline(char *tmp, char *quote)
+void	ms_readline(char *tmp, char quote)
 {
-	char	c[2];
-
-	ft_bzero(c, 2);
 	rdl_backslash(&tmp, &quote);
 	rdl_write_in_pipe(tmp, quote);
-	if (!quote && tmp && ft_strlen(tmp) >= 1 && tmp[ft_strlen(tmp) - 1] != '\\')
+	if (!quote && (!*tmp || tmp[ft_strlen(tmp) - 1] != '\\'))
 		return (free(tmp));
-	if (quote)
-		c[0] = *quote;
 	free(tmp);
-	quote = (char *)&c[0];
-	if (quote && *quote == '\'')
+	tmp = NULL;
+	if (quote == '\'')
 		tmp = readline("quote> ");
-	else if (quote && *quote == '"')
+	else if (quote == '"')
 		tmp = readline("dquote> ");
 	else
 		tmp = readline("> ");
 	if (errno == EINTR)
 		errno = 0;
 	if (!tmp)
-		error_ms_readline(c);
+		error_ms_readline(quote);
 	update_quotes(tmp, &quote);
 	return (ms_readline(tmp, quote));
 }
@@ -190,7 +185,7 @@ void	ms_readline(char *tmp, char *quote)
 void	readline_child(void)
 {
 	char				*tmp;
-	char				*quotes;
+	char				quotes;
 	
 	signal(SIGINT, handler_readline);
 	my_close(g_ms_params.readline_pipe[0], -2);
@@ -203,13 +198,11 @@ void	readline_child(void)
 	ensure_prompt_position();
 	g_ms_params.ms_prompt = build_prompt(&g_ms_params.prompt_params, P_HEADER);
 	free_prompt_params(&g_ms_params.prompt_params);
-	quotes = NULL;
+	quotes = 0;
 	tmp = readline(g_ms_params.ms_prompt);
 	if (errno == EINTR)
 		errno = 0;
 	quotes = check_for_quotes(tmp, quotes);
-	// if (quotes && quotes[1])
-		// update_quotes(quotes + 1, &quotes);
 	free(g_ms_params.ms_prompt);
 	g_ms_params.ms_prompt = NULL;
 	ms_readline(tmp, quotes);
