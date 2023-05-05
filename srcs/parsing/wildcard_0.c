@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_0.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 18:12:14 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 00:52:26 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ bool	open_dir(char *dir, DIR **dirp)
 		if (!dir)
 			return (false);
 	}
+	else
+		dir = ft_strdup(dir);
 	*dirp = opendir(dir);
 	errno = 0;
 	free(dir);

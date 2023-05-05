@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/01 04:41:11 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 01:57:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,11 @@ extern t_minishell	g_ms_params;
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
 
-# define SET_EXIT_CODE(x) x<<8
+enum e_env_scope
+{
+	INTERNAL_VAR,
+	PUBLIC_VAR
+};
 
 enum e_prompt_args_type
 {

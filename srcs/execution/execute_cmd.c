@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 04:49:46 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 23:59:22 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 01:12:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sys/wait.h>
 #include <env_function.h>
 
-void	wait_before_next_pipe_line(t_block *block)
+void	wait_before_doing_next_pipe_line(t_block *block)
 {
 	int exit_value;
 
@@ -24,7 +24,7 @@ void	wait_before_next_pipe_line(t_block *block)
 		exit_ms(2, "waitpid");
 	exit_value = extract_exit_code(block->cmd.exit_value);
 	set_env_exit_var(exit_value);
-	g_ms_params.last_exit_code = exit_value;
+	g_ms_params.last_exit_code = block->cmd.exit_value;
 }
 
 void	execute_t_block_cmd(t_block *block)
@@ -43,7 +43,7 @@ void	execute_t_block_cmd(t_block *block)
 	}
 	if (block->operator == AND_OPERATOR || block->operator == OR_OPERATOR
 		|| block->operator == SEMI_COLON)
-		wait_before_next_pipe_line(block);
+		wait_before_doing_next_pipe_line(block);
 	else
 		store_pid(block->cmd.pid, &g_ms_params.children);
 }

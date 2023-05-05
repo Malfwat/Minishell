@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 00:01:53 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 00:50:06 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*replace_dollars_var(char *res, t_env *envp, char *var)
 	dollar_var = ft_substr(var, 0, tmp - var);
 	env_var = find_env_var(envp, dollar_var);
 	if (!env_var)
-		res = ft_strjoin(res, "");
+		res = ft_strsjoin(3, res, "", tmp);
 	else
 	{
 		res = ft_strsjoin(3, res, env_var->var_value, tmp);

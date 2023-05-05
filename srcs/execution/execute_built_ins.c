@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/04 02:06:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 03:17:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	is_builtin(char *str)
 		return (true);
 	if (!ft_strcmp(str, "unset"))
 		return (true);
-	if (!ft_strcmp(str, "export"))
+	if (!ft_strcmp(str, "export") || ft_strchr(str, '='))
 		return (true);
 	if (!ft_strcmp(str, "cd"))
 		return (true);
@@ -53,7 +53,9 @@ void	launch_builtins(t_exec_vars vars, t_fd fd[2])
 	else if (!ft_strcmp(str, "unset"))
 		exit_value = unset(&g_ms_params.envp, &vars.argv[1]);
 	else if (!ft_strcmp(str, "export"))
-		exit_value = export(&vars.argv[1], 0, fd[1]);
+		exit_value = export(&vars.argv[1], PUBLIC_VAR, fd[1]);
+	else if (ft_strchr(str, '='))
+		exit_value = export(vars.argv, INTERNAL_VAR, fd[1]);
 	else if (!ft_strcmp(str, "cd"))
 		exit_value = cd(&vars.argv[1], fd[1]);
 	else if (!ft_strcmp(str, "echo"))

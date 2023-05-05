@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 00:54:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/03 22:55:25 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 01:25:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	parse_user_input(char *user_input)
 		return (true);
 	if (parse_cmds(&head, user_input) == false)
 	{
-		g_ms_params.last_exit_code = SET_EXIT_CODE(2);
+		g_ms_params.last_exit_code = 2 << 8; 
 		return (flood_free(head), false);
 	}
 	if (errno)

@@ -23,7 +23,7 @@ t_env	*get_last_env(t_env *tmp)
 	return (tmp);
 }
 
-t_env	*new_env_var(char *name, char *value, bool temp)
+t_env	*new_env_var(char *name, char *value, bool env_scope)
 {
 	t_env	*new;
 
@@ -34,16 +34,16 @@ t_env	*new_env_var(char *name, char *value, bool temp)
 		return (NULL);
 	new->var_name = name;
 	new->var_value = value;
-	new->temp = temp;
+	new->env_scope = env_scope;
 	return (new);
 }
 
-bool	add_env_var(t_env **head, char *name, char *value, bool temp)
+bool	add_env_var(t_env **head, char *name, char *value, bool env_scope)
 {
 	t_env	*new;
 	t_env	*last;
 
-	new = new_env_var(name, value, temp);
+	new = new_env_var(name, value, env_scope);
 	if (!new)
 		return (free(name), free(value), false);
 	if (!*head)
@@ -70,13 +70,13 @@ t_env	*get_env(char **env)
 	{
 		name = get_env_name(env[i]);
 		value = get_env_value(env[i]);
-		if (!name || !value || !add_env_var(&lst, name, value, 0))
+		if (!name || !value || !add_env_var(&lst, name, value, PUBLIC_VAR))
 			return (free(name), free(value), free_env_lst(lst), NULL);
 		i++;
 	}
 	name = ft_strdup("?");
 	value = ft_strdup("0");
-	if (!name || !value || !add_env_var(&lst, name, value, 0))
+	if (!name || !value || !add_env_var(&lst, name, value, INTERNAL_VAR))
 		return (free(name), free(value), free_env_lst(lst), NULL);
 	return (lst);
 }
