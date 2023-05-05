@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 08:09:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 23:18:25 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,18 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 {
 	char	*following_part;
 	int		len;
-	char	c[2];
 	char	*tmp;
-	char	*quotes;
+	char	quotes;
 
-	ft_bzero(c, 2);
 	get_next_line(fd, user_input);
 	len = 0;
 	if (*user_input)
 		len = ft_strlen(*user_input);
-	quotes = NULL;
+	quotes = 0;
 	update_quotes(*user_input, &quotes);
 	while (*user_input && quotes)
 	{
 		len = ft_strlen(*user_input);
-		if (quotes)
-			c[0] = *quotes;
 		get_next_line(fd, &following_part);
 		if (!following_part)
 			break ;
@@ -115,7 +111,6 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 		free(tmp);
 		if (*user_input)
 			len = ft_strlen(*user_input);
-		quotes = c;
 		update_quotes(following_part, &quotes);
 		free(following_part);
 	}
