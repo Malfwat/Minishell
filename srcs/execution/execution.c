@@ -6,15 +6,15 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 01:04:05 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 10:09:12 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <exec_ms.h>
+#include <ms_exec.h>
 #include <stdio.h>
 #include <minishell.h>
 #include <sys/wait.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 
 void	child_worker(t_block *blck, t_exec_vars exc_vrs)
 {

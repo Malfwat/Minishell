@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_ms.h                                        :+:      :+:    :+:   */
+/*   ms_history.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/07 04:49:51 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/10 19:57:06 by hateisse         ###   ########.fr       */
+/*   Created: 2023/04/07 03:14:25 by malfwa            #+#    #+#             */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNAL_MS_H
-# define SIGNAL_MS_H
+#ifndef HISTORY_H
+# define HISTORY_H
 
-void	sigquit_handler(int num);
-void	set_sig_handler(void);
+# include <ms_struct.h>
 
-#endif /* SIGNAL_MS_H */
+int		get_my_history(void);
+void	ms_add_history(char *str);
+
+#endif /* HISTORY_H */

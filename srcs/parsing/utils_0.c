@@ -6,12 +6,12 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 21:11:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:06:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
-#include <parsing_ms.h>
+#include <ms_struct.h>
+#include <ms_parsing.h>
 #include <minishell.h>
 #include <libft.h>
 #include <stdio.h>

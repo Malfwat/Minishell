@@ -6,11 +6,11 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 04:25:21 by marvin            #+#    #+#             */
-/*   Updated: 2023/05/01 18:29:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <minishell.h>
 #include <stdlib.h>
 #include <libft.h>

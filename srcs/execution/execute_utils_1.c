@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:13:08 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/03 17:49:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:18:03 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <exec_ms.h>
+#include <ms_exec.h>
 
 void	put_in_list(t_args *prev, t_args *next, t_args *to_insert)
 {

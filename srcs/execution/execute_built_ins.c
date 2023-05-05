@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 03:17:56 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <libft.h>
-#include <struct_ms.h>
-#include <env_function.h>
-#include <exec_ms.h>
+#include <ms_struct.h>
+#include <ms_env_function.h>
+#include <ms_exec.h>
 #include <ms_define.h>
 #include <sys/types.h>
 #include <sys/stat.h>

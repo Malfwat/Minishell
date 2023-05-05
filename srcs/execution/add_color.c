@@ -6,12 +6,12 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 01:21:19 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/27 01:26:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdlib.h>
 #include <libft.h>
 #include <minishell.h>
