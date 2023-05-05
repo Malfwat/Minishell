@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/06 00:21:08 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	**build_argv(t_args **head, char **path, t_env *envp)
 	char	**tab;
 	int		i;
 	t_args	*tmp;
+
 
 	i = 0;
 	if (errno)

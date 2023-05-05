@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 23:43:23 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/06 00:28:29 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,10 @@ void	rdl_backslash(char **last_read, char *quote)
 		return ;
 	tmp = *last_read;
 	len = ft_strlen(*last_read) - 1;
-	last_read[ft_strlen(*last_read) - 1] = 0;
 	new_read = readline("> ");
+	if (!new_read)
+		return ;
+	(*last_read)[ft_strlen(*last_read) - 1] = 0;
 	*last_read = ft_strjoin(*last_read, new_read);
 	free(new_read);
 	free(tmp);
