@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 00:36:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/01 09:03:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 02:46:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,24 @@ t_env	*sort_env(t_env *lst)
 t_env	*cpy_t_env(t_env *lst)
 {
 	t_env	*new_lst;
+	char	*name;
+	char	*value;
 
 	new_lst = NULL;
 	while (lst)
 	{
-		if (!add_env_var(&new_lst, lst->var_name, lst->var_value, 0))
+		name = ft_strdup(lst->var_name);
+		value = ft_strdup(lst->var_value);
+		if (errno)
+			return (free(name), free(value), free_env_lst(new_lst), NULL);
+		if (!add_env_var(&new_lst, name, value, lst->env_scope))
 			return (free_env_lst(new_lst), NULL);
 		lst = lst->next;
 	}
 	return (new_lst);
 }
 
-bool	add_update_env_var(char *name, bool temp, char *s)
+bool	add_update_env_var(char *name, bool env_scope, char *s)
 {
 	t_env	*tmp;
 	char	*value;
@@ -91,7 +97,7 @@ bool	add_update_env_var(char *name, bool temp, char *s)
 	tmp = find_env_var(g_ms_params.envp, name);
 	if (!tmp)
 	{
-		if (!add_env_var(&g_ms_params.envp, name, value, temp))
+		if (!add_env_var(&g_ms_params.envp, name, value, env_scope))
 			return (free_env_lst(g_ms_params.envp), false);
 	}
 	else

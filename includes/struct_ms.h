@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_ms.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/01 09:28:51 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 01:46:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@
 
 typedef int					t_fd;
 typedef char				t_flags;
+
 typedef struct s_env_var
 {
 	char					*var_name;
 	char					*var_value;
 	char					scope;
-	bool					temp;
+	char					env_scope;
 	struct s_env_var		*prev;
 	struct s_env_var		*next;
 }							t_env;

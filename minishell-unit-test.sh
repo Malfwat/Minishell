@@ -37,7 +37,8 @@ Test()
 	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	local VLG_OUTPUT=$(cat .vlg.out)
-	grep -E "(ERROR.*1.*suppressed.*)" .vlg.out
+	local NB_ERROR=$(grep -E "(ERROR.*[1-9].*suppressed.*)" .vlg.out | awk '{print $4}')
+	printf "$NB_ERROR"
 	local OPEN_FDS="$(grep -E "Open file descriptor" .vlg.out | wc -l)"
 	local PARENT_FDS=$(grep -E "<inherited from parent>" .vlg.out | wc -l)
 	rm -f .vlg.out
@@ -67,10 +68,13 @@ Test()
 	fi
 
 	# Check valgrind errors
-	if [ "$OPEN_FDS" == "0" ] || [ "$OPEN_FDS" == "$PARENT_FDS" ]; then
+	if [[ ( "$OPEN_FDS" == "0" || "$OPEN_FDS" == "$PARENT_FDS" ) && !"$NB_ERROR" ]]; then
 		echo -e "Valgrind: \033[92mOK\033[0m"
 		((TOTAL_VLG_SUCCESS++))
 	else
+		echo \"$NB_ERROR\"
+		echo \"$OPEN_FDS\"
+		echo \"$PARENT_FDS\"
 		echo -e "Valgrind: \033[91mKO\033[0m \n"
 		echo "$VLG_OUTPUT"
 	fi
@@ -102,6 +106,7 @@ Build_test_environment
 #                                                                          #
 #                                                                          #
 ############################################################################
+Test "export | adam"
 Test "echo test"
 Test "echo $"
 Test "echo $?"
@@ -124,6 +129,7 @@ Test "echo /dev/full"
 Test "cat /dev/null | head | grep a"
 Test "(echo test | (cat | cat | echo test | ls | export EEE=lol) | export EEE='123' | echo \$EEE)"
 Test ""
+
 Test "''"
 Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt1 ; ls) ; ls"
 Test "(mkdir ttt0 ttt1 ttt1/ttt2 ; cd ttt0 ; cd ../ttt1/ttt2 ; rm -rf ../../ttt1 ; mkdir) ; mkdir ok"

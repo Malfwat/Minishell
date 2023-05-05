@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amouflet <amouflet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 00:15:06 by amouflet         ###   ########.fr       */
+/*   Updated: 2023/05/05 02:36:22 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,32 @@
 bool	print_export(t_env *lst, t_fd fd)
 {
 	t_env	*cpy;
-	char	**tab;
+	t_env	*tmp;
 	int		i;
 
 	cpy = sort_env(lst);
 	if (!cpy)
 		return (false);
-	tab = build_envp(cpy);
-	if (!tab)
-		return (free_env_lst(cpy), false);
+	tmp = cpy;
 	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
-	while (tab && tab[++i])
+	while (cpy)
 	{
-		if (!ft_strncmp(tab[i], "?=", 2))
-			continue ;
-		ft_putstr_fd("export ", fd);
-		ft_putendl_fd(tab[i], fd);
+		if (cpy->env_scope == PUBLIC_VAR)
+		{
+			ft_putstr_fd("export ", fd);
+			ft_putstr_fd(cpy->var_name, fd);
+			ft_putstr_fd("=", fd);
+			ft_putendl_fd(cpy->var_value, fd);
+		}
+		cpy = cpy->next;
 	}
-	ft_strsfree(tab);
-	free_env_lst(cpy);
+	free_env_lst(tmp);
 	return (true);
 }
 
-bool	export(char **tab, bool temp, t_fd fd)
+bool	export(char **tab, bool env_scope, t_fd fd)
 {
 	char	*name;
 	int		i;
@@ -65,7 +66,7 @@ bool	export(char **tab, bool temp, t_fd fd)
 			free(name);
 			exit_value = false;
 		}
-		else if (!add_update_env_var(name, temp, tab[i]))
+		else if (!add_update_env_var(name, env_scope, tab[i]))
 			return (false);
 	}
 	return (exit_value);
@@ -102,21 +103,20 @@ bool	unset(t_env **head, char **tab)
 
 bool	env(t_env *lst, t_fd fd)
 {
-	char	**tab;
 	int		i;
 
-	tab = build_envp(lst);
-	if (errno)
-		return (false);
 	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
-	while (tab && tab[++i])
+	while (lst)
 	{
-		if (!ft_strncmp(tab[i], "?=", 2))
-			continue ;
-		ft_putendl_fd(tab[i], fd);
+		if (lst->env_scope == PUBLIC_VAR)
+		{
+			ft_putstr_fd(lst->var_name, fd);
+			ft_putstr_fd("=", fd);
+			ft_putendl_fd(lst->var_value, fd);
+		}
+		lst = lst->next;
 	}
-	ft_strsfree(tab);
 	return (true);
 }
