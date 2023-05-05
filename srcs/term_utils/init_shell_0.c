@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 19:47:19 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 21:10:39 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*check_for_quotes(char *str, char *quote)
 		return (quote);
 	quote_found = ft_strchr_set(str, "'\"");
 	if (quote && quote_found && *quote_found == *quote)
-		return (check_for_quotes(quote + 1, NULL));
+		return (check_for_quotes(quote_found + 1, NULL));
 	else if (quote_found && !quote)
 	{
 		closing_quote = ft_strchr(quote_found + 1, *quote_found);
@@ -124,7 +124,7 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 	bool	erase_slash;
 	
 	erase_slash = 0;
-	if (str && *str)
+	if (str)
 	{
 		if ((ft_strlen(str) > 1 && str[ft_strlen(str) - 1] == '\\') && !quote)
 			erase_slash = 1;
@@ -132,7 +132,7 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 		if (quote)
 			write(g_ms_params.readline_pipe[1], "\n", 1);
 	}
-	else
+	else if (!str && (!quote || !*quote))
 	{
 		write(g_ms_params.stdin_fileno, "exit\n", 5);
 		my_close(g_ms_params.readline_pipe[1], -2);
@@ -140,20 +140,21 @@ void	rdl_write_in_pipe(char	*str, char *quote)
 	}
 }
 
-bool	rdl_backslash(char **last_read, char **quote)
+void	rdl_backslash(char **last_read, char **quote)
 {
 	char	*tmp;
+	char	*new_read;
 
 	if (!*last_read || *quote)
-		return (false);
+		return ;
 	if (ft_strlen(*last_read) >= 1 && (*last_read)[ft_strlen(*last_read) - 1] != '\\')
-		return (false);
+		return ;
 	tmp = *last_read;
-	*last_read = ft_strjoin(*last_read, readline("> "));
+	new_read = readline("> ");
+	*last_read = ft_strjoin(*last_read, new_read);
 	free(tmp);
+	free(new_read);
 	update_quotes(*last_read, quote);
-	return (true);
-	// return (rdl_backslash(last_read, quote));
 }
 
 void	ms_readline(char *tmp, char *quote)
@@ -162,7 +163,6 @@ void	ms_readline(char *tmp, char *quote)
 
 	ft_bzero(c, 2);
 	rdl_backslash(&tmp, &quote);
-		// return (ms_readline(tmp, quote));
 	rdl_write_in_pipe(tmp, quote);
 	if (!quote && tmp && ft_strlen(tmp) >= 1 && tmp[ft_strlen(tmp) - 1] != '\\')
 		return (free(tmp));
