@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/07 23:46:37 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/08 01:35:19 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,10 @@ SIGNAL_DIR			=	signals/
 HISTORY				=	history_functions.c
 
 HISTORY_DIR			=	history/
+
+SHELL_BANNER		=	display_shell_banner.c
+
+SHELL_BANNER_DIR	=	shell_banner/
 
 PROMPT				=	prompt_utils_0.c	\
 						prompt_utils_1.c	\
@@ -136,6 +140,7 @@ SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	$(addprefix $(EXECUTION_DIR), $(EXECUTION))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
 SRCS				+=	$(addprefix $(MS_READLINE_DIR), $(MS_READLINE))
+SRCS				+=	$(addprefix $(SHELL_BANNER_DIR), $(SHELL_BANNER))
 SRCS				+=	main.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
@@ -152,6 +157,7 @@ DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(MS_READLINE_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(SHELL_BANNER_DIR))
 
 LGREY				=	\033[38;5;249m
 LGREEN				=	\033[38;5;28m
