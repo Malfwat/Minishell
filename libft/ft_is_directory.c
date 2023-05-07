@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 23:18:05 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/27 23:24:54 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 12:55:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int is_directory(char *file_name)
+int	is_directory(char *file_name)
 {
-	struct stat sb;
+	struct stat	sb;
 
 	if (stat(file_name, &sb) == -1)
 		return (-1);
