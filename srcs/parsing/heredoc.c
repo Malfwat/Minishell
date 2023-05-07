@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 23:14:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 23:14:53 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static void	ms_hd_gnl_join_next_line(char **user_input, t_fd fd, int *len)
 
 void	ms_hd_gnl(t_fd fd, char **user_input)
 {
-	char	*following_part;
 	int		len;
 
 	get_next_line(fd, user_input);
