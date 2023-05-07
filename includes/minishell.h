@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:01:40 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 14:17:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ void		ft_add_t_args(t_args **head, char *str);
 
 // init_shell.c
 
+bool		init_termios_struct(void);
 void		ensure_prompt_position(void);
 t_fd		init_prompt(void);
 bool		init_minishell(t_minishell *ms_params, int ac, char **av, \
@@ -145,6 +146,5 @@ void		exec_builtin(t_block *block, t_exec_vars vars);
 void		my_close(t_fd a, t_fd b);
 void		print_usage(void);
 void		ms_gnl(t_fd fd, char **user_input, bool conserve_nl);
-void		update_quotes(char *str, char *quotes);
 
 #endif /* MINISHELL_H */

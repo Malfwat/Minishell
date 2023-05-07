@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 11:42:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:11:00 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 14:04:26 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,3 @@ t_env	*find_env_var(t_env	*envp, char *str)
 	}
 	return (envp);
 }
-
