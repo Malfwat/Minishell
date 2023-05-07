@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:16:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 22:35:12 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	heredoc_child(char *limiter, int *tube)
 	while (g_ms_params.hd_vars.str && \
 	ft_strcmp(g_ms_params.hd_vars.str, g_ms_params.hd_vars.limiter) && !errno)
 	{
-		write(tube[1], g_ms_params.hd_vars.str, ft_strlen(g_ms_params.hd_vars.str));
+		write(tube[1], g_ms_params.hd_vars.str, \
+		ft_strlen(g_ms_params.hd_vars.str));
 		free(g_ms_params.hd_vars.str);
 		write(g_ms_params.stdin_fileno, "heredoc> ", 9);
 		ms_hd_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str);
@@ -83,7 +84,7 @@ void	heredoc_child(char *limiter, int *tube)
 	dev_null = open("/dev/null", O_RDWR);
 	tmp = dup(g_ms_params.stdin_fileno);
 	dup2(dev_null, g_ms_params.stdin_fileno);
-	close(dev_null);
+	my_close(dev_null, -2);
 	gnl_force_finish(1, g_ms_params.stdin_fileno);
 	g_ms_params.stdin_fileno = tmp;
 	exit_ms(0, "heredoc");
