@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 22:25:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 00:24:28 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef int			t_fd;
 # define LCYAN "\033[38;5;38m"
 # define LBLUE "\033[38;5;110m"
 # define ENDC "\033[0m"
-# define R_ESC(sc) ("\001"sc"\002")
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
 
