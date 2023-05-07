@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:04:45 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 14:26:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <minishell.h>
 # include <ms_define.h>
 # include <ms_struct.h>
+
+// flag_case.c
+
+void	flag_case(char **av);
 
 // children_functions.c
 
