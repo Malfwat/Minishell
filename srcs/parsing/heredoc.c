@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 23:24:03 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 23:32:33 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,24 @@
 #include <stdio.h>
 #include <ms_heredoc.h>
 
-void	heredoc_child(char *limiter, int *tube)
+static void	cleanup_heredoc_child(int *tube)
 {
 	t_fd	dev_null;
-	t_fd	tmp;
+	t_fd	tmp_stdin_fileno;
 
+	free(g_ms_params.hd_vars.str);
+	free(g_ms_params.hd_vars.limiter);
+	my_close(tube[1], tube[0]);
+	dev_null = open("/dev/null", O_RDWR);
+	tmp_stdin_fileno = dup(g_ms_params.stdin_fileno);
+	dup2(dev_null, g_ms_params.stdin_fileno);
+	my_close(dev_null, -2);
+	gnl_force_finish(1, g_ms_params.stdin_fileno);
+	g_ms_params.stdin_fileno = tmp_stdin_fileno;
+}
+
+void	heredoc_child(char *limiter, int *tube)
+{
 	my_close(g_ms_params.input_fd, -2);
 	signal(SIGINT, handler_hd_close);
 	write(g_ms_params.stdin_fileno, "heredoc> ", 9);
@@ -44,15 +57,7 @@ void	heredoc_child(char *limiter, int *tube)
 	}
 	if (!g_ms_params.hd_vars.str)
 		print_heredoc_syntax_error(limiter);
-	free(g_ms_params.hd_vars.str);
-	free(g_ms_params.hd_vars.limiter);
-	my_close(tube[1], tube[0]);
-	dev_null = open("/dev/null", O_RDWR);
-	tmp = dup(g_ms_params.stdin_fileno);
-	dup2(dev_null, g_ms_params.stdin_fileno);
-	my_close(dev_null, -2);
-	gnl_force_finish(1, g_ms_params.stdin_fileno);
-	g_ms_params.stdin_fileno = tmp;
+	cleanup_heredoc_child(tube);
 	exit_ms(0, "heredoc");
 }
 
