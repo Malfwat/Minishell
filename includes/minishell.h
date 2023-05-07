@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 23:22:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 23:47:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <ms_define.h>
 # include <errno.h>
 # include <signal.h>
+
+// handle_parsed_user_input.c
+
+void		handle_parsed_user_input(void);
 
 // init_t_block.c
 

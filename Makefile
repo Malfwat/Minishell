@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/07 23:24:36 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/07 23:46:37 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,18 +24,19 @@ SRCS_DIR			=	srcs/
 
 EXECUTION_DIR		=	execution/
 
-EXECUTION			=	execute_cmd.c			\
-						execution.c				\
-						flag_case.c				\
-						add_color.c				\
-						build_execve_args.c		\
-						execute_utils_0.c		\
-						execute_utils_1.c		\
-						execute_utils_2.c		\
-						execute_built_ins.c		\
-						set_env_exit_var.c		\
-						children_functions.c	\
-						init_exec_vars_io.c		\
+EXECUTION			=	execute_cmd.c				\
+						execution.c					\
+						flag_case.c					\
+						add_color.c					\
+						handle_parsed_user_input.c	\
+						build_execve_args.c			\
+						execute_utils_0.c			\
+						execute_utils_1.c			\
+						execute_utils_2.c			\
+						execute_built_ins.c			\
+						set_env_exit_var.c			\
+						children_functions.c		\
+						init_exec_vars_io.c			\
 						meta_char.c	
 
 SIGNAL				=	manage_signals.c
