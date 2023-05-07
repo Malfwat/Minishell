@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 14:18:20 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 22:47:59 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 22:55:04 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <ms_readline.h>
 #include <minishell.h>
 
-static bool	join_next_line(char **user_input, t_fd fd, char *quotes)
+static bool	ms_gnl_join_next_line(char **user_input, t_fd fd, char *quotes)
 {
 	char	*tmp;
 	char	*following_part;
@@ -42,7 +42,7 @@ void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl)
 	quotes = 0;
 	update_quotes(*user_input, &quotes);
 	while (*user_input && quotes)
-		if (!join_next_line(user_input, fd, &quotes))
+		if (!ms_gnl_join_next_line(user_input, fd, &quotes))
 			break ;
 	if (errno)
 		exit_ms(2, "ms_gnl");
