@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
+#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/06 00:24:55 by malfwa           ###   ########.fr        #
+#    Updated: 2023/05/07 14:28:29 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ EXECUTION_DIR		=	execution/
 
 EXECUTION			=	execute_cmd.c			\
 						execution.c				\
+						flag_case.c				\
 						add_color.c				\
 						execute_utils_0.c		\
 						execute_utils_1.c		\
@@ -68,12 +69,14 @@ ENV					=	export_unset_env.c	\
 				
 ENV_DIR				=	env/
 
-PARSING				=	input_output.c		\
+PARSING				=	ms_gnl.c			\
+						input_output.c		\
 						io_functions.c		\
 						parenthesis.c		\
 						utils_0.c			\
 						utils_1.c			\
 						utils_2.c			\
+						utils_3.c			\
 						check_cmd.c			\
 						parsing.c			\
 						heredoc.c			\
@@ -95,12 +98,18 @@ STRUCT_UTILS		=	init_t_block.c			\
 
 STRUCT_UTILS_DIR	=	struct_utils/
 
-TERM_UTILS			=	term_params_handler.c	\
-						exit_minishell.c		\
-						init_shell_0.c			\
-						init_shell_1.c
+TERM_UTILS			=	term_params_handler.c		\
+						exit_minishell.c			\
+						init_shell_0.c				\
+						ensure_prompt_position.c	\
+						print_usage.c
 
 TERM_UTILS_DIR		=	term_utils/
+
+MS_READLINE			=	ms_readline.c	\
+						utils.c
+
+MS_READLINE_DIR		=	ms_readline/
 
 CC					=	cc
 
@@ -123,6 +132,7 @@ SRCS				+=	$(addprefix $(HISTORY_DIR), $(HISTORY))
 SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	$(addprefix $(EXECUTION_DIR), $(EXECUTION))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
+SRCS				+=	$(addprefix $(MS_READLINE_DIR), $(MS_READLINE))
 SRCS				+=	main.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
@@ -138,6 +148,7 @@ DIRS				+=	$(addprefix $(BUILD), $(PROMPT_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(MS_READLINE_DIR))
 
 LGREY				=	\033[38;5;249m
 LGREEN				=	\033[38;5;28m

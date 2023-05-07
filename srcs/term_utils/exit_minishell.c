@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 06:22:13 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 14:05:18 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ void	exit_ms(int exitv, char *context)
 	free_children(&g_ms_params.children);
 	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
-		restore_terminal_params(g_ms_params.saved_params, g_ms_params.stdin_fileno);
+		restore_terminal_params(g_ms_params.saved_params, \
+		g_ms_params.stdin_fileno);
 		clear_history();
 		if (g_ms_params.history_fd > 2)
 			close(g_ms_params.history_fd);
