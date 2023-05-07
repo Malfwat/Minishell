@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 14:17:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 23:22:39 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ bool		is_parenthesis_empty(char *str);
 int			input_manager(t_redirect *ptr, t_fd *fd, t_block *block, \
 t_env *envp);
 int			output_manager(t_redirect *ptr, t_fd *fd, t_env *envp);
-int			hd_manager(t_block *block);
 // int			heredoc(char *limiter, t_fd fd);
 
 // wildcard
