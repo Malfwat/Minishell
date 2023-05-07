@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 13:08:17 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 22:25:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef int			t_fd;
 enum e_env_scope
 {
 	INTERNAL_VAR,
-	PUBLIC_VAR
+	PUBLIC_VAR,
+	ANY_ENV_SCOPE
 };
 
 enum e_prompt_args_type
