@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:12:22 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 22:06:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,61 +29,20 @@ char	**build_path(void)
 	return (path);
 }
 
-char	**build_argv(t_args **head, char **path, t_env *envp)
+static bool	check_init_exec_io_error(t_block *block, int ret)
 {
-	char	**tab;
-	int		i;
-	t_args	*tmp;
-
-	i = 0;
-	if (errno)
-		return (NULL);
-	rebuild_args(head, envp);
-	update_t_args(head);
-	check_for_color(head);
-	get_cmd_path(path, &(*head)->final_arg, &(*head)->cmd_w_path);
-	tab = ft_calloc(t_arg_lst_len(*head) + 1, sizeof(char *));
-	if (!tab)
-		return (0);
-	i = 0;
-	tmp = *head;
-	while (tmp)
+	if (ret == -1)
+		exit_ms(2, "exec init");
+	else if (ret == -2)
 	{
-		tab[i++] = tmp->final_arg;
-		tmp = tmp->next;
+		block->cmd.exit_value = 1 << 8;
+		g_ms_params.last_exit_code = block->cmd.exit_value;
+		perror("minishell1");
+		set_env_exit_var(extract_exit_code(block->cmd.exit_value));
+		errno = 0;
+		return (false);
 	}
-	return (tab);
-}
-
-char	**build_envp(t_env	*envp)
-{
-	char	**tab;
-	int		len;
-	t_env	*tmp;
-
-	tmp = envp;
-	len = 0;
-	while (envp)
-	{
-		if (envp->env_scope == PUBLIC_VAR)
-			len++;
-		envp = envp->next;
-	}
-	tab = ft_calloc((len + 1), sizeof(char *));
-	if (!tab)
-		return (NULL);
-	len = 0;
-	while (tmp)
-	{
-		if (tmp->env_scope == PUBLIC_VAR)
-		{
-			tab[len] = ft_strsjoin(3, tmp->var_name, "=", tmp->var_value);
-			if (!tab[len++])
-				return (ft_strsfree(tab), NULL);
-		}
-		tmp = tmp->next;
-	}
-	return (tab);
+	return (true);
 }
 
 bool	init_exec_io(t_block *block)
@@ -102,18 +61,7 @@ bool	init_exec_io(t_block *block)
 			ret = output_manager(tmp, &block->io_tab[1], g_ms_params.envp);
 		tmp = tmp->next;
 	}
-	if (ret == -1)
-		exit_ms(2, "exec init");
-	else if (ret == -2)
-	{
-		block->cmd.exit_value = 1 << 8;
-		g_ms_params.last_exit_code = block->cmd.exit_value;
-		perror("minishell1");
-		set_env_exit_var(extract_exit_code(block->cmd.exit_value));
-		errno = 0;
-		return (false);
-	}
-	return (true);
+	return (check_init_exec_io_error(block, ret));
 }
 
 t_exec_vars	init_exec_vars(t_block *block)

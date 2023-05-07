@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/07 14:28:29 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/07 22:30:41 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ EXECUTION			=	execute_cmd.c			\
 						execution.c				\
 						flag_case.c				\
 						add_color.c				\
+						build_execve_args.c		\
 						execute_utils_0.c		\
 						execute_utils_1.c		\
 						execute_utils_2.c		\
