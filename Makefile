@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/07 22:30:41 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/07 23:24:36 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,6 +81,7 @@ PARSING				=	ms_gnl.c			\
 						check_cmd.c			\
 						parsing.c			\
 						heredoc.c			\
+						heredoc_gnl.c		\
 						parse_user_input.c	\
 						wildcard_0.c		\
 						wildcard_1.c		\

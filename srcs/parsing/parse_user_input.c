@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 00:54:04 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 14:27:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 23:23:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <ms_parsing.h>
 #include <ms_history.h>
 #include <ms_exec.h>
+#include <ms_heredoc.h>
 
 bool	parse_user_input(char *user_input)
 {
