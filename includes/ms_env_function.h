@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env_function.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:04:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_FUNCTION_H
-# define ENV_FUNCTION_H
+#ifndef MS_ENV_FUNCTION_H
+# define MS_ENV_FUNCTION_H
 
 # include <ms_struct.h>
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 22:43:24 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:16:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 #include <ms_struct.h>
 #include <stdio.h>
 
-
-
 void	ms_hd_gnl(t_fd fd, char **user_input)
 {
 	char	*following_part;
@@ -33,10 +31,7 @@ void	ms_hd_gnl(t_fd fd, char **user_input)
 	get_next_line(fd, user_input);
 	len = 0;
 	if (*user_input)
-	{
 		len = ft_strlen(*user_input);
-		
-	}
 	while (*user_input && len >= 2 && (*user_input)[len - 1] == '\n' \
 		&& (*user_input)[len - 2] == '\\')
 	{
@@ -66,13 +61,14 @@ void	heredoc_child(char *limiter, int *tube)
 {
 	t_fd	dev_null;
 	t_fd	tmp;
-	
+
 	my_close(g_ms_params.input_fd, -2);
 	signal(SIGINT, handler_hd_close);
 	write(g_ms_params.stdin_fileno, "heredoc> ", 9);
 	ms_hd_gnl(g_ms_params.stdin_fileno, &g_ms_params.hd_vars.str);
 	g_ms_params.hd_vars.limiter = ft_strjoin(limiter, "\n");
-	while (g_ms_params.hd_vars.str && ft_strcmp(g_ms_params.hd_vars.str, g_ms_params.hd_vars.limiter) && !errno)
+	while (g_ms_params.hd_vars.str && \
+	ft_strcmp(g_ms_params.hd_vars.str, g_ms_params.hd_vars.limiter) && !errno)
 	{
 		write(tube[1], g_ms_params.hd_vars.str, ft_strlen(g_ms_params.hd_vars.str));
 		free(g_ms_params.hd_vars.str);

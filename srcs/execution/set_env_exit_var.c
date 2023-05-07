@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_env_exit_var.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 21:50:58 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:12:30 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_env_exit_var(int value)
 void	change_env_var_value(char *name, char *value)
 {
 	t_env	*var;
-	
+
 	var = find_env_var(g_ms_params.envp, name);
 	if (!var)
 		return ;

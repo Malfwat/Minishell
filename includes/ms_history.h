@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_history.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 03:14:25 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:05:00 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HISTORY_H
-# define HISTORY_H
+#ifndef MS_HISTORY_H
+# define MS_HISTORY_H
 
 # include <ms_struct.h>
 

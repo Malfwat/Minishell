@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ms_struct.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:05:49 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ms_struct_H
+#ifndef MS_STRUCT_H
 
-# define ms_struct_H
+# define MS_STRUCT_H
 
 # include <stdbool.h>
 # include <sys/types.h>
@@ -120,7 +120,7 @@ typedef struct s_exec_vars
 	char					*cd_implicit;
 }							t_exec_vars;
 
-typedef struct	s_heredoc_vars
+typedef struct s_heredoc_vars
 {
 	char		*str;
 	char		*limiter;
@@ -149,4 +149,3 @@ typedef struct s_minishell
 }							t_minishell;
 
 #endif
-

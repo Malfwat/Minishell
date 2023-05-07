@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_prompt.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:35:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:21:01 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:05:09 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PROMPT_H
-# define PROMPT_H
+#ifndef MS_PROMPT_H
+# define MS_PROMPT_H
 
 # include <errno.h>
 # include <minishell.h>

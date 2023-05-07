@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:04:45 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_MS_H
-# define EXEC_MS_H
+#ifndef MS_EXEC_H
+# define MS_EXEC_H
 
 # include <libft.h>
 # include <minishell.h>
@@ -44,8 +44,8 @@ bool		create_pipe(t_block *blck);
 // execute_utils_1.c
 
 t_block		*find_next_block(t_block *block, bool ignore_sub);
-void		join_splitted_arg_test(t_args **args,
-t_env *env,t_s_arg *arg, bool ch);
+void		join_splitted_arg_test(t_args **args, \
+t_env *env, t_s_arg *arg, bool ch);
 bool		rebuild_args(t_args **head, t_env *envp);
 void		close_sub_fds(t_block *head);
 void		free_exec_vars(t_exec_vars exec_vars);

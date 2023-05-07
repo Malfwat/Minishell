@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_built_ins.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:10:32 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,4 @@ void	exec_builtin(t_block *block, t_exec_vars vars)
 	else
 		launch_builtins(vars, block->io_tab);
 	block->cmd.exit_value = g_ms_params.last_exit_code;
-	// set_env_exit_var(extract_exit_code(block->cmd.exit_value));
 }
