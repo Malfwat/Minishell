@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 05:26:19 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/05 00:00:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 12:55:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ char	*ft_strchrnul_set(const char *s, char *set)
 	i = -1;
 	while (s[++i])
 		if (ft_strchr(set, s[i]))
-			break;
+			break ;
 	return ((char *)&s[i]);
 }

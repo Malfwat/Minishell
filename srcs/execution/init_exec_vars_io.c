@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec_vars_io.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/06 00:21:08 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:12:22 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	**build_argv(t_args **head, char **path, t_env *envp)
 	char	**tab;
 	int		i;
 	t_args	*tmp;
-
 
 	i = 0;
 	if (errno)
@@ -107,7 +106,7 @@ bool	init_exec_io(t_block *block)
 		exit_ms(2, "exec init");
 	else if (ret == -2)
 	{
-		block->cmd.exit_value = 1 << 8; 
+		block->cmd.exit_value = 1 << 8;
 		g_ms_params.last_exit_code = block->cmd.exit_value;
 		perror("minishell1");
 		set_env_exit_var(extract_exit_code(block->cmd.exit_value));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 23:15:32 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:01:40 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		add_block_back(t_block **head, t_block **(*last)(t_block *));
 // built_in/
 
 bool		pwd(t_fd fd);
-bool		cd(char **tab, t_fd);
+bool		cd(char **tab, t_fd fd);
 bool		ms_exit_builtin(t_exec_vars vars, t_fd fd[2]);
 bool		ms_echo(char **tab, t_fd fd);
 
@@ -57,7 +57,7 @@ void		free_t_args(t_args *ptr);
 
 // free_struct_1.c
 
-void		free_ms_params();
+void		free_ms_params(t_minishell ms_params);
 void		free_env_lst(t_env *envp_lst);
 void		free_prompt_params(t_prompt *lst);
 
@@ -85,7 +85,7 @@ bool interpret);
 // meta_char.c
 
 char		*interpret_dollars(t_s_arg *arg, t_env *envp);
-char    	*replace_dollars_var(char *res, t_env *envp, char *var);
+char		*replace_dollars_var(char *res, t_env *envp, char *var);
 void		update_t_args(t_args **args);
 
 void		handler_func(int num);
@@ -105,7 +105,7 @@ void		free_t_s_arg(t_s_arg **arg);
 char		*join_splitted_arg(t_s_arg *arg, t_env *envp, \
 bool interpret);
 void		ls_split_args_addback(t_s_arg **head, t_s_arg *new);
-t_s_arg	*ls_split_args_new(char *data, char scope);
+t_s_arg		*ls_split_args_new(char *data, char scope);
 
 // utils_1.c
 
@@ -135,17 +135,16 @@ void		ft_add_t_args(t_args **head, char *str);
 
 void		ensure_prompt_position(void);
 t_fd		init_prompt(void);
-bool		init_minishell(t_minishell *ms_params, int ac, char **av, char **envp);
+bool		init_minishell(t_minishell *ms_params, int ac, char **av, \
+char **envp);
 int			get_cursor_position(void);
 
+bool		is_builtin(char *str);
+void		exec_builtin(t_block *block, t_exec_vars vars);
 
-bool	is_builtin(char *str);
-void	exec_builtin(t_block *block, t_exec_vars vars);
-
-void	my_close(t_fd a, t_fd b);
-void	print_usage(void);
-void	ms_gnl(t_fd fd, char **user_input, bool conserve_nl);
-void	update_quotes(char *str, char *quotes);
-
+void		my_close(t_fd a, t_fd b);
+void		print_usage(void);
+void		ms_gnl(t_fd fd, char **user_input, bool conserve_nl);
+void		update_quotes(char *str, char *quotes);
 
 #endif /* MINISHELL_H */

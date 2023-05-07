@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 07:01:34 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:10:00 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ bool	change_dir(char *dir)
 	char	*tmp;
 	char	*tmp_oldpwd;
 	char	*cwd;
-	char	*previous_directory;
+	char	*previous_dir;
 
-	previous_directory = getcwd(NULL, 0);
-	if (chdir(dir) == -1 || !previous_directory)
-		return (error_case(&g_ms_params.last_exit_code, previous_directory), false);
+	previous_dir = getcwd(NULL, 0);
+	if (chdir(dir) == -1 || !previous_dir)
+		return (error_case(&g_ms_params.last_exit_code, previous_dir), false);
 	cwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", cwd);
-	tmp_oldpwd = ft_strjoin("OLDPWD=", previous_directory);
+	tmp_oldpwd = ft_strjoin("OLDPWD=", previous_dir);
 	if (!errno)
 	{
 		export((char *[]){tmp, NULL}, INTERNAL_VAR, 1);

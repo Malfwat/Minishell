@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 13:37:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:18:03 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:10:22 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ bool	ft_isnum(char *str)
 	return (true);
 }
 
-#include <stdio.h>
-
 bool	ms_exit_builtin(t_exec_vars vars, t_fd fd[2])
 {
 	int		length;
@@ -58,4 +56,3 @@ bool	ms_exit_builtin(t_exec_vars vars, t_fd fd[2])
 	exit_value = ft_atoi(vars.argv[1]);
 	return (free_exec_vars(vars), exit_ms(exit_value, "ex3it"), true);
 }
-

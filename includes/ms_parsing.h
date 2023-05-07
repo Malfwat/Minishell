@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ms_parsing.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:10:20 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:07:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_MS_H
-# define PARSING_MS_H
+#ifndef MS_PARSING_H
+# define MS_PARSING_H
 # include <stdlib.h>
 # include <sys/types.h>
 # include <ms_struct.h>

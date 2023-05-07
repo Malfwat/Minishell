@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/06 00:28:29 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/07 13:15:11 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,10 @@ void	error_ms_readline(const char quote)
 	exit_ms(2, "ms_readline");
 }
 
-
 void	rdl_write_in_pipe(char	*str, char quote)
 {
 	bool	erase_slash;
-	
+
 	erase_slash = 0;
 	if (str)
 	{
@@ -148,10 +147,11 @@ void	rdl_backslash(char **last_read, char *quote)
 
 	if (!*last_read || !**last_read || *quote)
 		return ;
-	if (ft_strlen(*last_read) >= 1 && (*last_read)[ft_strlen(*last_read) - 1] != '\\')
+	len = ft_strlen(*last_read);
+	if (len >= 1 && (*last_read)[len - 1] != '\\')
 		return ;
 	tmp = *last_read;
-	len = ft_strlen(*last_read) - 1;
+	len = len - 1;
 	new_read = readline("> ");
 	if (!new_read)
 		return ;
@@ -188,7 +188,7 @@ void	readline_child(void)
 {
 	char				*tmp;
 	char				quotes;
-	
+
 	signal(SIGINT, handler_readline);
 	my_close(g_ms_params.readline_pipe[0], -2);
 	if (!refresh_prompt_param(&g_ms_params.prompt_params, \
@@ -252,7 +252,8 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
 		if (tgetent(0, getenv("TERM")) == -1)
-			return (ms_perror("minishell", "tgetent", "couldn't load termcaps"), false);
+			return (ms_perror("minishell", "tgetent", \
+			"couldn't load termcaps"), false);
 		save_terminal_params(&g_ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
 		signal(SIGINT, &do_nothing);
