@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 02:15:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 05:46:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	kill_banner_processes(int sig)
 		exit_ms(2, "kill_banner: fatal:");
 	if (!pid)
 	{
-		chdir("srcs/shell_banner");
+		chdir("./srcs/shell_banner");
 		execve("/usr/bin/pkill", (char *[]){"/usr/bin/pkill", \
 		"minishell_banner", NULL}, NULL);
 		exit(0);
@@ -60,7 +60,7 @@ void	exec_shell_banner(void)
 		dup2(g_ms_params.stdin_fileno, 1);
 		signal(SIGINT, &kill_banner_processes);
 		envp = build_envp(g_ms_params.envp);
-		chdir("srcs/shell_banner");
+		chdir("./srcs/shell_banner");
 		execve("./ms_banner.sh", \
 		(char *[]){"./ms_banner.sh", NULL}, envp);
 		ms_perror("minishell", "exec_shell_banner", strerror(errno));
