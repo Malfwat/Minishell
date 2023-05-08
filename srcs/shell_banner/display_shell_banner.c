@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:32:30 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:33:43 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	exec_shell_banner(void)
 		return ;
 	if (!pid)
 	{
-		setpgid(0, 0);
-		// mute_fd(STDERR_FILENO);
+		if (setpgid(0, 0) == -1)
+			exit_ms(2, "exec_shell_banner");
 		dup2(g_ms_params.stdin_fileno, 1);
 		my_close(g_ms_params.stdin_fileno, -2);
 		signal(SIGINT, &do_nothing);
