@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:11:35 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:14:04 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ void	kill_banner_processes(int sig)
 	if (!pid)
 	{
 		killpg(g_ms_params.banner_gpid, SIGTERM);
-		printf("\033[2J\n");
+		printf("\033[2J\033[H\n");
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
-	printf("\033[2J\n");
+	printf("\033[2J\033[H\n");
 }
 
 void	exec_shell_banner(void)
@@ -95,6 +95,6 @@ void	display_shell_banner(void)
 	signal(SIGINT, do_nothing);
 	exec_shell_banner();
 	signal(SIGINT, SIG_DFL);
-	printf("\033[2J\n");
+	printf("\033[2J\033[H\n");
 	errno = 0;
 }
