@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:10:33 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:11:35 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ void	kill_banner_processes(int sig)
 		exit_ms(2, "kill_banner: fatal:");
 	if (!pid)
 	{
-		printf("Try to kill %d\n", g_ms_params.banner_gpid);
 		killpg(g_ms_params.banner_gpid, SIGTERM);
+		printf("\033[2J\n");
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
-	printf("\033[2J");
+	printf("\033[2J\n");
 }
 
 void	exec_shell_banner(void)
@@ -95,5 +95,6 @@ void	display_shell_banner(void)
 	signal(SIGINT, do_nothing);
 	exec_shell_banner();
 	signal(SIGINT, SIG_DFL);
+	printf("\033[2J\n");
 	errno = 0;
 }
