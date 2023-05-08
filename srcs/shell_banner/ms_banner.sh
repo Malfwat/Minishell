@@ -18,6 +18,8 @@ waitforjobs() {
     while test $(jobs -p | wc -w) -ge "$1"; do wait -n; done
 }
 
+trap "kill 0" SIGTERM
+
 while true; do
 	waitforjobs 60
 	(
