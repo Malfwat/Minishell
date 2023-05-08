@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 05:46:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:00:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <wait.h>
 #include <string.h>
 #include <ms_exec.h>
+#include <stdio.h>
 
 void	kill_banner_processes(int sig)
 {
@@ -37,12 +38,12 @@ void	kill_banner_processes(int sig)
 		exit_ms(2, "kill_banner: fatal:");
 	if (!pid)
 	{
-		chdir("./srcs/shell_banner");
-		execve("/usr/bin/pkill", (char *[]){"/usr/bin/pkill", \
-		"minishell_banner", NULL}, NULL);
+		printf("Try to kill %d\n", g_ms_params.banner_gpid);
+		killpg(g_ms_params.banner_gpid, SIGTERM);
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
+	printf("\n\n\n\n\n");
 }
 
 void	exec_shell_banner(void)
@@ -51,14 +52,16 @@ void	exec_shell_banner(void)
 	int		status;
 	char	**envp;
 
+	signal(SIGINT, &kill_banner_processes);
 	pid = fork();
 	if (pid == -1)
 		return ;
 	if (!pid)
 	{
+		setpgid(0, 0);
 		// mute_fd(STDERR_FILENO);
 		dup2(g_ms_params.stdin_fileno, 1);
-		signal(SIGINT, &kill_banner_processes);
+		signal(SIGINT, &do_nothing);
 		envp = build_envp(g_ms_params.envp);
 		chdir("./srcs/shell_banner");
 		execve("./ms_banner.sh", \
@@ -66,7 +69,10 @@ void	exec_shell_banner(void)
 		ms_perror("minishell", "exec_shell_banner", strerror(errno));
 		exit(1);
 	}
+	else
+		g_ms_params.banner_gpid = pid;
 	waitpid(pid, &status, 0);
+	signal(SIGINT, SIG_DFL);
 }
 
 bool	mute_fd(t_fd fd)
