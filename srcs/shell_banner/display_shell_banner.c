@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:00:58 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:10:33 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <string.h>
 #include <ms_exec.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
 
 void	kill_banner_processes(int sig)
 {
@@ -43,7 +44,7 @@ void	kill_banner_processes(int sig)
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
-	printf("\n\n\n\n\n");
+	printf("\033[2J");
 }
 
 void	exec_shell_banner(void)
