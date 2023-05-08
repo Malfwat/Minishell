@@ -14,7 +14,12 @@ echo -e -n "\033[$R;0H\033[38;5;110mPrompt de notre Minishell ici \033[38;5;9m>\
 
 : $[R--]
 
+waitforjobs() {
+    while test $(jobs -p | wc -w) -ge "$1"; do wait -n; done
+}
+
 while true; do
+	waitforjobs 60
 	(
 	e=echo\ -e
 	s=sleep
