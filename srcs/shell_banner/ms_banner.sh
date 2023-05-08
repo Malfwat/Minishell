@@ -1,5 +1,9 @@
 #!/bin/bash
 
+setsid "$0" "$@" & # Create new process group and execute script in background
+
+trap "kill 0" SIGTERM
+
 # Clear the screen and hide the cursor
 echo -e "\033[2J\033[?25l"
 
@@ -17,8 +21,6 @@ echo -e -n "\033[$R;0H\033[38;5;110mPrompt de notre Minishell ici \033[38;5;9m>\
 waitforjobs() {
     while test $(jobs -p | wc -w) -ge "$1"; do wait -n; done
 }
-
-trap "kill 0" SIGTERM
 
 while true; do
 	waitforjobs 60
