@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:33:43 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:37:21 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,10 @@ void	exec_shell_banner(void)
 	int		status;
 	char	**envp;
 
-	signal(SIGINT, &kill_banner_processes);
 	pid = fork();
 	if (pid == -1)
 		return ;
-	if (!pid)
+	else if (!pid)
 	{
 		if (setpgid(0, 0) == -1)
 			exit_ms(2, "exec_shell_banner");
@@ -54,14 +53,15 @@ void	exec_shell_banner(void)
 		signal(SIGINT, &do_nothing);
 		envp = build_envp(g_ms_params.envp);
 		if (!chdir("./srcs/shell_banner"))
-			execve("./ms_banner.sh", \
-			(char *[]){"./ms_banner.sh", NULL}, envp);
-		exit_ms(2, "exec_shell_banner");
+			execve("./ms_banner.sh", (char *[]){"./ms_banner.sh", NULL}, envp);
+		return (ft_strfree(envp), exit_ms(2, "exec_shell_banner"));
 	}
 	else
+	{
 		g_ms_params.banner_gpid = pid;
+		signal(SIGINT, &kill_banner_processes);
+	}
 	waitpid(pid, &status, 0);
-	signal(SIGINT, SIG_DFL);
 }
 
 bool	mute_fd(t_fd fd)
@@ -80,7 +80,6 @@ bool	mute_fd(t_fd fd)
 
 void	display_shell_banner(void)
 {
-	signal(SIGINT, do_nothing);
 	exec_shell_banner();
 	signal(SIGINT, SIG_DFL);
 	printf("\033[2J\033[H\n");
