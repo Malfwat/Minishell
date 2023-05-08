@@ -1,9 +1,5 @@
 #!/bin/bash
 
-setsid "$0" "$@" & # Create new process group and execute script in background
-
-trap "kill 0" SIGTERM
-
 # Clear the screen and hide the cursor
 echo -e "\033[2J\033[?25l"
 
