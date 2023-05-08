@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:37:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:50:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,17 @@ void	kill_banner_processes(int sig)
 {
 	(void)sig;
 	killpg(g_ms_params.banner_gpid, SIGTERM);
-	printf("\033[2J\033[H\n");
+	printf("\033[2J\033[H");
 }
 
-void	exec_shell_banner(void)
+pid_t	exec_shell_banner(void)
 {
 	pid_t	pid;
-	int		status;
 	char	**envp;
 
 	pid = fork();
 	if (pid == -1)
-		return ;
+		return (-1);
 	else if (!pid)
 	{
 		if (setpgid(0, 0) == -1)
@@ -54,14 +53,15 @@ void	exec_shell_banner(void)
 		envp = build_envp(g_ms_params.envp);
 		if (!chdir("./srcs/shell_banner"))
 			execve("./ms_banner.sh", (char *[]){"./ms_banner.sh", NULL}, envp);
-		return (ft_strfree(envp), exit_ms(2, "exec_shell_banner"));
+		ft_strsfree(envp);
+		exit_ms(2, "exec_shell_banner");
 	}
 	else
 	{
 		g_ms_params.banner_gpid = pid;
 		signal(SIGINT, &kill_banner_processes);
 	}
-	waitpid(pid, &status, 0);
+	return (pid);
 }
 
 bool	mute_fd(t_fd fd)
@@ -80,8 +80,12 @@ bool	mute_fd(t_fd fd)
 
 void	display_shell_banner(void)
 {
-	exec_shell_banner();
+	pid_t	exec_banner_pid;
+	int		status;
+
+	exec_banner_pid = exec_shell_banner();
+	waitpid(exec_banner_pid, &status, 0);
 	signal(SIGINT, SIG_DFL);
-	printf("\033[2J\033[H\n");
+	printf("\033[2J\033[H\033[?25h\n");
 	errno = 0;
 }
