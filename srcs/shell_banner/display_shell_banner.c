@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 01:56:02 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 02:10:18 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,18 @@ void	exec_shell_banner(void)
 	char	**envp;
 
 	pid = fork();
+	g_ms_params.shell_banner_pid = 
 	if (pid == -1)
 		return ;
 	if (!pid)
 	{
 		// mute_fd(STDERR_FILENO);
-		dup2(g_ms_params.stdin_fileno, 0);
 		dup2(g_ms_params.stdin_fileno, 1);
 		signal(SIGINT, &kill_banner_processes);
 		envp = build_envp(g_ms_params.envp);
 		chdir("srcs/shell_banner");
 		execve("./minishell_banner.sh", \
-		(char *[]){"./minishell_banner.sh", "-T", NULL}, envp);
+		(char *[]){"./minishell_banner.sh", NULL}, envp);
 		ms_perror("minishell", "exec_shell_banner", strerror(errno));
 		exit(1);
 	}
