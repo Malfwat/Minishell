@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:14:04 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/08 07:30:20 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,8 @@
 
 void	kill_banner_processes(int sig)
 {
-	pid_t	pid;
-	int		status;
-
 	(void)sig;
-	pid = fork();
-	if (pid == -1)
-		exit_ms(2, "kill_banner: fatal:");
-	if (!pid)
-	{
-		killpg(g_ms_params.banner_gpid, SIGTERM);
-		printf("\033[2J\033[H\n");
-		exit(0);
-	}
-	waitpid(pid, &status, 0);
+	killpg(g_ms_params.banner_gpid, SIGTERM);
 	printf("\033[2J\033[H\n");
 }
 
@@ -68,7 +56,8 @@ void	exec_shell_banner(void)
 		execve("./ms_banner.sh", \
 		(char *[]){"./ms_banner.sh", NULL}, envp);
 		ms_perror("minishell", "exec_shell_banner", strerror(errno));
-		exit(1);
+		errno = 0;
+		exit_ms(2, "exec_shell_banner");
 	}
 	else
 		g_ms_params.banner_gpid = pid;
