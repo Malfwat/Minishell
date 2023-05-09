@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:51:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 15:08:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_fd	init_prompt(void)
 	int					status;
 	int					exit_value;
 
+	status = 0;
 	if (pipe(g_ms_params.readline_pipe))
 		exit_ms(0, "prompt pipe");
 	g_ms_params.readline_pid = fork();
