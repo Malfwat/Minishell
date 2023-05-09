@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 13:35:07 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 23:35:02 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/09 23:38:39 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,5 @@ void	ms_readline(char *tmp, char quote)
 	if (!tmp)
 		error_ms_readline(quote);
 	update_quotes(tmp, &quote);
-	printf("actual quote:%c\n", quote);
 	return (ms_readline(tmp, quote));
 }
