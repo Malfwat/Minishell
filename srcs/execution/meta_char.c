@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/09 23:37:18 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*replace_dollars_var(char *res, t_env *envp, char *var)
 	char	*dollar_var;
 	char	*tmp;
 
-	tmp = ft_strchrnul_set(var, "\'*");
+	tmp = ft_strchrnul_set(var, "\'* ,!@#%^&()-+=[]{};:\"<>\t.?/\\|");
 	dollar_var = ft_substr(var, 0, tmp - var);
 	env_var = find_env_var(envp, dollar_var);
 	if (!env_var)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/07 23:24:36 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/09 23:27:42 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,18 +24,19 @@ SRCS_DIR			=	srcs/
 
 EXECUTION_DIR		=	execution/
 
-EXECUTION			=	execute_cmd.c			\
-						execution.c				\
-						flag_case.c				\
-						add_color.c				\
-						build_execve_args.c		\
-						execute_utils_0.c		\
-						execute_utils_1.c		\
-						execute_utils_2.c		\
-						execute_built_ins.c		\
-						set_env_exit_var.c		\
-						children_functions.c	\
-						init_exec_vars_io.c		\
+EXECUTION			=	execute_cmd.c				\
+						execution.c					\
+						flag_case.c					\
+						add_color.c					\
+						handle_parsed_user_input.c	\
+						build_execve_args.c			\
+						execute_utils_0.c			\
+						execute_utils_1.c			\
+						execute_utils_2.c			\
+						execute_built_ins.c			\
+						set_env_exit_var.c			\
+						children_functions.c		\
+						init_exec_vars_io.c			\
 						meta_char.c	
 
 SIGNAL				=	manage_signals.c
@@ -45,6 +46,10 @@ SIGNAL_DIR			=	signals/
 HISTORY				=	history_functions.c
 
 HISTORY_DIR			=	history/
+
+SHELL_BANNER		=	display_shell_banner.c
+
+SHELL_BANNER_DIR	=	shell_banner/
 
 PROMPT				=	prompt_utils_0.c	\
 						prompt_utils_1.c	\
@@ -135,6 +140,7 @@ SRCS				+=	$(addprefix $(SIGNAL_DIR), $(SIGNAL))
 SRCS				+=	$(addprefix $(EXECUTION_DIR), $(EXECUTION))
 SRCS				+=	$(addprefix $(TERM_UTILS_DIR), $(TERM_UTILS))
 SRCS				+=	$(addprefix $(MS_READLINE_DIR), $(MS_READLINE))
+SRCS				+=	$(addprefix $(SHELL_BANNER_DIR), $(SHELL_BANNER))
 SRCS				+=	main.c
 
 OBJ					=	$(addprefix $(BUILD), $(SRCS:.c=.o))
@@ -151,6 +157,7 @@ DIRS				+=	$(addprefix $(BUILD), $(PARSING_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(STRUCT_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(TERM_UTILS_DIR))
 DIRS				+=	$(addprefix $(BUILD), $(MS_READLINE_DIR))
+DIRS				+=	$(addprefix $(BUILD), $(SHELL_BANNER_DIR))
 
 LGREY				=	\033[38;5;249m
 LGREEN				=	\033[38;5;28m

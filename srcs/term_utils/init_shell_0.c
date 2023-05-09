@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:51:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 23:31:33 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,16 @@ t_fd	init_prompt(void)
 	int					status;
 	int					exit_value;
 
+	status = 0;
 	if (pipe(g_ms_params.readline_pipe))
 		exit_ms(0, "prompt pipe");
 	g_ms_params.readline_pid = fork();
-	if (!g_ms_params.readline_pid)
+	if (g_ms_params.readline_pid == -1)
+	{
+		my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]);
+		exit_ms(0, "prompt fork");
+	}
+	else if (!g_ms_params.readline_pid)
 		readline_child();
 	waitpid(g_ms_params.readline_pid, &status, 0);
 	exit_value = extract_exit_code(status);

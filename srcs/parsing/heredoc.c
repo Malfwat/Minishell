@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 23:32:33 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 23:31:20 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ int	heredoc(char *limiter)
 	if (pipe(g_ms_params.heredoc_pipe) == -1)
 		return (-1);
 	g_ms_params.heredoc_pid = fork();
+	if (g_ms_params.heredoc_pid == -1)
+	{
+		my_close(g_ms_params.heredoc_pipe[0], g_ms_params.heredoc_pipe[1]);
+		return (-1);
+	}
 	if (!g_ms_params.heredoc_pid)
 		heredoc_child(limiter, g_ms_params.heredoc_pipe);
 	waitpid(g_ms_params.heredoc_pid, &status, 0);

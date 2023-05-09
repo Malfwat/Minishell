@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_struct.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 18:04:12 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 13:05:49 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 23:27:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ typedef struct s_minishell
 	t_fd					input_fd;
 	char					*prev_line;
 	char					*ms_prompt;
+	pid_t					banner_gpid;
 	char					*previous_directory;
 	t_prompt				prompt_params;
 	t_env					*envp;
