@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 23:22:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 23:26:07 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 # include <ms_define.h>
 # include <errno.h>
 # include <signal.h>
+
+// display_shell_banner.c
+void		display_shell_banner(void);
+
+// handle_parsed_user_input.c
+
+void		handle_parsed_user_input(void);
 
 // init_t_block.c
 

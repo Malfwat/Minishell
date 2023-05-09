@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 13:38:58 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 23:37:37 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/09 23:31:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ char	check_for_quotes(char *str, char quote)
 
 	if (!str || !*str)
 		return (quote);
-	if (!quote)
-		quote_found = ft_strchr_set(str, "'\"");
-	else
-		quote_found = ft_strchr(str, quote);
+	quote_found = ft_strchr_set(str, "'\"");
 	if (quote && quote_found && *quote_found == quote)
 		return (check_for_quotes(quote_found + 1, 0));
 	else if (quote_found && !quote)
