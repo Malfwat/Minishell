@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/08 07:50:19 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 15:11:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,11 @@ void	display_shell_banner(void)
 	int		status;
 
 	exec_banner_pid = exec_shell_banner();
-	waitpid(exec_banner_pid, &status, 0);
+	if (exec_banner_pid != -1)
+	{
+		waitpid(exec_banner_pid, &status, 0);
+		printf("\033[2J\033[H\033[?25h\n");
+	}
 	signal(SIGINT, SIG_DFL);
-	printf("\033[2J\033[H\033[?25h\n");
 	errno = 0;
 }

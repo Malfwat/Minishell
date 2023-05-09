@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 16:12:21 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/09 15:04:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/09 15:10:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int ac, char **av, char **envp)
 {
 	if (!init_minishell(&g_ms_params, ac, av, envp))
 		return (1);
-//	display_shell_banner();
+	display_shell_banner();
 	while (1)
 		if (init_and_parse_input(av))
 			handle_parsed_user_input();
