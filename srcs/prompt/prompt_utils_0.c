@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:40:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:17:01 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/09 18:12:00 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*fetch_current_time(void)
 		return (NULL);
 	pid = fork();
 	if (pid == -1)
-		return (NULL);
+		return (my_close(tube[0], tube[1]), NULL);
 	else if (pid == 0)
 		my_exec((char *[]){"/usr/bin/date", "+%T", NULL}, tube);
 	else
@@ -69,7 +69,7 @@ char	*fetch_git_cwd_branch_name(void)
 		return (NULL);
 	pid = fork();
 	if (pid == -1)
-		return (NULL);
+		return (my_close(tube[0], tube[1]), NULL);
 	else if (pid == 0)
 		my_exec((char *[]){"/usr/bin/git", "branch", \
 		"--show-current", NULL}, tube);
