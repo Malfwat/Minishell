@@ -9,8 +9,8 @@ C=`tput cols`
 REVERSED_BANNER=`tac "minishell_banner.txt"`
 
 # Decrease the number of rows by 1
-: $[R--]
-echo -e -n "\033[$R;0H\033[38;5;110mPrompt de notre Minishell ici \033[38;5;9m>\033[0m"
+# : $[R--]
+# echo -e -n "\033[$R;0H\033[38;5;110mPrompt de notre Minishell ici \033[38;5;9m>\033[0m"
 
 : $[R--]
 
@@ -23,12 +23,12 @@ while true; do
 	random_chance=$((RANDOM % 100 + 1))
 
 	for i in `eval $e {1..$R}`; do
-		c=`printf '%c' $(shuf -n1 -e m i n i s h e l l M I N I S H E L L ═ ║ ╔ ╗ ╚ ╝ █ ░)`
+		c=`printf '%c' $(shuf -n1 -e m i n s h e l M I S E L 0 1 ! @ \# $ % & )`
 		p_char="\033[$[i-1];${j}H\033[32m$c"
 		curr_char="\033[$i;${j}H\033[37m$c"
 		char_in_banner=$(awk -v row=$(($R - $i + 1)) -v col=$j 'BEGIN{FS=""; OFS="";} NR==row {printf "%s", $col; exit}' <<< "$REVERSED_BANNER")
 
-		if [[ -n "$char_in_banner" && "$char_in_banner" != " " ]] && [ $random_chance -le 100 ]; then
+		if [[ -n "$char_in_banner" ]] && [ $random_chance -le 100 ]; then
 			p_char="\033[$[i-1];${j}H\033[32m$char_in_banner"
 			curr_char="\033[$i;${j}H\033[37m$char_in_banner"
 			$e $p_char$curr_char
@@ -61,7 +61,7 @@ while true; do
 			$s 0.06
 		fi
 	done
-	) & sleep 0.03
+	) & sleep 1
 done
 
 # ███╗░░░███╗██╗███╗░░██╗██╗░██████╗██╗░░██╗███████╗██╗░░░░░██╗░░░░░

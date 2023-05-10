@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env_function.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:56:26 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:04:15 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 01:01:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ t_env	*sort_env(t_env *lst);
 t_env	*cpy_t_env(t_env *lst);
 bool	add_update_env_var(char *name, bool env_scope, char *s);
 void	change_env_var_value(char *name, char *value);
+bool	is_valid_identifier(char *name);
 
 #endif /* ENV_FUNCTION_C */
