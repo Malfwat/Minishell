@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   children_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:15:17 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 17:32:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <exec_ms.h>
-#include <env_function.h>
+#include <ms_exec.h>
+#include <ms_env_function.h>
 #include <sys/wait.h>
 #include <signal.h>
 
@@ -65,12 +65,12 @@ void	free_children(t_pids **children)
 	*children = NULL;
 }
 
-int	wait_children(t_minishell *ms_params)
+int	wait_children(void)
 {
 	int		status;
 	t_pids	*children;
 
-	children = ms_params->children;
+	children = g_ms_params.children;
 	status = 0;
 	if (children)
 	{
@@ -80,10 +80,9 @@ int	wait_children(t_minishell *ms_params)
 				return (-1);
 			children = children->next;
 		}
-		free_children(&ms_params->children);
-		ms_params->last_exit_code = status;
-		free(find_env_var(ms_params->envp, "?")->var_value);
-		find_env_var(ms_params->envp, "?")->var_value = ft_itoa(extract_exit_code(ms_params->last_exit_code));
+		free_children(&g_ms_params.children);
+		g_ms_params.last_exit_code = status;
+		set_env_exit_var(extract_exit_code(g_ms_params.last_exit_code));
 	}
-	return (ms_params->last_exit_code);
+	return (g_ms_params.last_exit_code);
 }

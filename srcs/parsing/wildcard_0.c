@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_0.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 22:47:32 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 18:01:23 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <dirent.h>
 #include <sys/types.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdio.h>
 #include <errno.h>
 #include <libft.h>
 
-static void	ft_add_t_args(t_args **head, char *str)
+void	ft_add_t_args(t_args **head, char *str)
 {
 	t_args	*new;
 	t_args	*tmp;
@@ -47,11 +47,11 @@ static void	ft_add_t_args(t_args **head, char *str)
 
 bool	open_dir(char *dir, DIR **dirp)
 {
-	char			*path;
+	char	*path;
 
 	if (!dir)
 		dir = ft_strdup(".");
-	else if (dir[0] != '/')
+	else if ((dir)[0] != '/')
 	{
 		path = getcwd(NULL, 0);
 		if (!path)
@@ -61,10 +61,13 @@ bool	open_dir(char *dir, DIR **dirp)
 		if (!dir)
 			return (false);
 	}
+	else
+		dir = ft_strdup(dir);
 	*dirp = opendir(dir);
+	errno = 0;
 	free(dir);
 	if (!*dirp)
-		return (perror("dirp"), false);
+		return (false);
 	return (true);
 }
 
@@ -74,17 +77,17 @@ t_args	*wildcard(char *dir, char *pattern)
 	struct dirent	*d_entry;
 	t_args			*lst;
 
+	lst = NULL;
 	if (!open_dir(dir, &dirp))
 		return (NULL);
 	d_entry = readdir(dirp);
-	lst = NULL;
 	while (d_entry && !errno)
 	{
 		if (compare_wildcard(pattern, d_entry->d_name))
 		{
-			if (dir)
+			if (dir && ft_strcmp(dir, ".") && d_entry->d_name[0] != '.')
 				ft_add_t_args(&lst, ft_strsjoin(3, dir, "/", d_entry->d_name));
-			else
+			else if (d_entry->d_name[0] != '.')
 				ft_add_t_args(&lst, ft_strdup(d_entry->d_name));
 		}
 		d_entry = readdir(dirp);

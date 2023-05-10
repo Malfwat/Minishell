@@ -27,8 +27,11 @@ SRCS =	get_next_line/get_next_line.c \
 	ft_strcat.c \
 	ft_strcpy.c \
 	ft_strncat.c \
+	ft_strchr_set.c \
 	ft_strchr.c \
+	ft_strchrnul_nm.c \
 	ft_strchrnul.c \
+	ft_strchrnul_set.c \
 	ft_strschr_here.c \
 	ft_strs_expand.c \
 	ft_intchr.c \
@@ -74,6 +77,7 @@ SRCS =	get_next_line/get_next_line.c \
 	ft_putnbr_fd.c \
 	ft_strlcpy.c \
 	ft_split.c \
+	ft_is_directory.c \
 	ft_strjoin.c \
 	ft_strsjoin.c \
 	ft_strlcat.c
@@ -114,10 +118,10 @@ so:
 	$(CC) $(CFLAGS) -I$(INCLUDES) -I$(GNL_INCLUDES) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS) $(BONUS_OBJS)
+	@$(RM) $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
-	$(RM) $(NAME) $(NAME:.a=.so)
+	@$(RM) $(NAME) $(NAME:.a=.so)
 
 re: clean all
 

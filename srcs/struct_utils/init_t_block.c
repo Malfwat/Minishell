@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_t_block.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:02:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 20:56:12 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <libft.h>
 #include <stdlib.h>
 #include <ms_define.h>

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:07:16 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/17 22:02:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:17:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <prompt.h>
+#include <ms_prompt.h>
 
 void	ft_memset_uni(char *dest, char *c, int len)
 {
@@ -43,7 +43,7 @@ char	*get_cwd_path_since_home(void)
 	home_path = getenv("HOME");
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (NULL);
+		return (errno = 0, ft_strdup("\033[38;5;9munreachable\033[0m"));
 	else if (home_path && *home_path)
 	{
 		home_in_cwd = ft_strnstr(cwd, home_path, ft_strlen(home_path));

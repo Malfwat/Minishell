@@ -6,11 +6,11 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/22 17:50:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/07 13:11:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <prompt.h>
+#include <ms_prompt.h>
 #include <libft.h>
 #include <ms_define.h>
 #include <stdio.h>
@@ -77,11 +77,10 @@ char	*build_prompt(t_prompt *params, bool side)
 	char			*prompt;
 
 	errno = 0;
+	(void)side;
 	pargs = NULL;
-	if (side == P_HEADER)
-		build_upper_prompt(params, &pargs);
-	else if (side == P_FOOTER)
-		build_prompt_user(&pargs, params);
+	build_upper_prompt(params, &pargs);
+	build_prompt_user(&pargs, params);
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);
 	if (errno)

@@ -6,11 +6,11 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:52:45 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 22:02:58 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <minishell.h>
@@ -24,7 +24,8 @@ void	free_t_args(t_args *ptr)
 	{
 		tmp = ptr->next;
 		free(ptr->final_arg);
-		free_t_split_arg(&ptr->s_args);
+		free(ptr->cmd_w_path);
+		free_t_s_arg(&ptr->s_args);
 		free(ptr);
 		ptr = tmp;
 	}
@@ -45,8 +46,8 @@ void	free_redirect(t_redirect *ptr)
 	while (ptr)
 	{
 		tmp = ptr->next;
-		free_t_split_arg(&ptr->file_name);
-		free_t_split_arg(&ptr->hd_lim);
+		free_t_s_arg(&ptr->file_name);
+		free_t_s_arg(&ptr->hd_lim);
 		free(ptr->joined_name);
 		free(ptr);
 		ptr = tmp;
