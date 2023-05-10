@@ -6,18 +6,18 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:33:48 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/18 13:26:36 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:13:59 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <libft.h>
 #include <stdlib.h>
 #include <minishell.h>
 #include <stdio.h>
 #include <errno.h>
 
-t_args	*new_cmd_arg(t_split_arg *arg)
+t_args	*new_cmd_arg(t_s_arg *arg)
 {
 	t_args	*new;
 
@@ -35,7 +35,7 @@ t_args	*last_args(t_args *head)
 	return (head);
 }
 
-void	ft_ls_t_args_addback(t_args **head, t_split_arg *arg)
+void	ft_ls_t_args_addback(t_args **head, t_s_arg *arg)
 {
 	t_args	*new;
 
@@ -51,7 +51,7 @@ void	ft_ls_t_args_addback(t_args **head, t_split_arg *arg)
 	}
 }
 
-void	ft_addarg_front(t_args **head, t_split_arg *arg)
+void	ft_addarg_front(t_args **head, t_s_arg *arg)
 {
 	t_args	*new;
 
@@ -81,6 +81,6 @@ void	insert_t_args(t_args **head, t_args *current, t_args *new_lst)
 		current->next->prev = last_args(new_lst);
 	last_args(new_lst)->next = current->next;
 	free(current->final_arg);
-	free_t_split_arg(&current->s_args);
+	free_t_s_arg(&current->s_args);
 	free(current);
 }

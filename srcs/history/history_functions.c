@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 02:18:56 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 04:32:45 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/05 06:23:23 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 #include <readline/history.h>
 #include <fcntl.h>
 #include <minishell.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <ms_define.h>
 
-int	fill_history(int fd, t_minishell *ms_params)
+int	fill_history(int fd)
 {
 	char	*str;
 
@@ -28,17 +28,17 @@ int	fill_history(int fd, t_minishell *ms_params)
 		if (str[ft_strlen(str) - 1] == '\n')
 			str[ft_strlen(str) - 1] = 0;
 		add_history(str);
-		free(ms_params->prev_line);
-		ms_params->prev_line = ft_strdup(str);
-		if (!ms_params->prev_line)
-			return (free(str), -1);
+		free(g_ms_params.prev_line);
+		g_ms_params.prev_line = ft_strdup(str);
+		if (!g_ms_params.prev_line)
+			return (free(str), my_close(fd, -2), -1);
 		free(str);
 		get_next_line(fd, &str);
 	}
 	return (fd);
 }
 
-int	get_my_history(t_minishell *ms_params)
+int	get_my_history(void)
 {
 	t_fd	fd;
 	char	*tmp;
@@ -53,18 +53,18 @@ int	get_my_history(t_minishell *ms_params)
 	free(tmp);
 	if (fd == -1)
 		return (-1);
-	return (fill_history(fd, ms_params));
+	return (fill_history(fd));
 }
 
-void	ms_add_history(char *str, t_minishell *ms_params)
+void	ms_add_history(char *str)
 {
 	static char	*prev_line;
 	int			i;
 	t_fd		fd;
 
-	fd = ms_params->history_fd;
-	if (!*str || (ms_params->prev_line \
-		&& !ft_strcmp(ms_params->prev_line, str)))
+	fd = g_ms_params.history_fd;
+	if (!*str || (g_ms_params.prev_line \
+		&& !ft_strcmp(g_ms_params.prev_line, str)))
 		return ;
 	i = 0;
 	while (str[i] && ft_strchr(" \t", str[i]))
@@ -73,10 +73,12 @@ void	ms_add_history(char *str, t_minishell *ms_params)
 		return ;
 	prev_line = ft_strdup(str);
 	if (!prev_line)
-		exit_ms(*ms_params, 1, "history");
-	free(ms_params->prev_line);
-	ms_params->prev_line = prev_line;
+		exit_ms(1, "history");
+	free(g_ms_params.prev_line);
+	g_ms_params.prev_line = prev_line;
+	add_history(str);
+	if (fd == -1)
+		return ;
 	write(fd, str, ft_strlen(str));
 	write(fd, "\n", 1);
-	add_history(str);
 }

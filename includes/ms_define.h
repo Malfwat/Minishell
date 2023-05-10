@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ms_define.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:02:55 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 00:27:37 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MS_DEFINE_H
 # define MS_DEFINE_H
+
+# include <ms_struct.h>
+
+extern t_minishell	g_ms_params;
+typedef int			t_fd;
 
 # define INIT_FD_VALUE -2
 
@@ -40,6 +45,10 @@
 # define HEREDOC 0
 # define FILE_INPUT 1
 
+# define ALPHA "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# define DIGIT "0123456789"
+# define UC "_"
+
 // all defines related to the prompt (control sequence, decorative chars)
 
 # define BOLD "\033[1m"
@@ -54,9 +63,15 @@
 # define LCYAN "\033[38;5;38m"
 # define LBLUE "\033[38;5;110m"
 # define ENDC "\033[0m"
-# define R_ESC(sc) "\001"sc"\002"
 # define CORNER_LEFT_D "╰"
 # define CORNER_LEFT_U "╭"
+
+enum e_env_scope
+{
+	INTERNAL_VAR,
+	PUBLIC_VAR,
+	ANY_ENV_SCOPE
+};
 
 enum e_prompt_args_type
 {
@@ -83,7 +98,7 @@ enum e_type
 	ILLEGAL_INPUT = -8,
 	ILLEGAL_OUTPUT,
 	ILLEGAL_AOUTPUT,
-	ILLEGAL_HEREDOC = -5,
+	ILLEGAL_HEREDOC,
 	EXPECTING_ARGUMENT,
 	INCOMPLETE_INPUT_OUTPUT,
 	INCOMPLETE_CMD_ARG,
@@ -97,7 +112,5 @@ enum e_errors
 {
 	CMD_SYNTAX_ERR
 };
-
-typedef int	t_fd;
 
 #endif /* MS_DEFINE_H */

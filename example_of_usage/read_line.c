@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 14:13:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 22:55:49 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/03 06:45:47 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(void)
 	// char *tmp = ;
 	// rl_on_new_line();
 	// printf("%o\n", (unsigned char)-128);
-	readline("minishell $> ");
+	printf("%s\n", readline("minishell $> "));
 	// char *ptr = readline("\001\033[38;5;243m╰─\033[3m\033[38;5;235m\002\3\3 hateisse\001\033[38;5;22m\002 $ \001\033[0m\002");
 	// printf("ptr: %p rl_li.. %p\n", ptr, rl_line_buffer);
 	// printf("ptr: '%s' rl_li.. '%s'\n", ptr, rl_line_buffer);

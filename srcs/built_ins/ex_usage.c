@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ex_usage.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:49:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/21 20:39:39 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-#include <env_function.h>
-#include <struct_ms.h>
+#include <ms_env_function.h>
+#include <ms_struct.h>
 
 void	ms_echo(bool nl, int nb, ...);
 
-
 int	main(int ac, char **av, char **envp)
 {
-	t_env_var	*env_lst;
+	t_env	*env_lst;
 
 	if (ac != 2)
 		return (0);
-	env_lst = get_env_var(envp);
+	env_lst = get_env(envp);
 	pwd();
 	cd(env_lst, av[1]);
 	pwd();

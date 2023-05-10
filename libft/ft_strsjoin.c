@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 05:26:47 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 17:18:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/04/25 21:23:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strsjoin(unsigned int count, ...)
 	va_list	ap;
 
 	va_start(ap, count);
-	res = NULL;
+	res = ft_strdup("");
 	while (count--)
 	{
 		tmp = res;

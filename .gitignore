@@ -2,3 +2,6 @@
 test*
 minishell
 minishell_tester
+*.o
+*.d
+*.a
