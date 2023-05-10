@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:46:02 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 22:25:11 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:21:07 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ typedef int			t_fd;
 
 # define HEREDOC 0
 # define FILE_INPUT 1
+
+# define ALPHA "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# define DIGIT "0123456789"
+# define UC "_"
 
 // all defines related to the prompt (control sequence, decorative chars)
 

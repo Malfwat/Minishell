@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:53:42 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/10 18:42:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,24 @@ bool	change_scope(char *str)
 	return (true);
 }
 
+bool	is_valid_identifier(char *name)
+{
+	int	i;
+
+	if (!ft_isalpha(name[0]) && name[0] != '_')
+		return (false);
+	else
+	{
+		i = -1;
+		while (name[++i])
+		{
+			if (!ft_isalnum(name[i]) && name[i] != '_')
+				return (false);
+		}
+	}
+	return (true);
+}
+
 bool	export(char **tab, bool env_scope, t_fd fd)
 {
 	char	*name;
@@ -78,7 +96,7 @@ bool	export(char **tab, bool env_scope, t_fd fd)
 			return (false);
 		if (!name)
 			change_scope(tab[i]);
-		else if (ft_strchr(name, '?'))
+		else if (!is_valid_identifier(name))
 		{
 			ms_perror("minishell: export", tab[i], "not a valid identifier");
 			free(name);

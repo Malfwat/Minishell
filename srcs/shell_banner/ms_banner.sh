@@ -28,7 +28,7 @@ while true; do
 		curr_char="\033[$i;${j}H\033[37m$c"
 		char_in_banner=$(awk -v row=$(($R - $i + 1)) -v col=$j 'BEGIN{FS=""; OFS="";} NR==row {printf "%s", $col; exit}' <<< "$REVERSED_BANNER")
 
-		if [[ -n "$char_in_banner" && "$char_in_banner" != " " ]] && [ $random_chance -le 100 ]; then
+		if [[ -n "$char_in_banner" ]] && [ $random_chance -le 100 ]; then
 			p_char="\033[$[i-1];${j}H\033[32m$char_in_banner"
 			curr_char="\033[$i;${j}H\033[37m$char_in_banner"
 			$e $p_char$curr_char
@@ -61,7 +61,7 @@ while true; do
 			$s 0.06
 		fi
 	done
-	) & sleep 0.13
+	) & sleep 1
 done
 
 # ███╗░░░███╗██╗███╗░░██╗██╗░██████╗██╗░░██╗███████╗██╗░░░░░██╗░░░░░
