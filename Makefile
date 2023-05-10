@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/09 23:27:42 by malfwa           ###   ########.fr        #
+#    Updated: 2023/05/11 01:06:46 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ EXECUTION			=	execute_cmd.c				\
 						execute_utils_0.c			\
 						execute_utils_1.c			\
 						execute_utils_2.c			\
+						execute_utils_3.c			\
 						execute_built_ins.c			\
 						set_env_exit_var.c			\
 						children_functions.c		\
@@ -69,7 +70,8 @@ BUILT_INS			=	cd.c	\
 BUILT_INS_DIR		=	built_ins/
 		
 ENV					=	export_unset_env.c	\
-						export_utils.c		\
+						export_utils_0.c	\
+						export_utils_1.c	\
 						init_env_var.c		\
 						manage_env_var.c
 				
@@ -161,6 +163,7 @@ DIRS				+=	$(addprefix $(BUILD), $(SHELL_BANNER_DIR))
 
 LGREY				=	\033[38;5;249m
 LGREEN				=	\033[38;5;28m
+LRED				=	\033[1;31m
 LBLUE				=	\033[38;5;67m
 NC					=	\033[0m
 BLUE1				=	\033[38;5;72m
@@ -205,7 +208,7 @@ suppr_script:
 $(BUILD):
 	@mkdir $(BUILD) $(DIRS)
 
-$(NAME):	libft/libft.a $(BUILD)  $(OBJ)
+$(NAME):	libft/libft.a $(BUILD) $(OBJ)
 	@echo "$(LGREEN)OBJECT FILES COMPILED                                    $(NC)"
 	@$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
 	@echo "$(LGREEN)MINISHELL COMPILED                                        $(NC)"
@@ -213,8 +216,8 @@ $(NAME):	libft/libft.a $(BUILD)  $(OBJ)
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
 	@tput civis
-	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null || $(call makeprint,"Compiling ", "$@" ,"KO")
-	@$(call makeprint,"Compiling ", "$@" ,"OK")
+	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null && $(call makeprint,"Compiling ", "$@" ,"OK") || $(call makeprint,"Compiling ", "$@" ,$(LRED)"KO")
+	@tput cnorm
 
 launch: suppr_script
 	@make all ; valgrind --leak-check=full --track-origins=yes --quiet --show-leak-kinds=all --track-fds=yes --suppressions=$(SCRIPT_SUPPR) ./minishell

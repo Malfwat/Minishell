@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/09 23:26:07 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 00:35:07 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,9 @@ int			execute_commands(t_block *block);
 
 int			extract_exit_code(int status);
 
-char		*join_splitted_arg(t_s_arg *arg, t_env *envp, \
-bool interpret);
-
 // meta_char.c
 
-char		*interpret_dollars(t_s_arg *arg, t_env *envp);
+char		*interpret_dollars_syntax(t_s_arg *arg, t_env *envp);
 char		*replace_dollars_var(char *res, t_env *envp, char *var);
 void		update_t_args(t_args **args);
 
@@ -109,7 +106,7 @@ t_args		*new_cmd_arg(t_s_arg *arg);
 // init_t_s_args.c
 
 void		free_t_s_arg(t_s_arg **arg);
-char		*join_splitted_arg(t_s_arg *arg, t_env *envp, \
+char		*join_splitted_arg_syntax(t_s_arg *arg, t_env *envp, \
 bool interpret);
 void		ls_split_args_addback(t_s_arg **head, t_s_arg *new);
 t_s_arg		*ls_split_args_new(char *data, char scope);
