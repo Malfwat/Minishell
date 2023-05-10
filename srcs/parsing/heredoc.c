@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 04:10:58 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/09 15:41:17 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 18:26:40 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	hd_manager(t_block *block)
 	{
 		if (!ptr->hd_lim)
 			return (0);
-		ptr->joined_name = join_splitted_arg(ptr->hd_lim->next, NULL, false);
+		ptr->joined_name = join_splitted_arg_syntax(ptr->hd_lim->next, NULL, false);
 		if (errno)
 			return (-1);
 		ptr->fd = heredoc(ptr->joined_name);

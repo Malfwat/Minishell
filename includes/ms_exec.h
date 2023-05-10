@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 22:17:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 18:27:29 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool		create_pipe(t_block *blck);
 // execute_utils_1.c
 
 t_block		*find_next_block(t_block *block, bool ignore_sub);
-void		join_splitted_arg_test(t_args **args, \
+void		join_splitted_arg(t_args **args, \
 t_env *env, t_s_arg *arg, bool ch);
 bool		rebuild_args(t_args **head, t_env *envp);
 void		close_sub_fds(t_block *head);

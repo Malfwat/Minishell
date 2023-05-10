@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/10 15:33:50 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 21:25:50 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,37 @@ void	update_t_args(t_args **args)
 	}
 }
 
+char	*find_suffix(char *str)
+{
+	char	*suffix;
+
+	if (*str && ft_strchr(DIGIT"@!?#*$", *str))
+		suffix = str + 1;
+	else
+		suffix = ft_strchrnul_nm(str, ALPHA""DIGIT""UC);
+	return (suffix);
+}
+
 char	*replace_dollars_var(char *res, t_env *envp, char *var)
 {
 	t_env	*env_var;
 	char	*dollar_var;
-	char	*tmp;
+	char	*suffix;
 
-	if (*var && ft_strchr("0123456789@!?#*", *var))
-		tmp = var + 1;
-	else
-		tmp = ft_strchrnul_set(var, "\'* @,#%^&()-+=[]{};:\"<>\t.?!/\\|");
-	dollar_var = ft_substr(var, 0, tmp - var);
+	suffix = find_suffix(var);
+	dollar_var = ft_substr(var, 0, suffix - var);
 	env_var = find_env_var(envp, dollar_var);
 	if (!env_var)
-		res = ft_strsjoin(3, res, "", tmp);
+		res = ft_strsjoin(3, res, "", suffix);
 	else
 	{
-		res = ft_strsjoin(3, res, env_var->var_value, tmp);
+		res = ft_strsjoin(3, res, env_var->var_value, suffix);
 	}
 	free(dollar_var);
 	return (res);
 }
 
-char	*interpret_dollars(t_s_arg *arg, t_env *envp)
+char	*interpret_dollars_syntax(t_s_arg *arg, t_env *envp)
 {
 	char		*tmp;
 	char		*res;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io_functions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 06:25:37 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/10 18:26:56 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env *envp)
 {
-	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
+	ptr->joined_name = join_splitted_arg_syntax(ptr->file_name->next, envp, true);
 	if (errno)
 		return (-1);
 	if (ptr->joined_name)
@@ -44,7 +44,7 @@ int	input_manager(t_redirect *ptr, t_fd *fd, t_block *block, t_env *envp)
 
 int	output_manager(t_redirect *ptr, t_fd *fd, t_env *envp)
 {
-	ptr->joined_name = join_splitted_arg(ptr->file_name->next, envp, true);
+	ptr->joined_name = join_splitted_arg_syntax(ptr->file_name->next, envp, true);
 	if (errno)
 		return (-1);
 	if (ptr->append)

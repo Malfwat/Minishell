@@ -6,7 +6,7 @@
 #    By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/10 14:03:15 by hateisse         ###   ########.fr        #
+#    Updated: 2023/05/10 21:46:31 by hateisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -161,6 +161,7 @@ DIRS				+=	$(addprefix $(BUILD), $(SHELL_BANNER_DIR))
 
 LGREY				=	\033[38;5;249m
 LGREEN				=	\033[38;5;28m
+LRED				=	\033[1;31m
 LBLUE				=	\033[38;5;67m
 NC					=	\033[0m
 BLUE1				=	\033[38;5;72m
@@ -205,7 +206,7 @@ suppr_script:
 $(BUILD):
 	@mkdir $(BUILD) $(DIRS)
 
-$(NAME):	libft/libft.a $(BUILD)  $(OBJ)
+$(NAME):	libft/libft.a $(BUILD) $(OBJ)
 	@echo "$(LGREEN)OBJECT FILES COMPILED                                    $(NC)"
 	@$(CC) -Wall -Werror -Wextra $(OBJ) $(LIB_DIR) -lft -lncurses -lreadline -o $(NAME)
 	@echo "$(LGREEN)MINISHELL COMPILED                                        $(NC)"
@@ -213,8 +214,8 @@ $(NAME):	libft/libft.a $(BUILD)  $(OBJ)
 
 $(BUILD)%.o:	$(SRCS_DIR)%.c Makefile 
 	@tput civis
-	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null || $(call makeprint,"Compiling ", "$@" ,"KO")
-	@$(call makeprint,"Compiling ", "$@" ,"OK")
+	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@ > /dev/null && $(call makeprint,"Compiling ", "$@" ,"OK") || $(call makeprint,"Compiling ", "$@" ,$(LRED)"KO")
+	@tput cnorm
 
 launch: suppr_script
 	@make all ; valgrind --leak-check=full --track-origins=yes --quiet --show-leak-kinds=all --track-fds=yes --suppressions=$(SCRIPT_SUPPR) ./minishell
