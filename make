@@ -1,1 +1,0 @@
-~/Documents/Ecole/Minishell
