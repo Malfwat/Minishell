@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:20:04 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 22:17:57 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 01:15:30 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool		create_pipe(t_block *blck);
 // execute_utils_1.c
 
 t_block		*find_next_block(t_block *block, bool ignore_sub);
-void		join_splitted_arg_test(t_args **args, \
+void		join_splitted_arg(t_args **args, \
 t_env *env, t_s_arg *arg, bool ch);
 bool		rebuild_args(t_args **head, t_env *envp);
 void		close_sub_fds(t_block *head);
@@ -60,6 +60,13 @@ void		close_sub_fds(t_block *head);
 t_args		*array_to_t_args(char **tab);
 bool		rebuild_args(t_args **head, t_env *envp);
 void		free_exec_vars(t_exec_vars exec_vars);
+char		*slice_next_part_to_interpret(char **str);
+
+// execute_utils_3.c
+
+void		interpret_dollars(t_s_arg *arg, t_env *envp, char ***new);
+void		put_in_list(t_args *prev, t_args *next, t_args *to_insert);
+bool		is_first_identifier_char_valid(char c);
 
 // init_exec_vars_io.c
 

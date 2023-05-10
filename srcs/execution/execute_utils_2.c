@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 03:07:36 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:17:05 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 18:23:44 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	rebuild_args(t_args **head, t_env *envp)
 	ptr = *head;
 	while (ptr)
 	{
-		join_splitted_arg_test(&ptr, envp, ptr->s_args, true);
+		join_splitted_arg(&ptr, envp, ptr->s_args, true);
 		if (errno)
 			return (false);
 		ptr = ptr->next;

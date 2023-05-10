@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 05:28:13 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 12:56:21 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:15:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ char	*ft_strnchr(const char *s, size_t count, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strchrnul(const char *s, int c);
 int		ft_strschr_here(unsigned int count, char *haystack, ...);
+char	*ft_strchrnul_nm(const char *s, char *set);
 char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strcasestr(const char *haystack, const char *needle);
 char	*ft_strnstr(const char *big, const char *little, size_t len);

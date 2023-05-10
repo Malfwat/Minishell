@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:10:00 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:23:10 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ bool	change_dir(char *dir)
 	cwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", cwd);
 	tmp_oldpwd = ft_strjoin("OLDPWD=", previous_dir);
+	free(previous_dir);
 	if (!errno)
 	{
 		export((char *[]){tmp, NULL}, INTERNAL_VAR, 1);

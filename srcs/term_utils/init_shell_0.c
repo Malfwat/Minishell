@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/09 23:31:33 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 00:55:42 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,15 @@ bool	init_termios_struct(void)
 	return (true);
 }
 
+int	error_init_prompt(int status, int exit_value)
+{
+	g_ms_params.last_exit_code = status;
+	my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]);
+	if (exit_value == 1)
+		exit_ms(0, "init prompt");
+	return (-1);
+}
+
 t_fd	init_prompt(void)
 {
 	int					status;
@@ -62,17 +71,10 @@ t_fd	init_prompt(void)
 	waitpid(g_ms_params.readline_pid, &status, 0);
 	exit_value = extract_exit_code(status);
 	if (exit_value || errno)
-	{
-		g_ms_params.last_exit_code = status;
-		my_close(g_ms_params.readline_pipe[1], g_ms_params.readline_pipe[0]);
-		if (exit_value == 1)
-			exit_ms(0, "init prompt");
-		return (-1);
-	}
+		return (error_init_prompt(status, exit_value));
 	my_close(g_ms_params.readline_pipe[1], -2);
 	g_ms_params.ms_prompt = NULL;
-	g_ms_params.last_exit_code = 0;
-	return (g_ms_params.readline_pipe[0]);
+	return (g_ms_params.last_exit_code = 0, g_ms_params.readline_pipe[0]);
 }
 
 bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)

@@ -60,7 +60,7 @@ t_s_arg	*ls_split_args_new(char *data, char scope)
 	return (new);
 }
 
-char	*join_splitted_arg(t_s_arg *arg, t_env *envp, bool interpret)
+char	*join_splitted_arg_syntax(t_s_arg *arg, t_env *envp, bool interpret)
 {
 	char	*res;
 	char	*tmp;
@@ -73,7 +73,7 @@ char	*join_splitted_arg(t_s_arg *arg, t_env *envp, bool interpret)
 		tmp = res;
 		if (interpret)
 		{
-			dollar_interpreted = interpret_dollars(arg, envp);
+			dollar_interpreted = interpret_dollars_syntax(arg, envp);
 			if (!dollar_interpreted && !res)
 				dollar_interpreted = ft_strdup("");
 			res = ft_strjoin(res, dollar_interpreted);
