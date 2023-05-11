@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 00:54:18 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/09 15:11:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:52:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ pid_t	exec_shell_banner(void)
 			exit_ms(2, "exec_shell_banner");
 		dup2(g_ms_params.stdin_fileno, 1);
 		my_close(g_ms_params.stdin_fileno, -2);
-		signal(SIGINT, &do_nothing);
+		signal(SIGINT, SIG_IGN);
 		envp = build_envp(g_ms_params.envp);
 		if (!chdir("./srcs/shell_banner"))
 			execve("./ms_banner.sh", (char *[]){"./ms_banner.sh", NULL}, envp);
