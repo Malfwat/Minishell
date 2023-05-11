@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:30:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 22:06:19 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:24:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool	check_init_exec_io_error(t_block *block, int ret)
 	{
 		block->cmd.exit_value = 1 << 8;
 		g_ms_params.last_exit_code = block->cmd.exit_value;
-		perror("minishell1");
+		perror("minishell");
 		set_env_exit_var(extract_exit_code(block->cmd.exit_value));
 		errno = 0;
 		return (false);
