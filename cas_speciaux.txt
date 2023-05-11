@@ -1,1 +1,10 @@
-- ./minishell "cat | cat | cat |ls"
+
+
+ehco stdin_fileno
+echo tets
+
+
+echo "
+
+
+"

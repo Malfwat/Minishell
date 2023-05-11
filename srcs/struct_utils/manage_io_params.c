@@ -3,53 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   manage_io_params.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 20:47:23 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/24 18:01:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <errno.h>
 #include <minishell.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 #include <ms_define.h>
 
-t_redirect	*new_redirect(t_split_arg *arg, int mode)
-{
-	t_redirect	*new;
-
-	new = ft_calloc(1, sizeof(t_redirect));
-	if (!new)
-		return (free_t_split_arg(&arg), NULL);
-	if (!ft_strncmp(arg->str, "<<", 2))
-		new->hd_lim = arg;
-	else if (arg->str[0] == '<')
-		new->file_name = arg;
-	else if (!ft_strncmp(arg->str, ">>", 2))
-	{
-		new->append = true;
-		new->file_name = arg;
-	}
-	else
-		new->file_name = arg;
-	new->mode = mode;
-	new->fd = INIT_FD_VALUE;
-	if (errno)
-		return (NULL);
-	return (new);
-}
-
-t_redirect	*last_redirect(t_redirect *head)
-{
-	while (head && head->next)
-		head = head->next;
-	return (head);
-}
-
-void	ft_add_redirect(t_redirect **head, t_split_arg *arg, int mode)
+void	ft_add_redirect(t_redirect **head, t_s_arg *arg, int mode)
 {
 	t_redirect	*new;
 
@@ -62,7 +30,7 @@ void	ft_add_redirect(t_redirect **head, t_split_arg *arg, int mode)
 		last_redirect(*head)->next = new;
 }
 
-void	ft_add_io(t_block *block, t_split_arg *io)
+void	ft_add_io(t_block *block, t_s_arg *io)
 {
 	if (!ft_strncmp(io->str, "<<", 2))
 	{
@@ -78,19 +46,38 @@ void	ft_add_io(t_block *block, t_split_arg *io)
 		ft_add_redirect(&block->io_redirect, io, OUTPUT_MODE);
 }
 
-bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
+static bool	must_return(char redirect[3], int *type, t_s_arg **arg)
+{
+	if (!ft_strcmp(redirect, "<<") && !(*arg)->next)
+		return (free_t_s_arg(arg), *type = ILLEGAL_HEREDOC, true);
+	else if (!ft_strcmp(redirect, "<") && !(*arg)->next)
+		return (free_t_s_arg(arg), *type = ILLEGAL_INPUT, true);
+	else if (!ft_strcmp(redirect, ">") && !(*arg)->next)
+		return (free_t_s_arg(arg), *type = ILLEGAL_OUTPUT, true);
+	else if (!ft_strcmp(redirect, ">>") && !(*arg)->next)
+		return (free_t_s_arg(arg), *type = ILLEGAL_AOUTPUT, true);
+	return (false);
+}
+
+void	get_redirect(char redirect[3], char *str, int *i)
+{
+	(redirect)[0] = str[*i];
+	(redirect)[1] = 0;
+	if (str[*i] == str[*i + 1])
+		(redirect)[1] = str[(*i)++];
+	(redirect)[2] = 0;
+}
+
+bool	check_io_param(char *str, int *i, int *type, t_s_arg **arg)
 {
 	char		quotes;
 	char		redirect[3];
 
 	*type = INCOMPLETE_INPUT_OUTPUT;
 	*i += pass_whitespaces(&str[*i]);
-	ft_bzero(redirect, 3 * sizeof(char));
 	if (str[*i] && ft_strchr("><", str[*i]))
 	{
-		redirect[0] = str[*i];
-		if (str[*i] == str[*i + 1])
-			redirect[1] = str[(*i)++];
+		get_redirect(redirect, str, i);
 		*arg = ls_split_args_new(ft_strdup(redirect), 0);
 		if (!(*arg))
 			return (true);
@@ -102,16 +89,10 @@ bool	check_io_param(char *str, int *i, int *type, t_split_arg **arg)
 				quotes = str[(*i)++];
 			(*i) += slice_next_part(&str[*i], arg, quotes);
 		}
-		if (!ft_strcmp(redirect, "<<") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_HEREDOC, false);
-		else if (!ft_strcmp(redirect, "<") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_INPUT, false);
-		else if (!ft_strcmp(redirect, ">") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_OUTPUT, false);
-		else if (!ft_strcmp(redirect, ">>") && !(*arg)->next)
-			return (free_t_split_arg(arg), *type = ILLEGAL_AOUTPUT, false);
+		if (must_return(redirect, type, arg))
+			return (false);
 		if (*arg && !errno)
 			return (*type = INPUT_OUTPUT, true);
 	}
-	return (free_t_split_arg(arg), false);
+	return (free_t_s_arg(arg), false);
 }

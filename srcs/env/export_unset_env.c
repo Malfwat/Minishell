@@ -6,137 +6,106 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 00:06:09 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 22:49:50 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 01:02:31 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <struct_ms.h>
+#include <ms_struct.h>
 #include <stdio.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 #include <libft.h>
 #include <stdlib.h>
 #include <minishell.h>
 
-t_env_var	*cpy_t_env_var(t_env_var *lst)
+bool	print_export(t_env *lst, t_fd fd)
 {
-	t_env_var	*new_lst;
+	t_env	*cpy;
+	t_env	*tmp;
 
-	new_lst = NULL;
-	while (lst)
+	cpy = sort_env(lst);
+	if (!cpy)
+		return (false);
+	tmp = cpy;
+	if (fd == INIT_FD_VALUE)
+		fd = 1;
+	while (cpy)
 	{
-		if (!add_env_var(&new_lst, lst->var_name, lst->var_value, 0))
-			return (free_env_lst(new_lst), NULL);
-		lst = lst->next;
+		if (cpy->env_scope == PUBLIC_VAR)
+		{
+			ft_putstr_fd("export ", fd);
+			ft_putstr_fd(cpy->var_name, fd);
+			ft_putstr_fd("=", fd);
+			ft_putendl_fd(cpy->var_value, fd);
+		}
+		cpy = cpy->next;
 	}
-	return (new_lst);
-}
-
-bool	is_in_order(t_env_var *lst)
-{
-	char	*tmp;
-
-	tmp = "";
-	while (lst)
-	{
-		if (ft_strcmp(tmp, lst->var_name) > 0)
-			return (false);
-		tmp = lst->var_name;
-		lst = lst->next;
-	}
+	free_env_lst(tmp);
 	return (true);
 }
 
-void	swap_env_node(t_env_var **lst, t_env_var *a, t_env_var *b)
+bool	change_scope(char *str)
 {
-	if (*lst == a)
-		*lst = b;
-	// a->next->prev = b;
-	a->next = b->next;
-	if (b->next)
-		b->next->prev = a;
-	b->next = a;
-	b->prev = a->prev;
-	if (a->prev)
-		a->prev->next = b;
-	a->prev = b;
-}
+	char	*name;
+	t_env	*env_var;
 
-void	print_export(t_env_var *lst, t_fd fd)
-{
-	t_env_var	*cpy;
-	t_env_var	*tmp;
-
-	cpy = cpy_t_env_var(lst);
-	if (!cpy)
-		return ;
-	while (!is_in_order(cpy))
+	name = get_env_name(str);
+	if (name)
 	{
-		tmp = cpy;
-		while (tmp->next)
-		{
-			if (ft_strcmp(tmp->var_name, tmp->next->var_name) > 0)
-				swap_env_node(&cpy, tmp, tmp->next);
-			else
-				tmp = tmp->next;
-		}
+		env_var = find_env_var(g_ms_params.envp, name);
+		free(name);
 	}
-	env(cpy, fd);
-	// free_env_lst(cpy);
+	else
+		env_var = find_env_var(g_ms_params.envp, str);
+	if (env_var)
+		env_var->env_scope = PUBLIC_VAR;
+	return (true);
 }
 
-void	export(t_minishell *ms_params, char **tab, bool temp, t_fd fd)
+bool	export(char **tab, bool env_scope, t_fd fd)
 {
-	t_env_var	*tmp;
-	char		*name;
-	char		*value;
-	int			i;
+	char	*name;
+	int		i;
+	bool	exit_value;
 
 	i = -1;
+	exit_value = true;
 	if (!*tab)
-		return (print_export(ms_params->envp, fd));
+		return (print_export(g_ms_params.envp, fd));
 	while (tab && tab[++i])
 	{
-		name = get_env_var_name(tab[i]);
+		name = get_env_name(tab[i]);
+		if (errno)
+			return (false);
 		if (!name)
-			return ;
-		if (ft_strchr(name, '?'))
+			change_scope(tab[i]);
+		else if (!is_valid_identifier(name))
 		{
 			ms_perror("minishell: export", tab[i], "not a valid identifier");
-			ms_params->last_exit_code = 1;
-			continue ;
-		}
-		value = get_env_var_value(tab[i]);
-		tmp = find_env_var(ms_params->envp, name);
-		if (!tmp)
-		{
-			if (!add_env_var(&ms_params->envp, name, value, temp))
-				return (free_env_lst(ms_params->envp));
-		}
-		else
-		{
 			free(name);
-			free(tmp->var_value);
-			tmp->var_value = value;
+			exit_value = false;
 		}
+		else if (!add_update_env_var(name, env_scope, tab[i]))
+			return (false);
 	}
+	return (exit_value);
 }
 
-void	unset(t_env_var **head, char **tab)
+bool	unset(t_env **head, char **tab)
 {
-	t_env_var	*to_pop;
-	int			i;
+	t_env	*to_pop;
+	int		i;
 
 	i = -1;
 	while (tab[++i])
 	{
-		if (ft_strchr(tab[i], '?'))
-		{
-			ms_perror("minishell: unset", tab[i], "not a valid identifier");
-			continue ;
-		}
 		to_pop = find_env_var(*head, tab[i]);
 		if (!to_pop)
 			continue ;
+		if (to_pop == find_env_var(g_ms_params.envp, "OLDPWD"))
+		{
+			free(g_ms_params.previous_directory);
+			g_ms_params.previous_directory = NULL;
+		}
 		if (to_pop->prev)
 			to_pop->prev->next = to_pop->next;
 		if (to_pop->next)
@@ -147,22 +116,22 @@ void	unset(t_env_var **head, char **tab)
 		free(to_pop->var_value);
 		free(to_pop);
 	}
+	return (true);
 }
 
-void	env(t_env_var *lst, t_fd fd)
+bool	env(t_env *lst, t_fd fd)
 {
-	char	**tab;
-	int		i;
-
-	tab = build_envp(lst);
-	i = -1;
 	if (fd == INIT_FD_VALUE)
 		fd = 1;
-	while (tab && tab[++i])
+	while (lst)
 	{
-		if (!ft_strncmp(tab[i], "?=", 2))
-			continue ;
-		ft_putendl_fd(tab[i], fd);
+		if (lst->env_scope == PUBLIC_VAR)
+		{
+			ft_putstr_fd(lst->var_name, fd);
+			ft_putstr_fd("=", fd);
+			ft_putendl_fd(lst->var_value, fd);
+		}
+		lst = lst->next;
 	}
-	ft_strsfree(tab);
+	return (true);
 }

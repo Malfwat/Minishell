@@ -6,7 +6,7 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:54:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/18 20:59:53 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 00:25:54 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <minishell.h>
-#include <env_function.h>
+#include <ms_env_function.h>
 #include <libft.h>
-#include <struct_ms.h>
+#include <ms_struct.h>
 
 void	update_t_args(t_args **args)
 {
@@ -45,19 +45,37 @@ void	update_t_args(t_args **args)
 	}
 }
 
-char	*replace_dollars_var(char *res, t_env_var *envp, char *var)
+char	*find_suffix(char *str)
 {
-	t_env_var	*env_var;
+	char	*suffix;
 
-	env_var = find_env_var(envp, var);
-	if (!env_var)
-		res = ft_strjoin(res, "");
+	if (*str && ft_strchr(DIGIT"@!?#*$", *str))
+		suffix = str + 1;
 	else
-		res = ft_strjoin(res, env_var->var_value);
+		suffix = ft_strchrnul_nm(str, ALPHA""DIGIT""UC);
+	return (suffix);
+}
+
+char	*replace_dollars_var(char *res, t_env *envp, char *var)
+{
+	t_env	*env_var;
+	char	*dollar_var;
+	char	*suffix;
+
+	suffix = find_suffix(var);
+	dollar_var = ft_substr(var, 0, suffix - var);
+	env_var = find_env_var(envp, dollar_var);
+	if (!env_var)
+		res = ft_strsjoin(3, res, "", suffix);
+	else
+	{
+		res = ft_strsjoin(3, res, env_var->var_value, suffix);
+	}
+	free(dollar_var);
 	return (res);
 }
 
-char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
+char	*interpret_dollars_syntax(t_s_arg *arg, t_env *envp)
 {
 	char		*tmp;
 	char		*res;
@@ -73,7 +91,12 @@ char	*interpret_dollars(t_split_arg *arg, t_env_var *envp)
 	{
 		tmp = res;
 		if ((i == 0 && arg->str[0] != '$') || (arg->scope == '\''))
-			res = ft_strjoin(res, tab[i]);
+		{
+			if (!i && arg->str[0] != '$')
+				res = ft_strjoin(res, tab[i]);
+			else
+				res = ft_strsjoin(3, res, "$", tab[i]);
+		}
 		else
 			res = replace_dollars_var(res, envp, tab[i]);
 		free(tmp);
