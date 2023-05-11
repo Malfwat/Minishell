@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/11 17:12:29 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:37:26 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 			"couldn't load termcaps"), false);
 		save_terminal_params(&g_ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
-		child_reset_signals(2, SIGINT, SIGQUIT);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		g_ms_params.history_fd = get_my_history();
 	}
 	g_ms_params.envp = get_env(envp);
