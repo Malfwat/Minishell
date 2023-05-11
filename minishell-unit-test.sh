@@ -4,6 +4,7 @@ TOTAL_TESTS=0
 TOTAL_EV_SUCCESS=0 # EV = EXIT_VALUE
 TOTAL_OV_SUCCESS=0 # OP = OUTPUT_VALUE
 TOTAL_VLG_SUCCESS=0 # VLG = VALGRIND
+CWD=$(pwd)
 
 Build_test_environment()
 {
@@ -33,7 +34,7 @@ Test()
 	bash --posix -c "$1" > output
 	local EXPECTED_EXIT_VALUE="$(echo $?)"
 	cd ../original_output_dir
-	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" ~/42-CURSUS/Minishell/minishell -c "$1" > output
+	valgrind --track-fds=yes --leak-check=full -s --log-file=".vlg.out" $CWD/minishell -c "$1" > output
 	local PROGRAM_EXIT_VALUE="$(echo $?)"
 	local VLG_OUTPUT=$(cat .vlg.out)
 	local NB_ERROR=$(grep -E "(ERROR.*[1-9].*suppressed.*)" .vlg.out | awk '{print $4}')
