@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 14:05:18 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:24:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	handle_execve_failure(char *program_name)
 			exit_value = 126;
 		else if (errno)
 			exit_value = 2;
-		ms_perror("minishell6", program_name, strerror(errno));
+		ms_perror("minishell", program_name, strerror(errno));
 	}
 	else
 	{
-		ms_perror("minishell5", program_name, "Command not found");
+		ms_perror("minishell", program_name, "Command not found");
 		exit_value = 127;
 	}
 	errno = 0;
@@ -81,6 +81,6 @@ void	exit_ms(int exitv, char *context)
 	my_close(g_ms_params.stdin_fileno, -2);
 	free_ms_params(g_ms_params);
 	if (errno)
-		ms_perror("minishell7", context, strerror(errno));
+		ms_perror("minishell", context, strerror(errno));
 	exit(exitv);
 }

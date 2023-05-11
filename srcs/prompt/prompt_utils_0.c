@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_0.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:40:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/09 23:30:57 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 14:24:19 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static void	my_exec(char **tab, int *tube)
 	if (fd_null == -1 || dup2(fd_null, STDERR_FILENO) == -1)
 		perror("minishell");
 	else if (close(fd_null) == -1 || close(tube[0]) == -1)
-		perror("minishell2");
+		perror("minishell");
 	else if (dup2(tube[1], STDOUT_FILENO) == -1)
-		perror("minishell3");
+		perror("minishell");
 	else if (execve(tab[0], tab, NULL) == -1)
-		perror("minishell4");
+		perror("minishell");
 }
 
 char	*fetch_current_time(void)
