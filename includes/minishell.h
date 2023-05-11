@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 14:59:07 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/11 00:35:07 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 17:23:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,7 @@ void		free_prompt_params(t_prompt *lst);
 
 bool		toggle_control_character(int control_character, int mode);
 bool		save_terminal_params(t_minishell *ms_params);
-bool		restore_terminal_params(struct termios saved_term, \
-t_fd stdin_fileno);
+bool		restore_terminal_params(void);
 void		exit_ms(int exitv, char *context);
 void		ms_perror(char *program, char *subname, char *error);
 

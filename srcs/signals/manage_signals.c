@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:27 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/11 16:54:08 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:38:02 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ void	child_reset_signals(int nb, ...)
 		signal(signum, SIG_DFL);
 	}
 	va_end(arg);
+	restore_terminal_params();
 }

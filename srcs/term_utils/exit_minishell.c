@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/11 14:24:19 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:25:02 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ void	exit_ms(int exitv, char *context)
 	free_children(&g_ms_params.children);
 	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
-		restore_terminal_params(g_ms_params.saved_params, \
-		g_ms_params.stdin_fileno);
+		restore_terminal_params();
 		clear_history();
 		if (g_ms_params.history_fd > 2)
 			close(g_ms_params.history_fd);
