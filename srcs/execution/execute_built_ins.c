@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/11 16:54:30 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 19:48:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	exec_builtin(t_block *block, t_exec_vars vars)
 			if (block->pipe_next)
 				my_close(block->pipe_next->io_tab[0], -2);
 			free_exec_vars(vars);
-			exit_ms(block->cmd.exit_value, "builtin fork");
+			exit_ms(g_ms_params.last_exit_code, "builtin fork");
 		}
 		block->cmd.pid = pid;
 	}
