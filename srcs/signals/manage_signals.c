@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:27 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 13:12:37 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:54:08 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <minishell.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void	handler_hd_close(int num)
 {
@@ -46,7 +47,16 @@ void	handler_readline(int num)
 	exit_ms(130, "handler readline");
 }
 
-void	do_nothing(int num)
+void	child_reset_signals(int nb, ...)
 {
-	(void)num;
+	va_list	arg;
+	int		signum;
+
+	va_start(arg, nb);
+	while (nb--)
+	{
+		signum = va_arg(arg, int);
+		signal(signum, SIG_DFL);
+	}
+	va_end(arg);
 }

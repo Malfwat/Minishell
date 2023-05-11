@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shell_0.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/11 00:55:42 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 16:50:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 			"couldn't load termcaps"), false);
 		save_terminal_params(&g_ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
-		signal(SIGINT, &do_nothing);
+		child_reset_signals(2, SIGINT, SIGQUIT);
 		g_ms_params.history_fd = get_my_history();
 	}
 	g_ms_params.envp = get_env(envp);

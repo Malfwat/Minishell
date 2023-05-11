@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 01:04:05 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:20:38 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 16:53:05 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 #include <stdio.h>
 #include <minishell.h>
 #include <sys/wait.h>
+#include <ms_signal.h>
 #include <ms_env_function.h>
 
 void	child_worker(t_block *blck, t_exec_vars exc_vrs)
 {
-	signal(SIGINT, SIG_DFL);
+	child_reset_signals(2, SIGINT, SIGQUIT);
 	my_close(g_ms_params.input_fd, -2);
 	if (!my_dup(blck))
 		return (free_exec_vars(exc_vrs), exit_ms(2, "exec dup"));
@@ -41,7 +42,7 @@ void	puppet_child(t_block *blck, t_exec_vars exc_vrs)
 	blck->cmd.pid = fork();
 	if (!blck->cmd.pid)
 	{
-		signal(SIGINT, SIG_DFL);
+		child_reset_signals(2, SIGINT, SIGQUIT);
 		my_close(g_ms_params.input_fd, -2);
 		my_close(blck->io_tab[0], blck->io_tab[1]);
 		free_children(&g_ms_params.children);
