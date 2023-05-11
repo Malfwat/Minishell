@@ -7,4 +7,4 @@ if [ ! "$nb" -eq 2 ]; then
     exit
 fi
 
-git add . && git commit -m "[$1]: $2" && git push
+git add . && git commit -m "[$1]: $2" && git push -f
