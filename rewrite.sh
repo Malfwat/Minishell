@@ -1,5 +1,5 @@
 git filter-branch --env-filter '
-if [ "$GIT_AUTHOR_EMAIL" != "hateisse@student.42.fr" ] && [ "$GIT_AUTHOR_NAME" = "teisseire117" ];
+if [ "$GIT_AUTHOR_EMAIL" = "hateisse@student.42.fr" ] && [ "$GIT_AUTHOR_NAME" != "teisseire117" ];
 then
     GIT_AUTHOR_EMAIL="hateisse@student.42.fr";
     GIT_AUTHOR_NAME="teisseire117";
