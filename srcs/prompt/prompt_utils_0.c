@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:40:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/11 20:54:47 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 20:57:57 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 static void	my_exec(char **tab, int *tube)
 {
 	int	fd_null;
+
 	fd_null = open("/dev/null", O_RDWR);
 	if (fd_null == -1 || dup2(fd_null, STDERR_FILENO) == -1)
 		perror("minishell");
