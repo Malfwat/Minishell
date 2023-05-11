@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parenthesis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:08:33 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/14 21:50:13 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:16:13 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <stdbool.h>
-#include <parsing_ms.h>
+#include <ms_parsing.h>
 #include <ms_define.h>
 
 int	find_closing_parenthesis(char *str)

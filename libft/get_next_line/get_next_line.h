@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 07:45:37 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/12 18:48:14 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:04:47 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # define GET_NEXT_LINE_H
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 4096
 
 typedef struct s_gnl
 {

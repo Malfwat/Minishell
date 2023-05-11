@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 23:20:31 by malfwa            #+#    #+#             */
-/*   Updated: 2023/04/24 17:46:33 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/05 06:17:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <prompt.h>
+#include <ms_prompt.h>
 #include <libft.h>
 #include <ms_define.h>
 #include <stdio.h>

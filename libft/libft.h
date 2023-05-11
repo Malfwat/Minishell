@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/30 05:28:13 by hateisse          #+#    #+#             */
-/*   Updated: 2023/04/05 16:55:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:15:23 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,13 @@ int		ft_strcasecmp(const char *s1, const char *s2);
 size_t	ft_strlen(const char *s);
 int		ft_strslen(char **strs);
 char	*ft_strchr(const char *s, int c);
+char	*ft_strchr_set(const char *s, char *set);
+char	*ft_strchrnul_set(const char *s, char *set);
 char	*ft_strnchr(const char *s, size_t count, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strchrnul(const char *s, int c);
 int		ft_strschr_here(unsigned int count, char *haystack, ...);
+char	*ft_strchrnul_nm(const char *s, char *set);
 char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strcasestr(const char *haystack, const char *needle);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
@@ -107,5 +110,7 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 void	ft_print_array_str(char **array);
+
+int		is_directory(char *file_name);
 
 #endif
