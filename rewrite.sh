@@ -6,4 +6,4 @@ then
 fi
 export GIT_AUTHOR_EMAIL;
 export GIT_AUTHOR_NAME;
-' --tag-name-filter cat -- --branches --tags 
+' --tag-name-filter cat -- --branches --tags -f
