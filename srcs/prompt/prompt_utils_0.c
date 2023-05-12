@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:40:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/11 21:03:17 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/12 14:43:52 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static void	my_exec(char **tab, int *tube)
 		perror("minishell");
 	else if (dup2(tube[1], STDOUT_FILENO) == -1)
 		perror("minishell");
+	else if (close(tube[1]) == -1)
+		perror("minishell");
 	execve(tab[0], tab, NULL);
 	errno = 0;
 	exit_ms(1, "prompt");
@@ -50,11 +52,12 @@ char	*fetch_current_time(void)
 		my_exec((char *[]){"/usr/bin/date", "+%T", NULL}, tube);
 	else
 		waitpid(pid, &status, 0);
-	close(tube[1]);
+	my_close(tube[1], -2);
 	if (errno || extract_exit_code(status) != 0)
-		return (errno = 0, NULL);
+		return (my_close(tube[0], -2), errno = 0, NULL);
 	get_next_line(tube[0], &res);
 	gnl_force_finish(1, tube[0]);
+	my_close(tube[0], -2);
 	if (res && *res && res[ft_strlen(res) - 1] == '\n')
 		res[ft_strlen(res) - 1] = 0;
 	return (res);
@@ -77,11 +80,12 @@ char	*fetch_git_cwd_branch_name(void)
 		"--show-current", NULL}, tube);
 	else
 		waitpid(pid, &status, 0);
-	close(tube[1]);
+	my_close(tube[1], -2);
 	if (errno || extract_exit_code(status) != 0)
-		return (errno = 0, NULL);
+		return (my_close(tube[0], -2), errno = 0, NULL);
 	get_next_line(tube[0], &res);
 	gnl_force_finish(1, tube[0]);
+	my_close(tube[0], -2);
 	if (res && *res && res[ft_strlen(res) - 1] == '\n')
 		res[ft_strlen(res) - 1] = 0;
 	return (res);
