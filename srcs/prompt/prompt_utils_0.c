@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:40:10 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/12 14:43:52 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:49:10 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ char	*fetch_current_time(void)
 		return (my_close(tube[0], -2), errno = 0, NULL);
 	get_next_line(tube[0], &res);
 	gnl_force_finish(1, tube[0]);
-	my_close(tube[0], -2);
 	if (res && *res && res[ft_strlen(res) - 1] == '\n')
 		res[ft_strlen(res) - 1] = 0;
 	return (res);
@@ -85,7 +84,6 @@ char	*fetch_git_cwd_branch_name(void)
 		return (my_close(tube[0], -2), errno = 0, NULL);
 	get_next_line(tube[0], &res);
 	gnl_force_finish(1, tube[0]);
-	my_close(tube[0], -2);
 	if (res && *res && res[ft_strlen(res) - 1] == '\n')
 		res[ft_strlen(res) - 1] = 0;
 	return (res);
