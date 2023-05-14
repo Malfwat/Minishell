@@ -6,27 +6,26 @@
 /*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 05:40:38 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/11 00:55:42 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/14 11:53:01 by malfwa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-#include <libft.h>
-#include <termcap.h>
-#include <ms_prompt.h>
-#include <ms_env_function.h>
-#include <ms_define.h>
-#include <ms_struct.h>
-#include <sys/types.h>
-#include <signal.h>
-#include <ms_signal.h>
-#include <stdlib.h>
-#include <ms_history.h>
 #include <fcntl.h>
+#include <libft.h>
+#include <minishell.h>
+#include <ms_define.h>
+#include <ms_env_function.h>
 #include <ms_exec.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <ms_history.h>
+#include <ms_prompt.h>
 #include <ms_readline.h>
+#include <ms_signal.h>
+#include <ms_struct.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <termcap.h>
+#include <unistd.h>
 
 bool	init_termios_struct(void)
 {
@@ -54,8 +53,8 @@ int	error_init_prompt(int status, int exit_value)
 
 t_fd	init_prompt(void)
 {
-	int					status;
-	int					exit_value;
+	int	status;
+	int	exit_value;
 
 	status = 0;
 	if (pipe(g_ms_params.readline_pipe))
@@ -85,8 +84,8 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 		g_ms_params.flags |= C_FLAG;
 	if (ac > 1 && (g_ms_params.flags & C_FLAG) == 0)
 		return (print_usage(), false);
-	if ((g_ms_params.flags & C_FLAG) == 0
-		&& (!isatty(0) || !isatty(1) || !isatty(2)))
+	if ((g_ms_params.flags & C_FLAG) == 0 && (!isatty(0) || !isatty(1)
+			|| !isatty(2)))
 		return (perror("minishell"), false);
 	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
@@ -95,7 +94,8 @@ bool	init_minishell(t_minishell *ms_params, int ac, char **av, char **envp)
 			"couldn't load termcaps"), false);
 		save_terminal_params(&g_ms_params);
 		toggle_control_character(VQUIT, _POSIX_VDISABLE);
-		signal(SIGINT, &do_nothing);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		g_ms_params.history_fd = get_my_history();
 	}
 	g_ms_params.envp = get_env(envp);

@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:38:43 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/04 00:39:51 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 19:51:08 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,12 @@ bool	pwd(t_fd fd)
 		ft_putendl_fd(current_dir, fd);
 	else
 	{
+		ms_perror("minishell", "pwd", strerror(errno));
+		errno = 0;
 		free(current_dir);
-		exit_ms(2, "pwd");
+		return (false);
 	}
+	errno = 0;
 	free(current_dir);
 	return (true);
 }
