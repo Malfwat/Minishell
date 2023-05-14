@@ -6,7 +6,7 @@
 #    By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/06 18:07:52 by hateisse          #+#    #+#              #
-#    Updated: 2023/05/11 01:06:46 by malfwa           ###   ########.fr        #
+#    Updated: 2023/05/14 11:54:14 by malfwa           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -165,6 +165,7 @@ LGREY				=	\033[38;5;249m
 LGREEN				=	\033[38;5;28m
 LRED				=	\033[1;31m
 LBLUE				=	\033[38;5;67m
+LORANGE				=	\033[38;5;214m
 NC					=	\033[0m
 BLUE1				=	\033[38;5;72m
 GO_END_LINE			=	\033[K
@@ -223,8 +224,9 @@ launch: suppr_script
 	@make all ; valgrind --leak-check=full --track-origins=yes --quiet --show-leak-kinds=all --track-fds=yes --suppressions=$(SCRIPT_SUPPR) ./minishell
 
 clean:
+	@echo -n "$(LORANGE)CLEANING...$(NC)\r"
 	@rm -rf $(BUILD)
-	@echo "================cleaned================"
+	@echo "$(LGREEN)CLEANED$(NC)        "
 
 fclean:	clean
 	@rm -f suppr.txt

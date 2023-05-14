@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 20:26:59 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 14:05:18 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:25:02 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	handle_execve_failure(char *program_name)
 			exit_value = 126;
 		else if (errno)
 			exit_value = 2;
-		ms_perror("minishell6", program_name, strerror(errno));
+		ms_perror("minishell", program_name, strerror(errno));
 	}
 	else
 	{
-		ms_perror("minishell5", program_name, "Command not found");
+		ms_perror("minishell", program_name, "Command not found");
 		exit_value = 127;
 	}
 	errno = 0;
@@ -71,8 +71,7 @@ void	exit_ms(int exitv, char *context)
 	free_children(&g_ms_params.children);
 	if ((g_ms_params.flags & C_FLAG) == 0)
 	{
-		restore_terminal_params(g_ms_params.saved_params, \
-		g_ms_params.stdin_fileno);
+		restore_terminal_params();
 		clear_history();
 		if (g_ms_params.history_fd > 2)
 			close(g_ms_params.history_fd);
@@ -81,6 +80,6 @@ void	exit_ms(int exitv, char *context)
 	my_close(g_ms_params.stdin_fileno, -2);
 	free_ms_params(g_ms_params);
 	if (errno)
-		ms_perror("minishell7", context, strerror(errno));
+		ms_perror("minishell", context, strerror(errno));
 	exit(exitv);
 }

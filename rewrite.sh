@@ -1,4 +1,4 @@
-git filter-branch --env-filter '
+git filter-branch --env-filter -f '
 if [ "$GIT_AUTHOR_EMAIL" = "hateisse@student.42.fr" ] && [ "$GIT_AUTHOR_NAME" != "teisseire117" ];
 then
     GIT_AUTHOR_EMAIL="hateisse@student.42.fr";
@@ -6,4 +6,4 @@ then
 fi
 export GIT_AUTHOR_EMAIL;
 export GIT_AUTHOR_NAME;
-' --tag-name-filter cat -- --branches --tags 
+' --tag-name-filter cat -- --branches --tags

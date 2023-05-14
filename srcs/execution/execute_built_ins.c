@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 21:09:00 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 13:10:32 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 19:48:15 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <ms_struct.h>
 #include <ms_env_function.h>
 #include <ms_exec.h>
+#include <ms_signal.h>
 #include <ms_define.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -98,7 +99,7 @@ void	exec_builtin(t_block *block, t_exec_vars vars)
 			return ;
 		if (!pid)
 		{
-			signal(SIGINT, SIG_DFL);
+			child_reset_signals(2, SIGINT, SIGQUIT);
 			my_close(g_ms_params.input_fd, -2);
 			free_children(&g_ms_params.children);
 			launch_builtins(vars, block->io_tab);
@@ -106,7 +107,7 @@ void	exec_builtin(t_block *block, t_exec_vars vars)
 			if (block->pipe_next)
 				my_close(block->pipe_next->io_tab[0], -2);
 			free_exec_vars(vars);
-			exit_ms(block->cmd.exit_value, "builtin fork");
+			exit_ms(g_ms_params.last_exit_code, "builtin fork");
 		}
 		block->cmd.pid = pid;
 	}

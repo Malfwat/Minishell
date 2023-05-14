@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 01:47:15 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/07 13:11:56 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 20:52:58 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ char	*build_prompt(t_prompt *params, bool side)
 	prompt = strjoin_pargs(pargs);
 	ls_free_pargs(pargs);
 	if (errno)
-		return (free(prompt), NULL);
+	{
+		my_close(g_ms_params.readline_pipe[1], -2);
+		return (free(prompt), errno = 0, exit_ms(1, "minishell"), NULL);
+	}
 	return (prompt);
 }

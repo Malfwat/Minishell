@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 01:33:59 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/10 14:23:10 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 19:38:37 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,12 @@
 #include <libft.h>
 #include <ms_struct.h>
 
-void	error_case(int *exit_code, char *previous_directory)
+bool	error_case(char *previous_directory)
 {
-	if (previous_directory)
-	{
-		ms_perror("minishell", "cd", strerror(errno));
-		*exit_code = 1;
-	}
+	ms_perror("minishell", "cd", strerror(errno));
 	errno = 0;
 	free(previous_directory);
-	return ;
+	return (false);
 }
 
 bool	change_dir(char *dir)
@@ -38,8 +34,14 @@ bool	change_dir(char *dir)
 	char	*previous_dir;
 
 	previous_dir = getcwd(NULL, 0);
-	if (chdir(dir) == -1 || !previous_dir)
-		return (error_case(&g_ms_params.last_exit_code, previous_dir), false);
+	if (!previous_dir && *dir != '/')
+	{
+		ms_perror("minishell", "cd", strerror(errno));
+		return (errno = 0, false);
+	}
+	errno = 0;
+	if (chdir(dir) != 0)
+		return (error_case(previous_dir));
 	cwd = getcwd(NULL, 0);
 	tmp = ft_strjoin("PWD=", cwd);
 	tmp_oldpwd = ft_strjoin("OLDPWD=", previous_dir);
@@ -50,6 +52,21 @@ bool	change_dir(char *dir)
 		export((char *[]){tmp_oldpwd, NULL}, INTERNAL_VAR, 1);
 	}
 	return (free(tmp), free(cwd), free(tmp_oldpwd), true);
+}
+
+bool	cd_oldpwd(char **dir, t_fd fd)
+{
+	t_env	*var;
+
+	var = find_env_var(g_ms_params.envp, "OLDPWD");
+	if (!var)
+		return (ms_perror("minishell", "cd", "OLDPWD not set"), false);
+	*dir = var->var_value;
+	if (fd == INIT_FD_VALUE)
+		fd = 1;
+	if (*var->var_value)
+		ft_putendl_fd(var->var_value, fd);
+	return (true);
 }
 
 bool	cd(char **tab, t_fd fd)
@@ -68,13 +85,8 @@ bool	cd(char **tab, t_fd fd)
 	}
 	else if (!ft_strcmp(*tab, "-"))
 	{
-		var = find_env_var(g_ms_params.envp, "OLDPWD");
-		if (!var)
-			return (ms_perror("minishell", "cd", "OLDPWD not set"), false);
-		dir = var->var_value;
-		if (fd == INIT_FD_VALUE)
-			fd = 1;
-		ft_putendl_fd(var->var_value, fd);
+		if (!cd_oldpwd(&dir, fd))
+			return (false);
 	}
 	else
 		dir = *tab;

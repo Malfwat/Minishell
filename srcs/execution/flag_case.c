@@ -6,7 +6,7 @@
 /*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 14:25:13 by hateisse          #+#    #+#             */
-/*   Updated: 2023/05/07 22:31:53 by hateisse         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:40:44 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	flag_case(char **av)
 {
 	char	*u_in;
 
+	save_terminal_params(&g_ms_params);
 	av[2] += pass_whitespaces(av[2]);
 	u_in = ft_strdup(av[2]);
 	if (!u_in || !parse_user_input(u_in))

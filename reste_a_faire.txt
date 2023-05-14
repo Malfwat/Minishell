@@ -1,1 +1,0 @@
-heredoc.c revoir le open /dev/null

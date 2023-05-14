@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils_3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: malfwa <malfwa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hateisse <hateisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 23:20:31 by malfwa            #+#    #+#             */
-/*   Updated: 2023/05/05 06:17:01 by malfwa           ###   ########.fr       */
+/*   Updated: 2023/05/11 20:47:03 by hateisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,10 @@ bool	refresh_prompt_param(t_prompt *lst, int last_exit_code)
 	lst->last_exit_code = last_exit_code;
 	lst->session_user = getenv("USER");
 	lst->git_branch_name = fetch_git_cwd_branch_name();
-	if (errno)
-		return (false);
 	lst->time = fetch_current_time();
-	if (!lst->time)
-		return (false);
 	lst->cwd = get_cwd_path_since_home();
-	if (!lst->cwd)
-		return (false);
 	lst->term_width = fetch_term_width();
-	if (lst->term_width == -1)
-		return (false);
+	errno = 0;
 	return (true);
 }
 
